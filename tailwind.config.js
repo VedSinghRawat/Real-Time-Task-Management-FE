@@ -32,6 +32,8 @@ export default {
         400: '#33FFA7',
         300: '#47FFAF',
       },
+
+      transparent: 'transparent',
     },
   },
   plugins: [],
