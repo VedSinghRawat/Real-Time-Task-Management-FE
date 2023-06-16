@@ -1,10 +1,31 @@
-export function isArrayOrderingDiff<T>(arr1: Array<T>, arr2: Array<T>) {
-  if (arr1 === arr2) return false
-  if (arr1.length !== arr2.length) return true
+export const secondsToHHMMSS = (seconds: number) => {
+  const hours: number = Math.floor(seconds / (60 * 60))
+  const minutes: number = Math.floor(seconds / 60) % 60
+  seconds = seconds % 60
 
-  for (let i = 0; i < arr1.length; i++) {
-    if (arr1[i] !== arr2[i]) return true
+  // give the 0 padding to time segment which is less than 10
+  const time = [hours, minutes, seconds].map((segment) => (segment < 10 ? '0' + segment.toString() : segment)).join(':')
+
+  return time
+}
+
+export const HHMMSSToSeconds = (timeString: string) => {
+  const timeChunks = timeString.split(':').map((timeChunk) => +timeChunk)
+
+  if (timeChunks.length > 3 || timeChunks.includes(NaN)) {
+    console.error('time string not in correct format')
+
+    return 0
   }
 
-  return false
+  while (timeChunks.length < 3) {
+    timeChunks.unshift(0)
+  }
+
+  const [hours, minutes, seconds] = timeChunks
+
+  // prettier-ignore
+  const totalSeconds = (hours * 60 * 60) + (minutes * 60) + seconds
+
+  return totalSeconds
 }
