@@ -1,7 +1,6 @@
 import { FC, memo } from 'react'
-import { BsFillClockFill } from 'react-icons/bs'
 import TextArea from '../UI/Form/TextArea'
-import Button from '../UI/Button'
+import Input from '../UI/Form/Input'
 
 interface TaskCardProps {
   description: string
@@ -10,14 +9,18 @@ interface TaskCardProps {
 const TaskCard: FC<TaskCardProps> = ({}) => {
   return (
     <div
-      className={`rounded-xl bg-primary-800 w-fit group focus-within:bg-secondary-600 p-4 transition-all duration-100 ease-in-out text-tertiary-600 focus-within:text-tertiary-800`}
+      className={`rounded-xl bg-primary-800 w-fit group focus-within:bg-secondary-600 p-4 transition-all duration-100 ease-in-out text-tertiary-600  focus-within:text-tertiary-800`}
     >
       <TextArea className={`bg-transparent group-focus-within:outline-primary-800`} />
 
       <div className={`mt-4`}>
-        <Button Icon={BsFillClockFill} className={`group-focus-within:outline-primary-800 ml-auto`}>
+        <Input
+          className={`bg-transparent w-1/2 group-focus-within:outline-primary-800 placeholder-tertiary-600 group-focus-within:placeholder-tertiary-800`}
+          placeholder="HH:MM:SS"
+        />
+        {/* <Button Icon={BsFillClockFill} className={`group-focus-within:outline-primary-800 ml-auto`}>
           Add a Timer
-        </Button>
+        </Button> */}
       </div>
     </div>
   )
