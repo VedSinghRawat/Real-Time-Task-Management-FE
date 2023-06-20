@@ -12,7 +12,7 @@ const TextArea: FC<TextAreaProps> = ({ className = '', onInput, ...rest }) => {
         textAreaRef.style.height = 'auto'
         textAreaRef.style.height = textAreaRef.scrollHeight + 'px'
       }}
-      className={`overflow-hidden font-semibold outline-[3px] p-1 outline-secondary-800 resize-none outline rounded-sm w-fit focus:outline-primary-800 ${className}`}
+      className={`overflow-hidden w-full font-medium outline-[3px] p-1 outline-secondary-400 resize-none outline rounded-sm focus:outline-primary-800 ${className}`}
       {...rest}
     />
   )

@@ -1,11 +1,14 @@
-import { FC, HTMLAttributes, memo } from 'react'
+import { FC, HTMLAttributes, RefObject, memo } from 'react'
 
-interface InputProps extends HTMLAttributes<HTMLInputElement> {}
+interface InputProps extends HTMLAttributes<HTMLInputElement> {
+  setRef: RefObject<HTMLInputElement>
+}
 
-const Input: FC<InputProps> = ({ className, ...rest }) => {
+const Input: FC<InputProps> = ({ className, setRef, ...rest }) => {
   return (
     <input
-      className={`font-semibold outline-[3px] p-0.5 outline-secondary-800 outline rounded-sm focus:outline-primary-800 ${className}`}
+      ref={setRef}
+      className={`font-medium outline-[3px] p-0.5 outline-secondary-400 outline rounded-sm focus:outline-primary-800 ${className}`}
       {...rest}
     />
   )

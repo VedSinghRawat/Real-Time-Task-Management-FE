@@ -15,7 +15,7 @@ export const HHMMSSToSeconds = (timeString: string) => {
   if (timeChunks.length > 3 || timeChunks.includes(NaN)) {
     console.error('time string not in correct format')
 
-    return 0
+    return undefined
   }
 
   while (timeChunks.length < 3) {
