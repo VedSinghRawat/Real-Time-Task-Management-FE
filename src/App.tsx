@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react'
 import TaskCard from './Components/Task/TaskCard'
 
 function App() {
-  const [task, setTask] = useState<Task>({ id: Math.trunc(Math.random() * 1000), description: '' })
+  const [task, setTask] = useState<Task>({ id: Math.trunc(Math.random() * 1000), description: '', estimatedTime: 0, elapsedTime: 0 })
 
   const updateTimer = useCallback(
     (newTime: number) => {

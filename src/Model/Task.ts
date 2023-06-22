@@ -1,6 +1,6 @@
 interface Task {
   description: string
-  estimatedTime?: number
-  elapsedTime?: number
+  estimatedTime: number
+  elapsedTime: number
   id: number
 }

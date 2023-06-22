@@ -1,10 +1,13 @@
-import { FC, HTMLAttributes, memo } from 'react'
+import { FC, HTMLAttributes, RefObject, memo } from 'react'
 
-interface TextAreaProps extends HTMLAttributes<HTMLTextAreaElement> {}
+interface TextAreaProps extends HTMLAttributes<HTMLTextAreaElement> {
+  setRef?: RefObject<HTMLTextAreaElement>
+}
 
-const TextArea: FC<TextAreaProps> = ({ className = '', onInput, ...rest }) => {
+const TextArea: FC<TextAreaProps> = ({ className = '', setRef, onInput, ...rest }) => {
   return (
     <textarea
+      ref={setRef}
       onInput={(event) => {
         onInput && onInput(event)
 
