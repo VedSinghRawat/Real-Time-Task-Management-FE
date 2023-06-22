@@ -8,10 +8,13 @@ import Timer from '../UI/Timer'
 
 interface TaskCardProps {
   task: Task
+  active: boolean
   setTaskTimer: (newEstimatedTime: number) => void
+  increaseTimer: () => void
+  decreaseTimer: () => void
 }
 
-const TaskCard: FC<TaskCardProps> = ({ task, setTaskTimer }) => {
+const TaskCard: FC<TaskCardProps> = ({ task, active, decreaseTimer, increaseTimer, setTaskTimer }) => {
   const [isTimerInputOpen, setIsTimerInputOpen] = useState(task.estimatedTime !== undefined)
   const inputRef = useRef<HTMLInputElement>(null)
   const [timerError, setTimerError] = useState('')
@@ -23,8 +26,6 @@ const TaskCard: FC<TaskCardProps> = ({ task, setTaskTimer }) => {
   useEffect(() => {
     inputRef.current?.focus()
   }, [inputRef, isTimerInputOpen])
-
-  console.log(task)
 
   return (
     <div
@@ -47,11 +48,17 @@ const TaskCard: FC<TaskCardProps> = ({ task, setTaskTimer }) => {
             />
           </div>
         ) : (
-          <Timer timeInSeconds={task.estimatedTime}></Timer>
+          <Timer
+            active={active}
+            className={`w-fit ml-auto`}
+            timeInSeconds={task.estimatedTime}
+            increaseTimer={increaseTimer}
+            decreaseTimer={decreaseTimer}
+          ></Timer>
         )}
 
-        {task.estimatedTime === undefined ? (
-          !isTimerInputOpen ? (
+        {task.estimatedTime === undefined &&
+          (!isTimerInputOpen ? (
             <Button
               Icon={BsFillClockFill}
               className={`group-focus-within:outline-primary-800 group-focus-within:text-primary-800 ml-auto`}
@@ -77,10 +84,7 @@ const TaskCard: FC<TaskCardProps> = ({ task, setTaskTimer }) => {
             >
               Confirm
             </Button>
-          )
-        ) : (
-          <></>
-        )}
+          ))}
       </div>
 
       <p className={`absolute bottom-1.5 text-sm`}>{timerError}</p>
