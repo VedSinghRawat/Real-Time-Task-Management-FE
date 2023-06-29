@@ -1,7 +1,7 @@
-import { FC, HTMLAttributes, memo } from 'react'
+import { ButtonHTMLAttributes, FC, memo } from 'react'
 import { IconType } from 'react-icons'
 
-interface ButtonProps extends HTMLAttributes<HTMLButtonElement> {
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   Icon?: IconType
   iconClasses?: string
 }

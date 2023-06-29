@@ -1,3 +1,5 @@
+export type TimeString = `${number}:${number}:${number}`
+
 export const secondsToHHMMSS = (seconds: number) => {
   const hours: number = Math.floor(seconds / (60 * 60))
   const minutes: number = Math.floor(seconds / 60) % 60
@@ -6,10 +8,10 @@ export const secondsToHHMMSS = (seconds: number) => {
   // give the 0 padding to time segment which is less than 10
   const time = [hours, minutes, seconds].map((segment) => (segment < 10 ? '0' + segment.toString() : segment)).join(':')
 
-  return time
+  return time as TimeString
 }
 
-export const HHMMSSToSeconds = (timeString: string) => {
+export const HHMMSSToSeconds = (timeString: TimeString) => {
   const timeChunks = timeString.split(':').map((timeChunk) => +timeChunk)
 
   if (timeChunks.length > 3 || timeChunks.includes(NaN)) {

@@ -26,10 +26,10 @@ const Timer: FC<TimerProps> = ({ timeInSeconds, active, className = '', decrease
   useEffect(() => setCurrTime(timeInSeconds), [timeInSeconds])
 
   return (
-    <div {...rest} className={`${className} flex items-center gap-x-2`}>
+    <div {...rest} className={`${className} mt-3 flex items-center gap-x-2`}>
       <span className={`text-lg`}>{secondsToHHMMSS(currTime)}</span>
 
-      <div className={`border border-tertiary-500 rounded-sm p-0.5`}>
+      <div className={`rounded-sm`}>
         <IoMdArrowDropupCircle onClick={() => increaseTimer()} />
         <IoMdArrowDropdownCircle onClick={() => decreaseTimer()} />
       </div>

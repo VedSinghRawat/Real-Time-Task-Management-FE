@@ -20,7 +20,7 @@ function App() {
   }, [task])
 
   return (
-    <div className={`bg-primary-700 h-full w-full p-10`}>
+    <div className={`bg-primary-600 h-full w-full p-10`}>
       <TaskCard active={false} task={task} setTaskTimer={updateTimer} increaseTimer={increaseTimer} decreaseTimer={decreaseTimer} />
     </div>
   )
