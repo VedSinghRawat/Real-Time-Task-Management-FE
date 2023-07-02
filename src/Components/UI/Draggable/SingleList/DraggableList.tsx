@@ -1,14 +1,14 @@
 import { ReactElement, memo } from 'react'
 import { Draggable, Droppable, DroppableProps } from 'react-beautiful-dnd'
 
-export interface DraggableListProps<T extends { id: number }> extends Omit<DroppableProps, 'children'> {
+export interface DraggableListProps<T extends { id: number | string }> extends Omit<DroppableProps, 'children'> {
   items: T[]
   children: (item: T, index: number) => ReactElement
   itemContianerClasses?: string
   className?: string
 }
 
-const DraggableList = <T extends { id: number }>({
+const DraggableList = <T extends { id: number | string }>({
   items,
   children,
   className = '',
