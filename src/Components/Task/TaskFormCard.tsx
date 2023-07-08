@@ -1,25 +1,34 @@
-import { memo, useEffect, useRef, useState } from 'react'
+import { FC, memo, useCallback, useEffect, useRef, useState } from 'react'
 import { HiXCircle } from 'react-icons/hi'
 import TextArea from '../UI/Form/TextArea'
 import Button from '../UI/Button'
 import { HHMMSSToSeconds, TimeString } from '../../utils'
 import TimeInput from '../UI/Form/Input/TimeInput'
+import { useTaskStore } from '../../Store/task.store'
+import { taskFormFunctionSelector } from '../../Store/task.selector'
 
-type TaskFormCardProps<T extends Task | undefined = undefined> = {
-  task: T
+type TaskFormCardProps = {
+  task: Task | undefined
   onClose: () => void
-} & (T extends Task
-  ? {
-      onAdd: (task: Omit<Task, 'id'>) => void
-    }
-  : {
-      onUpdate: (task: Task) => void
-    })
+}
 
-function TaskFormCard<T extends Task | undefined = undefined>(props: TaskFormCardProps<T>) {
-  const { onClose, task } = props
-  const textAreaRef = useRef<HTMLTextAreaElement>(null)
+const TaskFormCard: FC<TaskFormCardProps> = ({ task, onClose }) => {
+  const [onAdd, onUpdate] = useTaskStore(taskFormFunctionSelector)
   const [timerValue, setTimerValue] = useState<TimeString | undefined>()
+
+  const textAreaRef = useRef<HTMLTextAreaElement>(null)
+
+  const handleSubmit = useCallback(() => {
+    if (timerValue) {
+      const timerInSeconds = HHMMSSToSeconds(timerValue)
+
+      if (timerInSeconds) {
+        task
+          ? onUpdate(task.id, { description: textAreaRef.current?.value || '', estimatedTime: timerInSeconds })
+          : onAdd({ description: textAreaRef.current?.value || '', estimatedTime: timerInSeconds, elapsedTime: 0 })
+      }
+    }
+  }, [])
 
   useEffect(() => {
     textAreaRef.current?.focus()
@@ -38,22 +47,7 @@ function TaskFormCard<T extends Task | undefined = undefined>(props: TaskFormCar
           className={`bg-transparent placeholder-tertiary-300 placeholder-opacity-70 group-focus-within:placeholder-tertiary-800`}
         />
 
-        <Button
-          className={`group-focus-within:outline-primary-800 group-focus-within:text-primary-700`}
-          onClick={() => {
-            if (timerValue) {
-              const timerInSeconds = HHMMSSToSeconds(timerValue)
-
-              if (timerInSeconds) {
-                if ('onAdd' in props) {
-                  props.onAdd({ description: textAreaRef.current?.value || '', estimatedTime: timerInSeconds, elapsedTime: 0 })
-                } else if (task) {
-                  props.onUpdate({ description: textAreaRef.current?.value || '', estimatedTime: timerInSeconds, elapsedTime: 0, id: task.id })
-                }
-              }
-            }
-          }}
-        >
+        <Button className={`group-focus-within:outline-primary-800 group-focus-within:text-primary-700`} onClick={handleSubmit}>
           {task ? 'Update' : 'Add'}
         </Button>
       </div>

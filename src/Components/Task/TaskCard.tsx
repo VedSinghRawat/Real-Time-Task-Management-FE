@@ -1,15 +1,21 @@
-import { FC, memo, useEffect, useRef } from 'react'
+import { FC, memo, useEffect, useMemo, useRef } from 'react'
 import Timer from '../UI/Timer'
+import { useTaskStore } from '../../Store/task.store'
+import { taskSetTimerSelector } from '../../Store/task.selector'
 
 interface TaskCardProps {
   task: Task
   active: boolean
-  increaseTimer: () => void
-  decreaseTimer: () => void
+  increaseTimerBy?: number
+  decreaseTimerBy?: number
 }
 
-const TaskCard: FC<TaskCardProps> = ({ task, active, decreaseTimer, increaseTimer }) => {
+const TaskCard: FC<TaskCardProps> = ({ task, active, increaseTimerBy = 60, decreaseTimerBy = 60 }) => {
   const textAreaRef = useRef<HTMLTextAreaElement>(null)
+
+  const [inc, dec] = useTaskStore(taskSetTimerSelector)
+
+  const [increaseTimer, decreaseTimer] = useMemo(() => [() => inc(task.id, increaseTimerBy), () => dec(task.id, decreaseTimerBy)], [])
 
   useEffect(() => {
     textAreaRef.current?.focus()

@@ -9,6 +9,7 @@ export type Keys = {
 
 export type Actions = {
   addTask: (newTask: Omit<Task, 'id' | 'done'>) => void
+  updateTask: (id: Task['id'], updatePayload: Partial<Omit<Task, 'id' | 'done'>>) => void
   removeTask: (id: Task['id']) => void
   increaseTimer: (id: Task['id'], by: number) => void
   decreaseTimer: (id: Task['id'], by: number) => void
@@ -19,7 +20,7 @@ export type Actions = {
 
 export type State = Keys & Actions
 
-export const useStore = create(
+export const useTaskStore = create(
   persist(
     immer<State>((set) => ({
       taskMap: {},
@@ -29,6 +30,8 @@ export const useStore = create(
           const newId = uuid()
           state.taskMap[newId] = { ...newTask, id: newId, done: false }
         }),
+
+      updateTask: (id, updatePayload) => set((state) => (state.taskMap[id] = { ...state.taskMap[id], ...updatePayload })),
 
       removeTask: (id) => set((state) => delete state.taskMap[id]),
 
