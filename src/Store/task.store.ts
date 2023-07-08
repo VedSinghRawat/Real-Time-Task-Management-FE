@@ -8,8 +8,13 @@ export type Keys = {
 }
 
 export type Actions = {
-  addTask: (newTask: Omit<Task, 'id'>) => void
+  addTask: (newTask: Omit<Task, 'id' | 'done'>) => void
   removeTask: (id: Task['id']) => void
+  increaseTimer: (id: Task['id'], by: number) => void
+  decreaseTimer: (id: Task['id'], by: number) => void
+  updateElapsed: (id: Task['id'], time: number) => void
+  markDone: (id: Task['id']) => void
+  unmarkDone: (id: Task['id']) => void
 }
 
 export type State = Keys & Actions
@@ -22,10 +27,20 @@ export const useStore = create(
       addTask: (newTask) =>
         set((state) => {
           const newId = uuid()
-          state.taskMap[newId] = { id: newId, ...newTask }
+          state.taskMap[newId] = { ...newTask, id: newId, done: false }
         }),
 
       removeTask: (id) => set((state) => delete state.taskMap[id]),
+
+      increaseTimer: (id, by) => set((state) => state.taskMap[id].estimatedTime + by),
+
+      decreaseTimer: (id, by) => set((state) => state.taskMap[id].estimatedTime - by),
+
+      updateElapsed: (id, time) => set((state) => (state.taskMap[id].elapsedTime = time)),
+
+      markDone: (id) => set((state) => (state.taskMap[id].done = true)),
+
+      unmarkDone: (id) => set((state) => (state.taskMap[id].done = false)),
     })),
     { name: 'state-zustand' }
   )
