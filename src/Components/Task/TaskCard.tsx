@@ -5,12 +5,11 @@ import { taskSetTimerSelector } from '../../Store/task.selector'
 
 interface TaskCardProps {
   task: Task
-  active: boolean
   increaseTimerBy?: number
   decreaseTimerBy?: number
 }
 
-const TaskCard: FC<TaskCardProps> = ({ task, active, increaseTimerBy = 60, decreaseTimerBy = 60 }) => {
+const TaskCard: FC<TaskCardProps> = ({ task, increaseTimerBy = 60, decreaseTimerBy = 60 }) => {
   const textAreaRef = useRef<HTMLTextAreaElement>(null)
 
   const [inc, dec] = useTaskStore(taskSetTimerSelector)
@@ -28,7 +27,7 @@ const TaskCard: FC<TaskCardProps> = ({ task, active, increaseTimerBy = 60, decre
       <p className={`bg-transparent group-focus-within:outline-primary-800 `}>{task.description}</p>
 
       <Timer
-        active={active}
+        active={task.active}
         className={`w-fit ml-auto`}
         timeInSeconds={task.estimatedTime}
         increaseTimer={increaseTimer}

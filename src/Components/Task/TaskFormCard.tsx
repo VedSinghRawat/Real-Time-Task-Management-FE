@@ -8,8 +8,8 @@ import { useTaskStore } from '../../Store/task.store'
 import { taskFormFunctionSelector } from '../../Store/task.selector'
 
 type TaskFormCardProps = {
-  task: Task | undefined
-  onClose: () => void
+  task?: Task
+  onClose?: () => void
 }
 
 const TaskFormCard: FC<TaskFormCardProps> = ({ task, onClose }) => {

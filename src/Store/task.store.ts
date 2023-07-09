@@ -8,8 +8,8 @@ export type Keys = {
 }
 
 export type Actions = {
-  addTask: (newTask: Omit<Task, 'id' | 'done'>) => void
-  updateTask: (id: Task['id'], updatePayload: Partial<Omit<Task, 'id' | 'done'>>) => void
+  addTask: (newTask: Omit<Task, 'id' | 'done' | 'active'>) => void
+  updateTask: (id: Task['id'], updatePayload: Partial<Omit<Task, 'id' | 'done' | 'active'>>) => void
   removeTask: (id: Task['id']) => void
   increaseTimer: (id: Task['id'], by: number) => void
   decreaseTimer: (id: Task['id'], by: number) => void
@@ -28,7 +28,7 @@ export const useTaskStore = create(
       addTask: (newTask) =>
         set((state) => {
           const newId = uuid()
-          state.taskMap[newId] = { ...newTask, id: newId, done: false }
+          state.taskMap[newId] = { ...newTask, id: newId, done: false, active: false }
         }),
 
       updateTask: (id, updatePayload) => set((state) => (state.taskMap[id] = { ...state.taskMap[id], ...updatePayload })),

@@ -4,4 +4,5 @@ interface Task {
   elapsedTime: number
   id: string
   done: boolean
+  active: boolean
 }

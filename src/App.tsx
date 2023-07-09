@@ -1,27 +1,21 @@
-import { useCallback, useState } from 'react'
-import TaskCard from './Components/Task/TaskCard'
+import { FC } from 'react'
+import { DragDropContext } from 'react-beautiful-dnd'
+import TaskTodoList from './Components/Task/Lists/TaskTodoList'
+import TaskDoingList from './Components/Task/Lists/TaskDoingList'
+import TaskDoneList from './Components/Task/Lists/TaskDoneList'
 
-function App() {
-  const [task, setTask] = useState<Task>({ id: Math.trunc(Math.random() * 1000), description: '', estimatedTime: 0, elapsedTime: 0 })
-
-  const updateTimer = useCallback(
-    (newTime: number) => {
-      setTask((currTask) => ({ ...currTask, estimatedTime: newTime }))
-    },
-    [task]
-  )
-
-  const increaseTimer = useCallback(() => {
-    setTask((currTask) => ({ ...currTask, estimatedTime: (currTask.estimatedTime || 0) + 60 }))
-  }, [task])
-
-  const decreaseTimer = useCallback(() => {
-    setTask((currTask) => ({ ...currTask, estimatedTime: Math.max((currTask.estimatedTime || 0) - 60, 0) }))
-  }, [task])
-
+const App: FC = () => {
   return (
-    <div className={`bg-primary-600 h-full w-full p-10`}>
-      <TaskCard active={false} task={task} setTaskTimer={updateTimer} increaseTimer={increaseTimer} decreaseTimer={decreaseTimer} />
+    <div className={`bg-primary-600 h-full w-full p-20`}>
+      <div className={`flex justify-between mx-auto gap-x-20 px-20 h-full`}>
+        <DragDropContext onDragEnd={(res) => console.log(res)}>
+          <TaskTodoList className={`w-full max-w-sm`} />
+
+          <TaskDoingList className={`w-full max-w-sm`} />
+
+          <TaskDoneList className={`w-full max-w-sm`} />
+        </DragDropContext>
+      </div>
     </div>
   )
 }
