@@ -19,7 +19,7 @@ const TaskListContext = createContext<Omit<TaskListProps, 'className' | 'childre
 const Base = ({ className, children, ...rest }: TaskListProps) => {
   return (
     <TaskListContext.Provider value={rest}>
-      <div className={`bg-primary-700 flex flex-col justify-between p-8 rounded-2xl ${className}`}>{children}</div>
+      <div className={`bg-primary-700 flex flex-col justify-between p-8 rounded-2xl gap-y-6 ${className}`}>{children}</div>
     </TaskListContext.Provider>
   )
 }
@@ -34,8 +34,8 @@ MemoedBase.DragList = () => {
   const context = useContext(TaskListContext)
 
   return (
-    <DraggableList droppableId={context!.droppableId} items={context!.tasks}>
-      {(task) => <TaskCard task={task} />}
+    <DraggableList className={`grow`} droppableId={context!.droppableId} items={context!.tasks} itemContianerClasses="mb-5">
+      {(task) => <TaskCard task={task} className={`w-4/5 mx-auto`} />}
     </DraggableList>
   )
 }

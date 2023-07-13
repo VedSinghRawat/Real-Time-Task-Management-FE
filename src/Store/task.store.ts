@@ -27,6 +27,7 @@ export const useTaskStore = create(
 
       addTask: (newTask) =>
         set((state) => {
+          console.log('hello world')
           const newId = uuid()
           state.taskMap[newId] = { ...newTask, id: newId, done: false, active: false }
         }),

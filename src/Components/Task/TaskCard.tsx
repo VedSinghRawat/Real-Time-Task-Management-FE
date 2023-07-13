@@ -5,11 +5,12 @@ import { taskSetTimerSelector } from '../../Store/task.selector'
 
 interface TaskCardProps {
   task: Task
+  className?: string
   increaseTimerBy?: number
   decreaseTimerBy?: number
 }
 
-const TaskCard: FC<TaskCardProps> = ({ task, increaseTimerBy = 60, decreaseTimerBy = 60 }) => {
+const TaskCard: FC<TaskCardProps> = ({ task, className, increaseTimerBy = 60, decreaseTimerBy = 60 }) => {
   const textAreaRef = useRef<HTMLTextAreaElement>(null)
 
   const [inc, dec] = useTaskStore(taskSetTimerSelector)
@@ -22,7 +23,7 @@ const TaskCard: FC<TaskCardProps> = ({ task, increaseTimerBy = 60, decreaseTimer
 
   return (
     <div
-      className={`relative rounded-xl bg-primary-800 group w-fit focus-within:bg-secondary-600 p-4 transition-all duration-100 ease-in-out text-tertiary-600  focus-within:text-tertiary-800`}
+      className={`${className} relative rounded-xl bg-primary-800 group focus-within:bg-secondary-600 p-4 transition-all duration-100 ease-in-out text-tertiary-600  focus-within:text-tertiary-800`}
     >
       <p className={`bg-transparent group-focus-within:outline-primary-800 `}>{task.description}</p>
 

@@ -8,11 +8,12 @@ import { useTaskStore } from '../../Store/task.store'
 import { taskFormFunctionSelector } from '../../Store/task.selector'
 
 type TaskFormCardProps = {
+  className?: string
   task?: Task
   onClose?: () => void
 }
 
-const TaskFormCard: FC<TaskFormCardProps> = ({ task, onClose }) => {
+const TaskFormCard: FC<TaskFormCardProps> = ({ task, className = '', onClose }) => {
   const [onAdd, onUpdate] = useTaskStore(taskFormFunctionSelector)
   const [timerValue, setTimerValue] = useState<TimeString | undefined>()
 
@@ -21,14 +22,13 @@ const TaskFormCard: FC<TaskFormCardProps> = ({ task, onClose }) => {
   const handleSubmit = useCallback(() => {
     if (timerValue) {
       const timerInSeconds = HHMMSSToSeconds(timerValue)
-
       if (timerInSeconds) {
         task
           ? onUpdate(task.id, { description: textAreaRef.current?.value || '', estimatedTime: timerInSeconds })
           : onAdd({ description: textAreaRef.current?.value || '', estimatedTime: timerInSeconds, elapsedTime: 0 })
       }
     }
-  }, [])
+  }, [onAdd, onUpdate, timerValue])
 
   useEffect(() => {
     textAreaRef.current?.focus()
@@ -36,7 +36,7 @@ const TaskFormCard: FC<TaskFormCardProps> = ({ task, onClose }) => {
 
   return (
     <div
-      className={`relative rounded-xl bg-primary-800 group w-fit focus-within:bg-secondary-600 p-4 transition-all duration-100 ease-in-out text-tertiary-600  focus-within:text-tertiary-800`}
+      className={`relative rounded-xl bg-primary-800 group ${className} focus-within:bg-secondary-600 p-4 transition-all duration-100 ease-in-out text-tertiary-600  focus-within:text-tertiary-800`}
     >
       <TextArea setRef={textAreaRef} className={`bg-transparent group-focus-within:outline-primary-800 `} />
 

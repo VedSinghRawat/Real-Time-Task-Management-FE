@@ -3,7 +3,10 @@ import { State } from './task.store'
 
 export const baseStateSelector = (state: State) => state
 
-const taskListSelector = createSelector(baseStateSelector, (state) => Object.values(state.taskMap))
+const taskListSelector = createSelector(baseStateSelector, (state) => {
+  console.log({ state })
+  return Object.values(state.taskMap)
+})
 
 export const taskDoneListSelector = createSelector(taskListSelector, (allTasks) => allTasks.filter((task) => task.done))
 
