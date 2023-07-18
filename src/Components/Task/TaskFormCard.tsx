@@ -26,6 +26,8 @@ const TaskFormCard: FC<TaskFormCardProps> = ({ task, className = '', onClose }) 
         task
           ? onUpdate(task.id, { description: textAreaRef.current?.value || '', estimatedTime: timerInSeconds })
           : onAdd({ description: textAreaRef.current?.value || '', estimatedTime: timerInSeconds, elapsedTime: 0 })
+
+        onClose && onClose()
       }
     }
   }, [onAdd, onUpdate, timerValue])
@@ -36,7 +38,7 @@ const TaskFormCard: FC<TaskFormCardProps> = ({ task, className = '', onClose }) 
 
   return (
     <div
-      className={`relative rounded-xl bg-primary-800 group ${className} focus-within:bg-secondary-600 p-4 transition-all duration-100 ease-in-out text-tertiary-600  focus-within:text-tertiary-800`}
+      className={`relative rounded-xl bg-primary-800 group ${className} focus-within:bg-secondary-600 p-2.5 transition-all duration-100 ease-in-out text-tertiary-600  focus-within:text-tertiary-800`}
     >
       <TextArea setRef={textAreaRef} className={`bg-transparent group-focus-within:outline-primary-800 `} />
 

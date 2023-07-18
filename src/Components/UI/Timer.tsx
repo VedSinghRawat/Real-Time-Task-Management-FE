@@ -30,8 +30,8 @@ const Timer: FC<TimerProps> = ({ timeInSeconds, active, className = '', decrease
       <span className={`text-lg`}>{secondsToHHMMSS(currTime)}</span>
 
       <div className={`rounded-sm`}>
-        <IoMdArrowDropupCircle onClick={() => increaseTimer()} />
-        <IoMdArrowDropdownCircle onClick={() => decreaseTimer()} />
+        <IoMdArrowDropupCircle className={`cursor-pointer`} onClick={() => increaseTimer()} />
+        <IoMdArrowDropdownCircle className={`cursor-pointer`} onClick={() => decreaseTimer()} />
       </div>
     </div>
   )

@@ -3,16 +3,11 @@ import { State } from './task.store'
 
 export const baseStateSelector = (state: State) => state
 
-const taskListSelector = createSelector(baseStateSelector, (state) => {
-  console.log({ state })
-  return Object.values(state.taskMap)
-})
+export const taskDoneListSelector = createSelector(baseStateSelector, (state) => Array.from(state.doneOrder, (taskId) => state.taskMap.get(taskId)!))
 
-export const taskDoneListSelector = createSelector(taskListSelector, (allTasks) => allTasks.filter((task) => task.done))
+export const taskTodoListSelector = createSelector(baseStateSelector, (state) => Array.from(state.doneOrder, (taskId) => state.taskMap.get(taskId)!))
 
-export const taskTodoListSelector = createSelector(taskListSelector, (allTasks) => allTasks.filter((task) => !task.active))
-
-export const taskDoingListSelector = createSelector(taskListSelector, (allTasks) => allTasks.filter((task) => task.active))
+export const taskDoingListSelector = createSelector(baseStateSelector, (state) => Array.from(state.doneOrder, (taskId) => state.taskMap.get(taskId)!))
 
 export const taskSetTimerSelector = createSelector(baseStateSelector, (state) => [state.increaseTimer, state.decreaseTimer] as const)
 

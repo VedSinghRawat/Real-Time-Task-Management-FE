@@ -4,18 +4,18 @@ import { persist } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
 
 export type Keys = {
-  taskMap: Record<string, Task>
+  taskMap: Map<string, Task>
+  todoOrder: Task['id'][]
+  doingOrder: Task['id'][]
+  doneOrder: Task['id'][]
 }
 
 export type Actions = {
   addTask: (newTask: Omit<Task, 'id' | 'done' | 'active'>) => void
-  updateTask: (id: Task['id'], updatePayload: Partial<Omit<Task, 'id' | 'done' | 'active'>>) => void
+  updateTask: (id: Task['id'], updatePayload: Partial<Omit<Task, 'id'>>) => void
   removeTask: (id: Task['id']) => void
   increaseTimer: (id: Task['id'], by: number) => void
   decreaseTimer: (id: Task['id'], by: number) => void
-  updateElapsed: (id: Task['id'], time: number) => void
-  markDone: (id: Task['id']) => void
-  unmarkDone: (id: Task['id']) => void
 }
 
 export type State = Keys & Actions
@@ -23,28 +23,47 @@ export type State = Keys & Actions
 export const useTaskStore = create(
   persist(
     immer<State>((set) => ({
-      taskMap: {},
+      taskMap: new Map(),
+      todoOrder: [],
+      doingOrder: [],
+      doneOrder: [],
 
       addTask: (newTask) =>
         set((state) => {
-          console.log('hello world')
           const newId = uuid()
-          state.taskMap[newId] = { ...newTask, id: newId, done: false, active: false }
+          state.taskMap.set(newId, { ...newTask, id: newId, done: false, active: false })
+          state.todoOrder.unshift(newId)
         }),
 
-      updateTask: (id, updatePayload) => set((state) => (state.taskMap[id] = { ...state.taskMap[id], ...updatePayload })),
+      updateTask: (id, updatePayload) =>
+        set((state) => {
+          const old = state.taskMap.get(id)
 
-      removeTask: (id) => set((state) => delete state.taskMap[id]),
+          if (old) {
+            state.taskMap.set(id, { ...old, ...updatePayload })
+          }
+        }),
 
-      increaseTimer: (id, by) => set((state) => state.taskMap[id].estimatedTime + by),
+      removeTask: (id) =>
+        set((state) => {
+          state.taskMap.delete(id)
+        }),
 
-      decreaseTimer: (id, by) => set((state) => state.taskMap[id].estimatedTime - by),
+      increaseTimer: (id, by) =>
+        set((state) => {
+          if (state.taskMap.has(id)) {
+            state.taskMap.get(id)!.estimatedTime += by
+          }
+        }),
 
-      updateElapsed: (id, time) => set((state) => (state.taskMap[id].elapsedTime = time)),
+      decreaseTimer: (id, by) =>
+        set((state) => {
+          if (state.taskMap.has(id)) {
+            state.taskMap.get(id)!.estimatedTime -= by
+          }
+        }),
 
-      markDone: (id) => set((state) => (state.taskMap[id].done = true)),
-
-      unmarkDone: (id) => set((state) => (state.taskMap[id].done = false)),
+      moveTodo: () => {},
     })),
     { name: 'state-zustand' }
   )

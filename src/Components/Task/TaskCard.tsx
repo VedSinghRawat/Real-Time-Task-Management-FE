@@ -21,11 +21,17 @@ const TaskCard: FC<TaskCardProps> = ({ task, className, increaseTimerBy = 60, de
     textAreaRef.current?.focus()
   }, [textAreaRef])
 
+  const descriptionLines = task.description.split('\n')
+  const formattedDescription = descriptionLines.map((line, i) => (
+    <span key={i}>
+      {line} {i < descriptionLines.length - 1 && <br />}
+    </span>
+  ))
   return (
     <div
-      className={`${className} relative rounded-xl bg-primary-800 group focus-within:bg-secondary-600 p-4 transition-all duration-100 ease-in-out text-tertiary-600  focus-within:text-tertiary-800`}
+      className={`${className} relative rounded-xl bg-primary-800 group focus-within:bg-secondary-600 p-2.5 transition-all duration-100 ease-in-out text-tertiary-600  focus-within:text-tertiary-800`}
     >
-      <p className={`bg-transparent group-focus-within:outline-primary-800 `}>{task.description}</p>
+      <p className={`bg-transparent group-focus-within:outline-primary-800 `}>{formattedDescription}</p>
 
       <Timer
         active={task.active}

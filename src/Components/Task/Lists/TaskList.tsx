@@ -19,7 +19,7 @@ const TaskListContext = createContext<Omit<TaskListProps, 'className' | 'childre
 const Base = ({ className, children, ...rest }: TaskListProps) => {
   return (
     <TaskListContext.Provider value={rest}>
-      <div className={`bg-primary-700 flex flex-col justify-between p-8 rounded-2xl gap-y-6 ${className}`}>{children}</div>
+      <div className={`bg-primary-700 flex flex-col justify-between p-8 rounded-2xl gap-y-6 min-h-full ${className}`}>{children}</div>
     </TaskListContext.Provider>
   )
 }

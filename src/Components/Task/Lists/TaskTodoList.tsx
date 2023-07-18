@@ -17,17 +17,19 @@ const TaskTodoList: FC<TaskTodoListProps> = ({ className }) => {
 
   return (
     <TaskList tasks={todoTasks} droppableId={'todo'} className={className}>
-      <TaskList.Heading>Todo</TaskList.Heading>
+      <div className={`flex ${isFormOpen ? 'flex-col gap-y-5' : ''}`}>
+        <TaskList.Heading>Todo</TaskList.Heading>
+
+        {isFormOpen ? (
+          <TaskFormCard className={`mx-auto`} onClose={toggleTaskForm} />
+        ) : (
+          <Button className={`w-fit px-3 text-lg py-1.5 ml-auto`} onClick={toggleTaskForm}>
+            Add Todo
+          </Button>
+        )}
+      </div>
 
       <TaskList.DragList />
-
-      {isFormOpen ? (
-        <TaskFormCard className={`mx-auto`} onClose={toggleTaskForm} />
-      ) : (
-        <Button className={`w-fit px-6 py-1.5 ml-auto`} onClick={toggleTaskForm}>
-          Add Todo
-        </Button>
-      )}
     </TaskList>
   )
 }
