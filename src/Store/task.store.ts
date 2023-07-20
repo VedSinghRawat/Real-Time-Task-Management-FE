@@ -1,10 +1,11 @@
+import { enableMapSet } from 'immer'
 import { v4 as uuid } from 'uuid'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
 
 export type Keys = {
-  taskMap: Map<string, Task>
+  taskMap: { [id: string]: Task }
   todoOrder: Task['id'][]
   doingOrder: Task['id'][]
   doneOrder: Task['id'][]
@@ -20,10 +21,12 @@ export type Actions = {
 
 export type State = Keys & Actions
 
+enableMapSet()
+
 export const useTaskStore = create(
   persist(
     immer<State>((set) => ({
-      taskMap: new Map(),
+      taskMap: {},
       todoOrder: [],
       doingOrder: [],
       doneOrder: [],
@@ -31,36 +34,37 @@ export const useTaskStore = create(
       addTask: (newTask) =>
         set((state) => {
           const newId = uuid()
-          state.taskMap.set(newId, { ...newTask, id: newId, done: false, active: false })
+
+          state.taskMap[newId] = { ...newTask, id: newId, done: false, active: false }
           state.todoOrder.unshift(newId)
         }),
 
       updateTask: (id, updatePayload) =>
         set((state) => {
-          const old = state.taskMap.get(id)
+          let old = state.taskMap[id]
 
           if (old) {
-            state.taskMap.set(id, { ...old, ...updatePayload })
+            old = { ...old, ...updatePayload }
           }
         }),
 
       removeTask: (id) =>
         set((state) => {
-          state.taskMap.delete(id)
+          state.taskMap[id]
         }),
 
       increaseTimer: (id, by) =>
         set((state) => {
-          if (state.taskMap.has(id)) {
-            state.taskMap.get(id)!.estimatedTime += by
-          }
+          const task = state.taskMap[id]
+
+          if (task) task.estimatedTime += by
         }),
 
       decreaseTimer: (id, by) =>
         set((state) => {
-          if (state.taskMap.has(id)) {
-            state.taskMap.get(id)!.estimatedTime -= by
-          }
+          const task = state.taskMap[id]
+
+          if (task) task.estimatedTime -= by
         }),
 
       moveTodo: () => {},

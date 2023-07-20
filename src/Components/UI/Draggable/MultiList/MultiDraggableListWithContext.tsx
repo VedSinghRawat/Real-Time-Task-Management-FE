@@ -1,17 +1,16 @@
-import { memo } from 'react'
-import MultiDraggableList, { MultiDraggableListProps } from './MultiDraggableList'
+import { ReactElement, memo } from 'react'
 import { DragDropContext } from 'react-beautiful-dnd'
 
-interface MultiDraggableListWithContextProps<T extends { id: number }, L extends { items: T[]; id: number }> extends MultiDraggableListProps<T, L> {
-  containerClasses?: string
-  handleItemMove: (data: { fromIndex: number; toIndex: number; fromListId?: number; toListId?: number; item: T }) => void
+interface MultiDraggableListWithContextProps<T extends { id: number | string }, L extends { items: T[]; id: number | string }> {
+  lists: L[]
+  handleItemMove: (data: { fromIndex: number; fromListId?: L['id']; toIndex: number; toListId?: L['id']; item: L['items'][number] }) => void
+  children: (list: L, index: number) => ReactElement
 }
 
-const MultiDraggableListWithContext = <T extends { id: number }, L extends { items: T[]; id: number }>({
-  containerClasses,
+const MultiDraggableListWithContext = <T extends { id: number | string }, L extends { items: T[]; id: number | string }>({
+  children,
   handleItemMove,
   lists,
-  ...rest
 }: MultiDraggableListWithContextProps<T, L>) => {
   return (
     <DragDropContext
@@ -25,8 +24,8 @@ const MultiDraggableListWithContext = <T extends { id: number }, L extends { ite
               handleItemMove({
                 fromIndex: result.source.index,
                 toIndex: result.destination.index,
-                fromListId: +result.source.droppableId,
-                toListId: +result.destination.droppableId,
+                fromListId: result.source.droppableId,
+                toListId: result.destination.droppableId,
                 item,
               })
             } else {
@@ -40,7 +39,7 @@ const MultiDraggableListWithContext = <T extends { id: number }, L extends { ite
         }
       }}
     >
-      <MultiDraggableList lists={lists} {...rest}></MultiDraggableList>
+      {lists.map((list, index) => children(list, index))}
     </DragDropContext>
   )
 }

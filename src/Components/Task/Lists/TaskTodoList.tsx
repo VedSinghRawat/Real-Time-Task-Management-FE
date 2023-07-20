@@ -21,7 +21,7 @@ const TaskTodoList: FC<TaskTodoListProps> = ({ className }) => {
         <TaskList.Heading>Todo</TaskList.Heading>
 
         {isFormOpen ? (
-          <TaskFormCard className={`mx-auto`} onClose={toggleTaskForm} />
+          <TaskFormCard onClose={toggleTaskForm} className={`max-w-[14rem] mx-auto`} />
         ) : (
           <Button className={`w-fit px-3 text-lg py-1.5 ml-auto`} onClick={toggleTaskForm}>
             Add Todo

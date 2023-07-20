@@ -34,8 +34,13 @@ MemoedBase.DragList = () => {
   const context = useContext(TaskListContext)
 
   return (
-    <DraggableList className={`grow`} droppableId={context!.droppableId} items={context!.tasks} itemContianerClasses="mb-5">
-      {(task) => <TaskCard task={task} className={`w-4/5 mx-auto`} />}
+    <DraggableList
+      className={`grow max-w-[14rem] mx-auto w-full`}
+      droppableId={context!.droppableId}
+      items={context!.tasks}
+      itemContianerClasses="mb-5"
+    >
+      {(task) => <TaskCard task={task} />}
     </DraggableList>
   )
 }
