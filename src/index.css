@@ -23,3 +23,21 @@
     font-family: Merriweather;
   }
 }
+
+::-webkit-scrollbar {
+  -webkit-appearance: none;
+}
+::-webkit-scrollbar:vertical {
+  width: 0.5rem;
+}
+::-webkit-scrollbar:horizontal {
+  height: 0.5rem;
+}
+::-webkit-scrollbar-thumb {
+  border: 0.063rem solid #00a35c;
+  border-radius: 0.5rem;
+  background-color: #1f1f1f;
+}
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
