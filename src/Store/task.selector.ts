@@ -16,3 +16,5 @@ export const taskDoingListSelector = createSelector([taskMapSelector, taskDoingI
 export const taskSetTimerSelector = createSelector(baseStateSelector, (state) => [state.increaseTimer, state.decreaseTimer] as const)
 
 export const taskFormFunctionSelector = createSelector(baseStateSelector, (state) => [state.addTask, state.updateTask] as const)
+
+export const taskMoveItemSelector = createSelector(baseStateSelector, (state) => state.moveTodo)

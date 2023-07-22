@@ -3,7 +3,7 @@ import { DragDropContext } from 'react-beautiful-dnd'
 
 interface MultiDraggableListWithContextProps<T extends { id: number | string }, L extends { items: T[]; id: number | string }> {
   lists: L[]
-  handleItemMove: (data: { fromIndex: number; fromListId?: L['id']; toIndex: number; toListId?: L['id']; item: L['items'][number] }) => void
+  handleItemMove: (data: { fromIndex: number; fromListId: L['id']; toIndex: number; toListId?: L['id']; item: L['items'][number] }) => void
   children: (list: L, index: number) => ReactElement
 }
 
@@ -31,6 +31,7 @@ const MultiDraggableListWithContext = <T extends { id: number | string }, L exte
             } else {
               handleItemMove({
                 fromIndex: result.source.index,
+                fromListId: result.source.droppableId,
                 toIndex: result.destination.index,
                 item,
               })

@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import MultiDraggableListWithContext from './Components/UI/Draggable/MultiList/MultiDraggableListWithContext'
-import { taskTodoListSelector, taskDoingListSelector, taskDoneListSelector } from './Store/task.selector'
+import { taskTodoListSelector, taskDoingListSelector, taskDoneListSelector, taskMoveItemSelector } from './Store/task.selector'
 import { useTaskStore } from './Store/task.store'
 import TaskTodoList from './Components/Task/Lists/TaskTodoList'
 import TaskDoingList from './Components/Task/Lists/TaskDoingList'
@@ -11,16 +11,14 @@ const App: FC = () => {
   const doingTasks = useTaskStore(taskDoingListSelector)
   const doneTasks = useTaskStore(taskDoneListSelector)
 
+  const handleItemMove = useTaskStore(taskMoveItemSelector)
+
   return (
     <div className={`bg-primary-600 h-full w-full p-20`}>
       <div className={`flex justify-between mx-auto gap-x-20 px-20 h-full`}>
         <MultiDraggableListWithContext
-          handleItemMove={(data) => console.log(data)}
-          lists={[
-            { id: 'todo', items: todoTasks },
-            { id: 'doing', items: doingTasks },
-            { id: 'done', items: doneTasks },
-          ]}
+          handleItemMove={handleItemMove}
+          lists={[{ id: 'todo', items: todoTasks } as const, { id: 'doing', items: doingTasks } as const, { id: 'done', items: doneTasks } as const]}
         >
           {(list) =>
             list.id === 'todo' ? (

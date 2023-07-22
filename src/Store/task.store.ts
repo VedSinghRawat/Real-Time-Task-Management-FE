@@ -1,4 +1,3 @@
-import { enableMapSet } from 'immer'
 import { v4 as uuid } from 'uuid'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
@@ -17,11 +16,16 @@ export type Actions = {
   removeTask: (id: Task['id']) => void
   increaseTimer: (id: Task['id'], by: number) => void
   decreaseTimer: (id: Task['id'], by: number) => void
+  moveTodo: (data: {
+    fromIndex: number
+    fromListId: 'todo' | 'doing' | 'done'
+    toIndex: number
+    toListId?: 'todo' | 'doing' | 'done'
+    item: Task
+  }) => void
 }
 
 export type State = Keys & Actions
-
-enableMapSet()
 
 export const useTaskStore = create(
   persist(
@@ -67,7 +71,24 @@ export const useTaskStore = create(
           if (task) task.estimatedTime -= by
         }),
 
-      moveTodo: () => {},
+      moveTodo: (data: {
+        fromIndex: number
+        fromListId: 'todo' | 'doing' | 'done'
+        toIndex: number
+        toListId?: 'todo' | 'doing' | 'done'
+        item: Task
+      }) =>
+        set((state) => {
+          const { fromIndex, item, toIndex, fromListId, toListId } = data
+
+          const orderListMapping = { todo: state.todoOrder, doing: state.doingOrder, done: state.doneOrder }
+
+          const oldItemTypeList = orderListMapping[fromListId]
+          const newItemTypeList = orderListMapping[toListId || fromListId]
+
+          oldItemTypeList.splice(fromIndex, 1)
+          newItemTypeList.splice(toIndex, 0, item.id)
+        }),
     })),
     { name: 'state-zustand' }
   )
