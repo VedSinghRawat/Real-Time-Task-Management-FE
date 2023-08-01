@@ -1,8 +1,12 @@
+type TaskType = 'todo' | 'doing' | 'done'
+
 interface Task {
   description: string
   estimatedTime: number
-  elapsedTime: number
+  timeLeft: number
+  overTime: number
   id: string
   done: boolean
-  active: boolean
+  type: TaskType
+  order: number
 }

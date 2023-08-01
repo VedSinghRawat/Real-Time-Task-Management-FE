@@ -4,17 +4,15 @@ import { State } from './task.store'
 export const baseStateSelector = (state: State) => state
 
 export const taskMapSelector = createSelector(baseStateSelector, (state) => state.taskMap)
+export const taskListSelector = createSelector(baseStateSelector, (state) => Object.values(state.taskMap))
 
-export const taskDoneIdsListSelector = createSelector(baseStateSelector, (state) => state.doneOrder)
-export const taskTodoIdsListSelector = createSelector(baseStateSelector, (state) => state.todoOrder)
-export const taskDoingIdsListSelector = createSelector(baseStateSelector, (state) => state.doingOrder)
+export const taskTypedListSelector = (type: TaskType) =>
+  createSelector(taskListSelector, (taskList) => taskList.filter((task) => task.type === type).sort((a, b) => a.order - b.order))
 
-export const taskDoneListSelector = createSelector([taskMapSelector, taskDoneIdsListSelector], (map, idList) => idList.map((id) => map[id]))
-export const taskTodoListSelector = createSelector([taskMapSelector, taskTodoIdsListSelector], (map, idList) => idList.map((id) => map[id]))
-export const taskDoingListSelector = createSelector([taskMapSelector, taskDoingIdsListSelector], (map, idList) => idList.map((id) => map[id]))
+export const taskSetTimerActions = createSelector(baseStateSelector, (state) => [state.increaseTimer, state.decreaseTimer] as const)
 
-export const taskSetTimerSelector = createSelector(baseStateSelector, (state) => [state.increaseTimer, state.decreaseTimer] as const)
-
-export const taskFormFunctionSelector = createSelector(baseStateSelector, (state) => [state.addTask, state.updateTask] as const)
+export const taskFormActions = createSelector(baseStateSelector, (state) => [state.addTask, state.updateTask] as const)
 
 export const taskMoveItemSelector = createSelector(baseStateSelector, (state) => state.moveTodo)
+
+export const taskUpdateAction = createSelector(baseStateSelector, (state) => state.updateTask)

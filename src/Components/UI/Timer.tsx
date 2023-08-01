@@ -4,19 +4,23 @@ import { IoMdArrowDropupCircle, IoMdArrowDropdownCircle } from 'react-icons/io'
 
 interface TimerProps extends HTMLAttributes<HTMLSpanElement> {
   timeInSeconds: number
-  active: boolean
+  active?: boolean
   increaseTimer: () => void
   decreaseTimer: () => void
+  onTimeChange?: (newTime: number) => void
 }
 
-const Timer: FC<TimerProps> = ({ timeInSeconds, active, className = '', decreaseTimer, increaseTimer, ...rest }) => {
+const Timer: FC<TimerProps> = ({ timeInSeconds, onTimeChange, active = true, className = '', decreaseTimer, increaseTimer, ...rest }) => {
   const [currTime, setCurrTime] = useState(timeInSeconds)
 
   useEffect(() => {
     const interval = setInterval(() => {
       active &&
         setCurrTime((curr) => {
-          return curr === 0 ? curr : curr - 1
+          const newTime = curr === 0 ? curr : curr - 1
+          onTimeChange && onTimeChange(newTime)
+
+          return newTime
         })
     }, 1000)
 

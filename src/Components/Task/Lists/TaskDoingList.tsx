@@ -1,6 +1,6 @@
 import { FC, memo } from 'react'
 import { useTaskStore } from '../../../Store/task.store'
-import { taskDoingListSelector } from '../../../Store/task.selector'
+import { taskTypedListSelector } from '../../../Store/task.selector'
 import TaskList from './TaskList'
 
 interface TaskDoingListProps {
@@ -8,7 +8,7 @@ interface TaskDoingListProps {
 }
 
 const TaskDoingList: FC<TaskDoingListProps> = ({ className }) => {
-  const doingTasks = useTaskStore(taskDoingListSelector)
+  const doingTasks = useTaskStore(taskTypedListSelector('doing'))
 
   return (
     <TaskList tasks={doingTasks} droppableId={'doing'} className={className}>

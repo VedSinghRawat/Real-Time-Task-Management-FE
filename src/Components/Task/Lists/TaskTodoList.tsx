@@ -1,6 +1,6 @@
 import { FC, memo, useCallback, useState } from 'react'
 import { useTaskStore } from '../../../Store/task.store'
-import { taskTodoListSelector } from '../../../Store/task.selector'
+import { taskTypedListSelector } from '../../../Store/task.selector'
 import Button from '../../UI/Button'
 import TaskList from './TaskList'
 import TaskFormCard from '../TaskFormCard'
@@ -11,8 +11,7 @@ interface TaskTodoListProps {
 
 const TaskTodoList: FC<TaskTodoListProps> = ({ className }) => {
   const [isFormOpen, setIsFormOpen] = useState(false)
-  const todoTasks = useTaskStore(taskTodoListSelector)
-
+  const todoTasks = useTaskStore(taskTypedListSelector('todo'))
   const toggleTaskForm = useCallback(() => setIsFormOpen((curr) => !curr), [setIsFormOpen])
 
   return (

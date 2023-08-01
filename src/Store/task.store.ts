@@ -2,12 +2,10 @@ import { v4 as uuid } from 'uuid'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
+import { taskTypedListSelector } from './task.selector'
 
 export type Keys = {
   taskMap: { [id: string]: Task }
-  todoOrder: Task['id'][]
-  doingOrder: Task['id'][]
-  doneOrder: Task['id'][]
 }
 
 export type Actions = {
@@ -16,13 +14,7 @@ export type Actions = {
   removeTask: (id: Task['id']) => void
   increaseTimer: (id: Task['id'], by: number) => void
   decreaseTimer: (id: Task['id'], by: number) => void
-  moveTodo: (data: {
-    fromIndex: number
-    fromListId: 'todo' | 'doing' | 'done'
-    toIndex: number
-    toListId?: 'todo' | 'doing' | 'done'
-    item: Task
-  }) => void
+  moveTodo: (data: { fromListType: TaskType; toOrder: number; toListType?: TaskType; task: Task }) => void
 }
 
 export type State = Keys & Actions
@@ -30,31 +22,40 @@ export type State = Keys & Actions
 export const useTaskStore = create(
   persist(
     immer<State>((set) => ({
-      taskMap: {},
-      todoOrder: [],
-      doingOrder: [],
-      doneOrder: [],
+      taskMap: {
+        asdf: { description: 'task', done: false, timeLeft: 1000, estimatedTime: 1000, id: 'asdf', order: 1, type: 'todo', overTime: 0 },
+        avndk: { description: 'task 1', done: false, timeLeft: 10000, estimatedTime: 10000, id: 'avndk', order: 2, type: 'todo', overTime: 0 },
+        nkald: { description: 'task 2', done: false, timeLeft: 100, estimatedTime: 100, id: 'nkald', order: 3, type: 'todo', overTime: 0 },
+        nliia: { description: 'task 3', done: false, timeLeft: 100000, estimatedTime: 100000, id: 'nliia', order: 4, type: 'todo', overTime: 0 },
+        aslkanln: { description: 'task 4', done: false, timeLeft: 10, estimatedTime: 10, id: 'aslkanln', order: 5, type: 'todo', overTime: 0 },
+        kiwnd: { description: 'task 5', done: false, timeLeft: 10, estimatedTime: 1000000, id: 'kiwnd', order: 6, type: 'todo', overTime: 0 },
+        ownfn: { description: 'task 6', done: false, timeLeft: 10, estimatedTime: 1000000000, id: 'ownfn', order: 7, type: 'todo', overTime: 0 },
+        oppomj: { description: 'task 7', done: false, timeLeft: 10, estimatedTime: 10000000, id: 'oppomj', order: 8, type: 'todo', overTime: 0 },
+        ibbuuhj: { description: 'task 8', done: false, timeLeft: 10, estimatedTime: 100000000, id: 'ibbuuhj', order: 9, type: 'todo', overTime: 0 },
+      },
 
       addTask: (newTask) =>
         set((state) => {
           const newId = uuid()
+          const todoTasks = taskTypedListSelector('todo')(state)
 
-          state.taskMap[newId] = { ...newTask, id: newId, done: false, active: false }
-          state.todoOrder.unshift(newId)
+          todoTasks.forEach((task) => (task.order += 1))
+          state.taskMap[newId] = { ...newTask, id: newId, done: false, type: 'todo', order: 1 }
         }),
 
       updateTask: (id, updatePayload) =>
         set((state) => {
-          let old = state.taskMap[id]
+          const old = state.taskMap[id]
 
-          if (old) {
-            old = { ...old, ...updatePayload }
+          for (const key in updatePayload) {
+            // @ts-ignore
+            old[key] = updatePayload[key]
           }
         }),
 
       removeTask: (id) =>
         set((state) => {
-          state.taskMap[id]
+          delete state.taskMap[id]
         }),
 
       increaseTimer: (id, by) =>
@@ -68,26 +69,27 @@ export const useTaskStore = create(
         set((state) => {
           const task = state.taskMap[id]
 
-          if (task) task.estimatedTime -= by
+          if (task && task.estimatedTime > by) task.estimatedTime -= by
         }),
 
-      moveTodo: (data: {
-        fromIndex: number
-        fromListId: 'todo' | 'doing' | 'done'
-        toIndex: number
-        toListId?: 'todo' | 'doing' | 'done'
-        item: Task
-      }) =>
+      moveTodo: (data) =>
         set((state) => {
-          const { fromIndex, item, toIndex, fromListId, toListId } = data
+          const { fromListType, task, toOrder, toListType } = data
+          const stateTask = state.taskMap[task.id]
 
-          const orderListMapping = { todo: state.todoOrder, doing: state.doingOrder, done: state.doneOrder }
+          const fromList = taskTypedListSelector(fromListType)(state)
+          const toList = taskTypedListSelector(toListType || fromListType)(state)
 
-          const oldItemTypeList = orderListMapping[fromListId]
-          const newItemTypeList = orderListMapping[toListId || fromListId]
+          fromList.forEach((task) => {
+            if (task.order > stateTask.order && task.id !== stateTask.id) task.order -= 1
+          })
 
-          oldItemTypeList.splice(fromIndex, 1)
-          newItemTypeList.splice(toIndex, 0, item.id)
+          toList.forEach((task) => {
+            if (task.order >= toOrder && task.id !== stateTask.id) task.order += 1
+          })
+
+          stateTask.order = toOrder
+          stateTask.type = toListType ? toListType : stateTask.type
         }),
     })),
     { name: 'state-zustand' }

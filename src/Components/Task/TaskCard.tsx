@@ -1,7 +1,8 @@
 import { FC, memo, useEffect, useMemo, useRef } from 'react'
 import Timer from '../UI/Timer'
 import { useTaskStore } from '../../Store/task.store'
-import { taskSetTimerSelector } from '../../Store/task.selector'
+import { taskSetTimerActions, taskUpdateAction } from '../../Store/task.selector'
+import { AiFillDelete } from 'react-icons/ai'
 
 interface TaskCardProps {
   task: Task
@@ -13,7 +14,8 @@ interface TaskCardProps {
 const TaskCard: FC<TaskCardProps> = ({ task, className, increaseTimerBy = 60, decreaseTimerBy = 60 }) => {
   const textAreaRef = useRef<HTMLTextAreaElement>(null)
 
-  const [inc, dec] = useTaskStore(taskSetTimerSelector)
+  const [inc, dec] = useTaskStore(taskSetTimerActions)
+  const taskUpdate = useTaskStore(taskUpdateAction)
 
   const [increaseTimer, decreaseTimer] = useMemo(() => [() => inc(task.id, increaseTimerBy), () => dec(task.id, decreaseTimerBy)], [])
 
@@ -22,21 +24,26 @@ const TaskCard: FC<TaskCardProps> = ({ task, className, increaseTimerBy = 60, de
   }, [textAreaRef])
 
   const descriptionLines = task.description.split('\n')
+
   const formattedDescription = descriptionLines.map((line, i) => (
     <span key={i}>
       {line} {i < descriptionLines.length - 1 && <br />}
     </span>
   ))
+
   return (
     <div
       className={`${className} relative rounded-xl bg-primary-800 group focus-within:bg-secondary-600 p-2.5 transition-all duration-100 ease-in-out text-tertiary-600  focus-within:text-tertiary-800`}
     >
+      <AiFillDelete className={`absolute bg-secondary-300 rounded-full h-5 w-5 -top-2 -right-1 cursor-pointer`} />
+
       <p className={`bg-transparent group-focus-within:outline-primary-800 `}>{formattedDescription}</p>
 
       <Timer
-        active={task.active}
+        active={task.type === 'doing'}
+        onTimeChange={(newTime) => taskUpdate(task.id, { timeLeft: newTime })}
         className={`w-fit ml-auto`}
-        timeInSeconds={task.estimatedTime}
+        timeInSeconds={task.timeLeft || task.estimatedTime}
         increaseTimer={increaseTimer}
         decreaseTimer={decreaseTimer}
       />
