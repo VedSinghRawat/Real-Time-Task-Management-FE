@@ -22,10 +22,11 @@ const TaskFormCard: FC<TaskFormCardProps> = ({ task, className = '', onClose }) 
   const handleSubmit = useCallback(() => {
     if (timerValue) {
       const timerInSeconds = HHMMSSToSeconds(timerValue)
+
       if (timerInSeconds) {
         task
           ? onUpdate(task.id, { description: textAreaRef.current?.value || '', estimatedTime: timerInSeconds })
-          : onAdd({ description: textAreaRef.current?.value || '', estimatedTime: timerInSeconds, elapsedTime: 0 })
+          : onAdd({ description: textAreaRef.current?.value || '', estimatedTime: timerInSeconds })
 
         onClose && onClose()
       }

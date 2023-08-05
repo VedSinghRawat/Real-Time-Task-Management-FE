@@ -35,9 +35,9 @@ const TaskCard: FC<TaskCardProps> = ({ task, className, increaseTimerBy = 60, de
     <div
       className={`${className} relative rounded-xl bg-primary-800 group focus-within:bg-secondary-600 p-2.5 transition-all duration-100 ease-in-out text-tertiary-600  focus-within:text-tertiary-800`}
     >
-      <AiFillDelete className={`absolute bg-secondary-300 rounded-full h-5 w-5 -top-2 -right-1 cursor-pointer`} />
+      <AiFillDelete className={`absolute bg-secondary-300 p-[1px] rounded-full sm:h-5 sm:w-5  -top-2 -right-1 cursor-pointer`} />
 
-      <p className={`bg-transparent group-focus-within:outline-primary-800 `}>{formattedDescription}</p>
+      <p className={`bg-transparent group-focus-within:outline-primary-800 text-sm sm:text-base`}>{formattedDescription}</p>
 
       <Timer
         active={task.type === 'doing'}

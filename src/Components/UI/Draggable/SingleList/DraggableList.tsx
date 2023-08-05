@@ -23,7 +23,12 @@ const DraggableList = <T extends { id: number | string }>({
           {items.map((item, i) => (
             <Draggable draggableId={item.id.toString()} key={item.id.toString()} index={i}>
               {(provided) => (
-                <div ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps} className={`${itemContianerClasses}`}>
+                <div
+                  ref={provided.innerRef}
+                  {...provided.dragHandleProps}
+                  {...provided.draggableProps}
+                  className={`${itemContianerClasses} touch-none`}
+                >
                   {children(item, i)}
                 </div>
               )}
