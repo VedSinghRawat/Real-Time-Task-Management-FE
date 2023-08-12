@@ -45,7 +45,7 @@ const TaskCard: FC<TaskCardProps> = ({ task, className }) => {
           }}
         />
 
-        {task.timeLeft !== task.estimatedTime && (
+        {task.timeLeft !== task.estimatedTime && task.type !== 'done' && (
           <BsFillCheckCircleFill
             className={` bg-secondary-300 p-[1px] rounded-full h-5 w-5  cursor-pointer`}
             onClick={() => setIsDonePopupOpen(true)}
