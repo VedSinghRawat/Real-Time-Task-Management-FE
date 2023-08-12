@@ -15,7 +15,7 @@ interface PopupCloseButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> 
 
 const PopupCloseButton: FC<PopupCloseButtonProps> = ({ className = '', ...rest }) => {
   return (
-    <button {...rest} className={`rounded-full bg-primary-600 p-2 border-3 border-white text-white ${className}`}>
+    <button {...rest} className={`rounded-full bg-tertiary-800 p-2 border-4 border-primary-700 text-primary-700 ${className}`}>
       <ImCross className={`h-2.5 w-2.5`} />
     </button>
   )
@@ -40,18 +40,18 @@ const Popup: FC<PopupProps> = ({ children, className = '', setIsOpen, isOpen }) 
         </Transition.Child>
 
         <Transition.Child
-          className={`fixed inset-[15%] z-50 flex items-center justify-center`}
+          className={`fixed sm:inset-[15%] inset-[5%] z-50 flex items-center justify-center`}
           as="div"
-          enter="duration-700 transition-size"
-          enterFrom="scale-400 opacity-0"
+          enter="duration-300 transition-size"
+          enterFrom="scale-150 opacity-0"
           enterTo={`scale-100 opacity-100`}
-          leave="duration-700 transition-size"
+          leave="duration-300 transition-size"
           leaveFrom={`scale-100 opacity-100`}
-          leaveTo="scale-400 opacity-0"
+          leaveTo="scale-150 opacity-0"
         >
-          <div className={`relative max-w-full max-h-full flex my-auto`}>
+          <div className={`relative max-w-full max-h-full flex my-auto scale`}>
             <Dialog.Panel
-              className={`overflow-y-auto max-h-full mx-auto bg-primary-700 border-5 shadow-popup border-white rounded-2.5xl p-6 sm:p-12 ${className} `}
+              className={`overflow-y-auto max-h-full mx-auto bg-secondary-600 border-4 shadow-popup border-primary-700 rounded-2xl p-6 sm:p-12 ${className} `}
             >
               {children}
             </Dialog.Panel>
