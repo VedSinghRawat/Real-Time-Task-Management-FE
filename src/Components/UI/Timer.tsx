@@ -4,17 +4,20 @@ import { secondsToHHMMSS } from '../../utils'
 interface TimerProps extends HTMLAttributes<HTMLParagraphElement> {
   timeInSeconds: number
   active?: boolean
+  dir?: 'inc' | 'dec'
   onTimeChange?: (newTime: number) => void
 }
 
-const Timer: FC<TimerProps> = ({ timeInSeconds, onTimeChange, active = true, ...rest }) => {
+const Timer: FC<TimerProps> = ({ timeInSeconds, dir = 'dec', onTimeChange, active = true, ...rest }) => {
   const [currTime, setCurrTime] = useState(timeInSeconds)
 
   useEffect(() => {
     const interval = setInterval(() => {
       active &&
         setCurrTime((curr) => {
-          const newTime = curr === 0 ? curr : curr - 1
+          const newTime = curr + (dir === 'dec' ? -1 : 1)
+
+          setCurrTime(newTime)
           onTimeChange && onTimeChange(newTime)
 
           return newTime
@@ -22,9 +25,7 @@ const Timer: FC<TimerProps> = ({ timeInSeconds, onTimeChange, active = true, ...
     }, 1000)
 
     return () => clearInterval(interval)
-  }, [active])
-
-  useEffect(() => setCurrTime(timeInSeconds), [timeInSeconds])
+  }, [active, onTimeChange])
 
   return <p {...rest}>{secondsToHHMMSS(currTime)}</p>
 }

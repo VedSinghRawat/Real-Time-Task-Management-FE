@@ -24,7 +24,7 @@ const TimeInput: FC<TimeInputProps> = ({ className, containerClasses, getValue, 
       {
         ref: hourInputRef,
         label: 'h',
-        className: `!rounded-l-md !rounded-none pr-4 w-12 ${className}`,
+        className: `!rounded-l-md !rounded-none pr-3 w-8 ${className}`,
         setter: setHourValue,
         value: inputVals[0],
         disable: inputVals[1].length < 2,
@@ -32,7 +32,7 @@ const TimeInput: FC<TimeInputProps> = ({ className, containerClasses, getValue, 
       {
         ref: minuteInputRef,
         label: 'm',
-        className: `!rounded-none pr-5 w-11 ${className}`,
+        className: `!rounded-none pr-4 w-9 ${className}`,
         setter: setMinuteValue,
         value: inputVals[1],
         disable: inputVals[2].length < 2,
@@ -40,7 +40,7 @@ const TimeInput: FC<TimeInputProps> = ({ className, containerClasses, getValue, 
       {
         ref: secondInputRef,
         label: 's',
-        className: `!rounded-r-md !rounded-none pr-3.5 w-9 ${className}`,
+        className: `!rounded-r-md !rounded-none pr-2.5 w-7 ${className}`,
         setter: setSecondValue,
         value: inputVals[2],
         disable: false,
@@ -53,7 +53,13 @@ const TimeInput: FC<TimeInputProps> = ({ className, containerClasses, getValue, 
   }, inputVals)
 
   return (
-    <div className={`text-lg ${containerClasses}`}>
+    <div
+      className={`${containerClasses} flex`}
+      onClick={() => {
+        const activeInput = inputsData.find((input) => !input.disable)
+        activeInput?.ref.current?.focus()
+      }}
+    >
       {inputsData.map(({ ref, value, disable, label, className, setter }, i) => {
         return (
           <span className={`relative`} key={label}>

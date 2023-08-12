@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.16",
     "immer": "^10.0.2",
     "lodash": "^4.17.21",
     "react": "^18.2.0",

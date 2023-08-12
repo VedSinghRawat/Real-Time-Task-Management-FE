@@ -22,7 +22,7 @@ const TaskTodoList: FC<TaskTodoListProps> = ({ className }) => {
       <TaskList.DragList />
 
       {isFormOpen ? (
-        <TaskFormCard onClose={toggleTaskForm} className={`max-w-[14rem] mx-auto`} />
+        <TaskFormCard onClose={toggleTaskForm} className={`mx-auto`} />
       ) : (
         <Button
           className={`w-full text-center px-3 text-sm sm:text-lg py-1.5 ml-auto justify-center`}

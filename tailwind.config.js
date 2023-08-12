@@ -33,6 +33,16 @@ export default {
         300: '#47FFAF',
       },
 
+      red: {
+        700: '#C6393B',
+        600: '#D55B5D',
+        500: '#F03C3D',
+        400: '#FF6B6C',
+        300: '#FFA3A4',
+      },
+
+      white: '#FFF',
+      black: '#000',
       transparent: 'transparent',
     },
   },

@@ -39,7 +39,7 @@ const TaskFormCard: FC<TaskFormCardProps> = ({ task, className = '', onClose }) 
 
   return (
     <div
-      className={`relative rounded-xl bg-primary-800 group ${className} focus-within:bg-secondary-600 p-2.5 transition-all duration-100 ease-in-out text-tertiary-600  focus-within:text-tertiary-800`}
+      className={`relative text-sm sm:text-base rounded-xl bg-primary-800 group ${className} focus-within:bg-secondary-600 p-2.5 transition-all duration-100 ease-in-out text-tertiary-600  focus-within:text-tertiary-800`}
     >
       <TextArea setRef={textAreaRef} className={`bg-transparent group-focus-within:outline-primary-800 `} />
 

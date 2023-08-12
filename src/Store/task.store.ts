@@ -12,8 +12,7 @@ export type Actions = {
   addTask: (newTask: Omit<Task, 'id' | 'done' | 'active' | 'timeLeft' | 'order' | 'overTime' | 'type'>) => void
   updateTask: (id: Task['id'], updatePayload: Partial<Omit<Task, 'id'>>) => void
   removeTask: (id: Task['id']) => void
-  increaseTimer: (id: Task['id'], by: number) => void
-  decreaseTimer: (id: Task['id'], by: number) => void
+  changeTimer: (id: Task['id'], by: number, type: 'inc' | 'dec') => void
   moveTodo: (data: { fromListType: TaskType; toOrder: number; toListType?: TaskType; task: Task }) => void
 }
 
@@ -85,18 +84,14 @@ export const useTaskStore = create(
           delete state.taskMap[id]
         }),
 
-      increaseTimer: (id, by) =>
+      changeTimer: (id, by, type) =>
         set((state) => {
           const task = state.taskMap[id]
 
-          if (task) task.estimatedTime += by
-        }),
-
-      decreaseTimer: (id, by) =>
-        set((state) => {
-          const task = state.taskMap[id]
-
-          if (task && task.estimatedTime > by) task.estimatedTime -= by
+          if (task) {
+            task.estimatedTime += by * (type === 'dec' ? -1 : 1)
+            task.timeLeft += by * (type === 'dec' ? -1 : 1)
+          }
         }),
 
       moveTodo: (data) =>
