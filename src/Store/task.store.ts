@@ -66,7 +66,7 @@ export const useTaskStore = create(
           const todoTasks = taskTypedListSelector('todo')(state)
 
           todoTasks.forEach((task) => (task.order += 1))
-          state.taskMap[newId] = { ...newTask, id: newId, done: false, type: 'todo', order: 1, overTime: 0, timeLeft: newTask.estimatedTime }
+          state.taskMap[newId] = { ...newTask, id: newId, type: 'todo', order: 1, overTime: 0, timeLeft: newTask.estimatedTime }
         }),
 
       updateTask: (id, updatePayload) =>

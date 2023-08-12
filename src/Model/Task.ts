@@ -6,7 +6,6 @@ interface Task {
   timeLeft: number
   overTime: number
   id: string
-  done: boolean
   type: TaskType
   order: number
 }

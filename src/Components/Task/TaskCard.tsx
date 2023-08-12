@@ -45,7 +45,7 @@ const TaskCard: FC<TaskCardProps> = ({ task, className }) => {
           }}
         />
 
-        {task.timeLeft === 0 && (
+        {task.timeLeft !== task.estimatedTime && (
           <BsFillCheckCircleFill
             className={` bg-secondary-300 p-[1px] rounded-full h-5 w-5  cursor-pointer`}
             onClick={() => setIsDonePopupOpen(true)}
@@ -60,12 +60,12 @@ const TaskCard: FC<TaskCardProps> = ({ task, className }) => {
 
         {task.timeLeft < task.estimatedTime && (
           <div className={`flex flex-col ml-2 gap-y-1 `}>
-            <button className={`rounded-full bg-secondary-300`}>
-              <AiFillPlusCircle className={`text-tertiary-400 h-3.5 w-3.5`} onClick={increaseTimer} />
+            <button onClick={increaseTimer}>
+              <AiFillPlusCircle className={`bg-secondary-400 text-tertiary-300 rounded-full h-3.5 w-3.5 `} />
             </button>
 
-            <button className={`rounded-full bg-secondary-300`}>
-              <AiFillMinusCircle className={`text-tertiary-400 h-3.5 w-3.5`} onClick={decreaseTimer} />
+            <button onClick={decreaseTimer}>
+              <AiFillMinusCircle className={`bg-secondary-400 text-tertiary-300 rounded-full h-3.5 w-3.5`} />
             </button>
           </div>
         )}
