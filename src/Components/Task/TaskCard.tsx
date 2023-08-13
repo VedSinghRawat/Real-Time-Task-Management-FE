@@ -1,7 +1,7 @@
-import { FC, memo, useEffect, useMemo, useRef, useState } from 'react'
+import { FC, memo, useEffect, useRef, useState } from 'react'
 import { useTaskStore } from '../../Store/task.store'
-import { taskRemoveAction, taskSetTimerActions } from '../../Store/task.selector'
-import { AiFillDelete, AiFillMinusCircle, AiFillPlusCircle } from 'react-icons/ai'
+import { taskRemoveAction } from '../../Store/task.selector'
+import { AiFillDelete } from 'react-icons/ai'
 import { BsFillCheckCircleFill } from 'react-icons/bs'
 import TaskDonePopup from '../UI/Popups/TaskDonePopup'
 import TaskTimer from './TaskTimer'
@@ -15,9 +15,6 @@ const TaskCard: FC<TaskCardProps> = ({ task, className }) => {
   const [isDonePopupOpen, setIsDonePopupOpen] = useState(false)
 
   const textAreaRef = useRef<HTMLTextAreaElement>(null)
-
-  const [inc, dec] = useTaskStore(taskSetTimerActions)
-  const [increaseTimer, decreaseTimer] = useMemo(() => [() => inc(task.id, 60), () => dec(task.id, 60)], [])
 
   const taskRemove = useTaskStore(taskRemoveAction)
 
@@ -55,21 +52,7 @@ const TaskCard: FC<TaskCardProps> = ({ task, className }) => {
 
       <p className={`bg-transparent group-focus-within:outline-primary-800 text-sm sm:text-base max-h-28 overflow-auto`}>{formattedDescription}</p>
 
-      <div className={`flex items-center`}>
-        <TaskTimer isDonePopupOpen={isDonePopupOpen} setIsDonePopupOpen={setIsDonePopupOpen} task={task} />
-
-        {task.timeLeft >= task.estimatedTime && (
-          <div className={`flex flex-col ml-2 gap-y-1 `}>
-            <button onClick={increaseTimer}>
-              <AiFillPlusCircle className={`bg-secondary-400 text-tertiary-300 rounded-full h-3.5 w-3.5 `} />
-            </button>
-
-            <button onClick={decreaseTimer}>
-              <AiFillMinusCircle className={`bg-secondary-400 text-tertiary-300 rounded-full h-3.5 w-3.5`} />
-            </button>
-          </div>
-        )}
-      </div>
+      <TaskTimer isDonePopupOpen={isDonePopupOpen} setIsDonePopupOpen={setIsDonePopupOpen} task={task} />
 
       <TaskDonePopup task={task} isOpen={isDonePopupOpen} setIsOpen={setIsDonePopupOpen} />
     </div>

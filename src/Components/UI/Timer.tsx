@@ -1,14 +1,23 @@
-import { FC, HTMLAttributes, memo, useEffect, useState } from 'react'
+import { Dispatch, FC, HTMLAttributes, SetStateAction, memo, useEffect, useState } from 'react'
 import { secondsToHHMMSS } from '../../utils'
+import { AiFillPlusCircle, AiFillMinusCircle } from 'react-icons/ai'
 
-interface TimerProps extends HTMLAttributes<HTMLParagraphElement> {
+type TimerProps = HTMLAttributes<HTMLParagraphElement> & {
   timeInSeconds: number
   active?: boolean
   dir?: 'inc' | 'dec'
-  onTimeChange?: (newTime: number) => void
-}
 
-const Timer: FC<TimerProps> = ({ timeInSeconds, dir = 'dec', onTimeChange, active = true, ...rest }) => {
+  onTimeChange?: (newTime: number) => void
+} & (
+    | { showControls?: false }
+    | {
+        showControls?: true
+        onIncreaseControlClick: (internalSetter: Dispatch<SetStateAction<number>>) => void
+        onDecreaseControlClick: (internalSetter: Dispatch<SetStateAction<number>>) => void
+      }
+  )
+
+const Timer: FC<TimerProps> = ({ timeInSeconds, active, dir, onTimeChange, ...rest }) => {
   const [currTime, setCurrTime] = useState(timeInSeconds)
 
   useEffect(() => {
@@ -27,7 +36,23 @@ const Timer: FC<TimerProps> = ({ timeInSeconds, dir = 'dec', onTimeChange, activ
     return () => clearInterval(interval)
   }, [active, onTimeChange])
 
-  return <p {...rest}>{secondsToHHMMSS(currTime)}</p>
+  return (
+    <div className={`flex items-center`}>
+      <p {...rest}>{secondsToHHMMSS(currTime)}</p>
+
+      {rest.showControls && (
+        <div className={`flex flex-col ml-2 gap-y-1 `}>
+          <button onClick={() => rest.onIncreaseControlClick(setCurrTime)}>
+            <AiFillPlusCircle className={`bg-secondary-400 text-tertiary-300 rounded-full h-3.5 w-3.5 `} />
+          </button>
+
+          <button onClick={() => rest.onDecreaseControlClick(setCurrTime)}>
+            <AiFillMinusCircle className={`bg-secondary-400 text-tertiary-300 rounded-full h-3.5 w-3.5`} />
+          </button>
+        </div>
+      )}
+    </div>
+  )
 }
 
 export default memo(Timer)

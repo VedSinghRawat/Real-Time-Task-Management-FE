@@ -24,5 +24,9 @@ export const taskUpdateAction = createSelector(baseStateSelector, (state) => sta
 export const taskRemoveAction = createSelector(baseStateSelector, (state) => state.removeTask)
 
 export const taskTotalRemainingTime = createSelector(taskListSelector, (taskList) =>
-  taskList.reduce((totalTime, task) => totalTime + task.timeLeft, 0)
+  taskList.reduce((totalTime, task) => {
+    if (task.type !== 'done') totalTime += task.timeLeft
+
+    return totalTime
+  }, 0)
 )
