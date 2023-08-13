@@ -58,7 +58,7 @@ const TaskCard: FC<TaskCardProps> = ({ task, className }) => {
       <div className={`flex items-center`}>
         <TaskTimer isDonePopupOpen={isDonePopupOpen} setIsDonePopupOpen={setIsDonePopupOpen} task={task} />
 
-        {task.timeLeft < task.estimatedTime && (
+        {task.timeLeft >= task.estimatedTime && (
           <div className={`flex flex-col ml-2 gap-y-1 `}>
             <button onClick={increaseTimer}>
               <AiFillPlusCircle className={`bg-secondary-400 text-tertiary-300 rounded-full h-3.5 w-3.5 `} />

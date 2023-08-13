@@ -41,19 +41,26 @@ const TaskFormCard: FC<TaskFormCardProps> = ({ task, className = '', onClose }) 
     <div
       className={`relative text-sm sm:text-base rounded-xl bg-primary-800 group ${className} focus-within:bg-secondary-600 p-2.5 transition-all duration-100 ease-in-out text-tertiary-600  focus-within:text-tertiary-800`}
     >
-      <TextArea setRef={textAreaRef} className={`bg-transparent group-focus-within:outline-primary-800 `} />
+      <form
+        onSubmit={(e) => {
+          e.preventDefault()
+          handleSubmit()
+        }}
+      >
+        <TextArea setRef={textAreaRef} className={`bg-transparent group-focus-within:outline-primary-800 `} />
 
-      <div className={`relative mt-4 gap-x-4 flex`}>
-        <TimeInput
-          getValue={setTimerValue}
-          containerClasses="w-full outline-[3px] outline-secondary-400 outline group-focus-within:outline-primary-800 rounded-md"
-          className={`bg-transparent placeholder-tertiary-300 placeholder-opacity-70 group-focus-within:placeholder-tertiary-800`}
-        />
+        <div className={`relative mt-4 gap-x-4 flex`}>
+          <TimeInput
+            getValue={setTimerValue}
+            containerClasses="w-full outline-[3px] outline-secondary-400 outline group-focus-within:outline-primary-800 rounded-md"
+            className={`bg-transparent placeholder-tertiary-300 placeholder-opacity-70 group-focus-within:placeholder-tertiary-800`}
+          />
 
-        <Button className={`group-focus-within:outline-primary-800 group-focus-within:text-primary-700`} onClick={handleSubmit}>
-          {task ? 'Update' : 'Add'}
-        </Button>
-      </div>
+          <Button type="submit" className={`group-focus-within:outline-primary-800 group-focus-within:text-primary-700`} onClick={handleSubmit}>
+            {task ? 'Update' : 'Add'}
+          </Button>
+        </div>
+      </form>
 
       <HiXCircle
         className={`absolute cursor-pointer w-7 h-7 -top-3.5 -right-3.5 bg-secondary-300 rounded-full group-focus-within:bg-primary-800`}

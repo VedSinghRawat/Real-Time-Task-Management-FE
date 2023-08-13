@@ -53,13 +53,7 @@ const TimeInput: FC<TimeInputProps> = ({ className, containerClasses, getValue, 
   }, inputVals)
 
   return (
-    <div
-      className={`${containerClasses} flex`}
-      onClick={() => {
-        const activeInput = inputsData.find((input) => !input.disable)
-        activeInput?.ref.current?.focus()
-      }}
-    >
+    <div className={`${containerClasses} flex`}>
       {inputsData.map(({ ref, value, disable, label, className, setter }, i) => {
         return (
           <span className={`relative`} key={label}>

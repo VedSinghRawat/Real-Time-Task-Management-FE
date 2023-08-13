@@ -81,6 +81,14 @@ export const useTaskStore = create(
 
       removeTask: (id) =>
         set((state) => {
+          const taskToDelete = state.taskMap[id]
+
+          const deletedFromList = taskTypedListSelector(taskToDelete.type)(state)
+
+          deletedFromList.forEach((t) => {
+            if (t.order > taskToDelete.order) t.order -= 1
+          })
+
           delete state.taskMap[id]
         }),
 
