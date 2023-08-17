@@ -1,4 +1,4 @@
-import { FC, memo, useMemo } from 'react'
+import { FC, memo, useCallback, useMemo } from 'react'
 import Timer from '../UI/Timer'
 import alert from '../../assets/audio/alert.wav'
 import { taskSetTimerActions, taskUpdateAction } from '../../Store/task.selector'
@@ -18,6 +18,19 @@ const TaskTimer: FC<TaskTimerProps> = ({ task, isDonePopupOpen, setIsDonePopupOp
   const [inc, dec] = useTaskStore(taskSetTimerActions)
   const [increaseTimeEstimate, decreaseTimeEstimate] = useMemo(() => [() => inc(task.id, 60), () => dec(task.id, 60)], [])
 
+  const handleTimeChange: (newTime: number) => void = useCallback(
+    (newTime) => {
+      if (newTime === 0 && !isDonePopupOpen) {
+        alertAudio.play()
+        setIsDonePopupOpen(true)
+      }
+
+      const prop = task.timeLeft > 0 ? 'timeLeft' : 'overTime'
+      taskUpdate(task.id, { [prop]: newTime })
+    },
+    [isDonePopupOpen, task.timeLeft, taskUpdate]
+  )
+
   return (
     <Timer
       active={task.type === 'doing' && (task.timeLeft > 0 || task.overTime > 0)}
@@ -33,16 +46,7 @@ const TaskTimer: FC<TaskTimerProps> = ({ task, isDonePopupOpen, setIsDonePopupOp
         setter((curr) => curr - 60)
         decreaseTimeEstimate()
       }}
-      onTimeChange={(newTime) => {
-        if (newTime === 0 && !isDonePopupOpen) {
-          alertAudio.play()
-          setIsDonePopupOpen(true)
-        }
-
-        const prop = task.timeLeft > 0 ? 'timeLeft' : 'overTime'
-
-        taskUpdate(task.id, { [prop]: newTime })
-      }}
+      onTimeChange={handleTimeChange}
     />
   )
 }

@@ -1,11 +1,13 @@
 import { FC } from 'react'
 import TaskMultiList from './Components/Task/Lists/TaskMultiList'
 import { useTaskStore } from './Store/task.store'
-import { taskTotalRemainingTime } from './Store/task.selector'
+import { taskListSelector, taskTotalRemainingTime, taskTypedListSelector } from './Store/task.selector'
 import { secondsToHHMMSS } from './utils'
 
 const App: FC = () => {
   const totalRemainingTime = useTaskStore(taskTotalRemainingTime)
+  const doneTaskList = useTaskStore(taskTypedListSelector('done'))
+  const taskList = useTaskStore(taskListSelector)
 
   return (
     <div className={`bg-primary-600 h-[calc(100vh-0.5rem)] relative w-fit min-w-full`}>
@@ -14,7 +16,9 @@ const App: FC = () => {
 
         <p className={`text-xl`}>{secondsToHHMMSS(totalRemainingTime)}</p>
 
-        <h2 className={`text-2xl`}>Done 1/1</h2>
+        <h2 className={`text-2xl`}>
+          Done {doneTaskList.length}/{taskList.length}
+        </h2>
       </div>
 
       <TaskMultiList className={`gap-x-8 h-[70vh] px-8`} />

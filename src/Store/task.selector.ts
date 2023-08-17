@@ -1,10 +1,13 @@
 import { createSelector } from 'reselect'
 import { State } from './task.store'
+import { isToday } from 'date-fns'
 
 export const baseStateSelector = (state: State) => state
 
 export const taskMapSelector = createSelector(baseStateSelector, (state) => state.taskMap)
-export const taskListSelector = createSelector(baseStateSelector, (state) => Object.values(state.taskMap))
+export const taskListSelector = createSelector(baseStateSelector, (state) =>
+  Object.values(state.taskMap).filter((t) => (typeof t.created_at === 'string' ? isToday(new Date(t.created_at)) : isToday(t.created_at)))
+)
 
 export const taskTypedListSelector = (type: TaskType) =>
   createSelector(taskListSelector, (taskList) => taskList.filter((task) => task.type === type).sort((a, b) => a.order - b.order))

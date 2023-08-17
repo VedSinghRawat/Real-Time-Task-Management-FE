@@ -34,7 +34,7 @@ const Timer: FC<TimerProps> = ({ timeInSeconds, active, dir, onTimeChange, ...re
     }, 1000)
 
     return () => clearInterval(interval)
-  }, [active, onTimeChange])
+  }, [onTimeChange, active, dir])
 
   return (
     <div className={`flex items-center`}>

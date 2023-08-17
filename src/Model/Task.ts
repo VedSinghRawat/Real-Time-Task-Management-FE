@@ -8,4 +8,5 @@ interface Task {
   id: string
   type: TaskType
   order: number
+  created_at: Date
 }
