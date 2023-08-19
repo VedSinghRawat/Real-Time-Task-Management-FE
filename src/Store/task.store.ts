@@ -6,6 +6,7 @@ import { taskTypedListSelector } from './task.selector'
 
 export type Keys = {
   taskMap: { [id: string]: Task }
+  taskToConfirmDoneIds: Task['id'][]
 }
 
 export type Actions = {
@@ -14,6 +15,9 @@ export type Actions = {
   removeTask: (id: Task['id']) => void
   changeTimer: (id: Task['id'], by: number, type: 'inc' | 'dec') => void
   moveTodo: (data: { fromListType: TaskType; toOrder: number; toListType?: TaskType; task: Task }) => void
+  removeTaskToConfimDone: (id: Task['id']) => void
+  addTaskToConfimDone: (id: Task['id']) => void
+  clearTaskToConfimDone: () => void
 }
 
 export type State = Keys & Actions
@@ -54,47 +58,11 @@ export const useTaskStore = create(
           overTime: 0,
           created_at: new Date(),
         },
-        kiwnd: {
-          description: 'task 5',
-          timeLeft: 1000000,
-          estimatedTime: 1000000,
-          id: 'kiwnd',
-          order: 6,
-          type: 'todo',
-          overTime: 0,
-          created_at: new Date(),
-        },
-        ownfn: {
-          description: 'task 6',
-          timeLeft: 1000000000,
-          estimatedTime: 1000000000,
-          id: 'ownfn',
-          order: 7,
-          type: 'todo',
-          overTime: 0,
-          created_at: new Date(),
-        },
-        oppomj: {
-          description: 'task 7',
-          timeLeft: 10000000,
-          estimatedTime: 10000000,
-          id: 'oppomj',
-          order: 8,
-          type: 'todo',
-          overTime: 0,
-          created_at: new Date(),
-        },
-        ibbuuhj: {
-          description: 'task 8',
-          timeLeft: 100000000,
-          estimatedTime: 100000000,
-          id: 'ibbuuhj',
-          order: 9,
-          type: 'todo',
-          overTime: 0,
-          created_at: new Date(),
-        },
       },
+
+      taskToConfirmDoneIds: [],
+
+      isDonePopupOpen: false,
 
       addTask: (newTask) =>
         set((state) => {
@@ -164,6 +132,21 @@ export const useTaskStore = create(
 
           stateTask.order = toOrder
           stateTask.type = toListType ? toListType : stateTask.type
+        }),
+
+      removeTaskToConfimDone: (id) =>
+        set((state) => {
+          state.taskToConfirmDoneIds = state.taskToConfirmDoneIds.filter((tId) => tId !== id)
+        }),
+
+      addTaskToConfimDone: (id) =>
+        set((state) => {
+          state.taskToConfirmDoneIds.push(id)
+        }),
+
+      clearTaskToConfimDone: () =>
+        set((state) => {
+          state.taskToConfirmDoneIds = []
         }),
     })),
     { name: 'state-zustand' }

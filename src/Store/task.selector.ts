@@ -33,3 +33,13 @@ export const taskTotalRemainingTime = createSelector(taskListSelector, (taskList
     return totalTime
   }, 0)
 )
+
+export const taskAddToConfirmDoneActionSelector = createSelector(baseStateSelector, (state) => state.addTaskToConfimDone)
+
+export const taskRemoveToConfirmDoneActionSelector = createSelector(baseStateSelector, (state) => state.removeTaskToConfimDone)
+
+export const taskToConfirmDoneIdsSelector = createSelector(baseStateSelector, (state) => state.taskToConfirmDoneIds)
+
+export const taskToConfirmDoneListSelector = createSelector([taskToConfirmDoneIdsSelector, taskMapSelector], (ids, map) =>
+  ids.map((id) => map[id]).filter((t) => !!t)
+)

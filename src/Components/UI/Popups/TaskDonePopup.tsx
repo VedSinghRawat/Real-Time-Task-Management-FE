@@ -1,25 +1,28 @@
-import { FC, memo } from 'react'
-import Popup, { PopupProps } from './Popup'
+import { FC, memo, useState } from 'react'
+import Popup from './Popup'
 import Button from '../Button'
 import { BsFillCheckCircleFill } from 'react-icons/bs'
 import { HiXCircle } from 'react-icons/hi'
-import { taskUpdateAction } from '../../../Store/task.selector'
+import { taskRemoveToConfirmDoneActionSelector, taskUpdateAction } from '../../../Store/task.selector'
 import { useTaskStore } from '../../../Store/task.store'
 
-interface TaskDonePopupProps extends Omit<PopupProps, 'children'> {
+interface TaskDonePopupProps {
   task: Task
 }
 
-const TaskDonePopup: FC<TaskDonePopupProps> = ({ task, setIsOpen, ...rest }) => {
+const TaskDonePopup: FC<TaskDonePopupProps> = ({ task }) => {
   const taskUpdate = useTaskStore(taskUpdateAction)
+  const removeTaskToConfimDone = useTaskStore(taskRemoveToConfirmDoneActionSelector)
+
+  const [isOpen] = useState(true)
 
   return (
-    <Popup {...rest} setIsOpen={setIsOpen} className={`font-semibold text-tertiary-700`}>
+    <Popup isOpen={isOpen} setIsOpen={() => {}} className={`font-semibold text-tertiary-700`}>
       <h3>
         Are you <span className={`text-primary-700 font-bold`}>DONE</span> with this task?
       </h3>
 
-      <pre className={`mt-4`}>{task.description}</pre>
+      <pre className={`mt-4 whitespace-break-spaces`}>{task.description}</pre>
 
       <div className={`flex justify-around mt-10`}>
         <Button
@@ -27,6 +30,8 @@ const TaskDonePopup: FC<TaskDonePopupProps> = ({ task, setIsOpen, ...rest }) => 
           className={`flex-row-reverse !outline-primary-800 !text-primary-700`}
           onClick={() => {
             taskUpdate(task.id, { type: 'done' })
+
+            removeTaskToConfimDone(task.id)
           }}
         >
           YES
@@ -39,7 +44,7 @@ const TaskDonePopup: FC<TaskDonePopupProps> = ({ task, setIsOpen, ...rest }) => 
           onClick={() => {
             task.overTime === 0 && taskUpdate(task.id, { overTime: 1 })
 
-            setIsOpen(false)
+            removeTaskToConfimDone(task.id)
           }}
         >
           CONTINUE

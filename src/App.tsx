@@ -1,13 +1,17 @@
 import { FC } from 'react'
 import TaskMultiList from './Components/Task/Lists/TaskMultiList'
 import { useTaskStore } from './Store/task.store'
-import { taskListSelector, taskTotalRemainingTime, taskTypedListSelector } from './Store/task.selector'
+import { taskListSelector, taskToConfirmDoneListSelector, taskTotalRemainingTime, taskTypedListSelector } from './Store/task.selector'
 import { secondsToHHMMSS } from './utils'
+import TaskDonePopup from './Components/UI/Popups/TaskDonePopup'
 
 const App: FC = () => {
   const totalRemainingTime = useTaskStore(taskTotalRemainingTime)
   const doneTaskList = useTaskStore(taskTypedListSelector('done'))
   const taskList = useTaskStore(taskListSelector)
+  const tasksToConfirm = useTaskStore(taskToConfirmDoneListSelector)
+
+  console.log(tasksToConfirm)
 
   return (
     <div className={`bg-primary-600 h-[calc(100vh-0.5rem)] relative w-fit min-w-full`}>
@@ -22,6 +26,10 @@ const App: FC = () => {
       </div>
 
       <TaskMultiList className={`gap-x-8 h-[70vh] px-8`} />
+
+      {tasksToConfirm.map((task) => (
+        <TaskDonePopup key={task.id} task={task} />
+      ))}
     </div>
   )
 }

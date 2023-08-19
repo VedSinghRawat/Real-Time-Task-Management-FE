@@ -23,13 +23,17 @@ const TaskMultiList: FC<TaskMultiListProps> = ({ className }) => {
   )
 
   const handleTaskMove = useCallback(
-    (data: { fromIndex: number; fromListId: TaskType; item: Task; toIndex: number; toListId?: TaskType }) =>
-      taskMove({
-        fromListType: data.fromListId,
-        task: data.item,
-        toOrder: data.toIndex + 1,
-        toListType: data.toListId,
-      }),
+    (data: { fromIndex: number; fromListId: TaskType; item: Task; toIndex: number; toListId?: TaskType }) => {
+      if (data.toListId === 'done') {
+      } else {
+        taskMove({
+          fromListType: data.fromListId,
+          task: data.item,
+          toOrder: data.toIndex + 1,
+          toListType: data.toListId,
+        })
+      }
+    },
     [taskLists]
   )
 
