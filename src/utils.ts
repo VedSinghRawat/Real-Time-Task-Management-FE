@@ -31,3 +31,10 @@ export const HHMMSSToSeconds = (timeString: TimeString) => {
 
   return totalSeconds
 }
+
+export const getHistoryParam = () => {
+  const urlSearchParams = new URLSearchParams(window.location.search)
+  const { h } = Object.fromEntries(urlSearchParams.entries())
+
+  return h
+}
