@@ -29,7 +29,6 @@ const TaskDonePopup: FC<TaskDonePopupProps> = ({ task }) => {
           Icon={BsFillCheckCircleFill}
           className={`flex-row-reverse !outline-primary-800 !text-primary-700`}
           onClick={() => {
-            console.log('hello world')
             taskUpdate(task.id, { type: 'done' })
 
             removeTaskToConfimDone(task.id)
