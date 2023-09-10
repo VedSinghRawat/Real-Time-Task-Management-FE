@@ -20,7 +20,7 @@ const DatePickerPopup: FC<DatePickerPopupProps> = ({ onChange, className, ...res
   return (
     <Popup {...rest} className={`!p-0 ${className}`}>
       <div>
-        <DatePicker selected={date} onChange={(newDate) => onChange(newDate, [date, setDate])} inline />
+        <DatePicker maxDate={new Date()} selected={date} onChange={(newDate) => onChange(newDate, [date, setDate])} inline />
       </div>
     </Popup>
   )

@@ -52,3 +52,11 @@
 .react-datepicker__day {
   color: #d8d1dc;
 }
+
+.react-datepicker__day--disabled {
+  color: #585858;
+}
+
+.react-datepicker__day--keyboard-selected {
+  color: #216ba5;
+}

@@ -38,3 +38,14 @@ export const getHistoryParam = () => {
 
   return h
 }
+
+export const generateToken = () => {
+  return Math.random().toString(36).substring(2)
+}
+
+export function getRandomInt(min: number, max: number) {
+  min = Math.ceil(min)
+  max = Math.floor(max)
+
+  return Math.floor(Math.random() * (max + 1 - min) + min)
+}

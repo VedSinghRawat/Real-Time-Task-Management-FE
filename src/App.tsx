@@ -1,17 +1,15 @@
 import { FC } from 'react'
-import { getHistoryParam } from './utils'
-import TodayPage from './Pages/Today.Page'
 import Header from './Components/UI/Header'
+import { Outlet, useParams } from 'react-router-dom'
 
 const App: FC = () => {
-  const historyParam = getHistoryParam()
-
-  console.log(historyParam)
+  const { history } = useParams()
 
   return (
-    <div className={`bg-primary-600 ${historyParam ? 'h-screen' : 'h-[calc(100vh-0.5rem)] '} relative w-fit min-w-full`}>
+    <div className={`bg-primary-600 ${history ? 'h-screen' : 'h-[calc(100vh-0.5rem)] '} relative w-fit min-w-full`}>
       <Header />
-      {historyParam ? <></> : <TodayPage />}
+
+      <Outlet />
     </div>
   )
 }

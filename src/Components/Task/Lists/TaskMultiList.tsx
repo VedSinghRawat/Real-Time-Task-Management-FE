@@ -3,7 +3,7 @@ import MultiDraggableListWithContext from '../../UI/Draggable/MultiList/MultiDra
 import TaskDoingList from './TaskDoingList'
 import TaskDoneList from './TaskDoneList'
 import TaskTodoList from './TaskTodoList'
-import { taskMoveItemSelector, taskTypedListSelector } from '../../../Store/task.selector'
+import { taskAddToConfirmDoneActionSelector, taskMoveItemSelector, taskTypedListSelector } from '../../../Store/task.selector'
 import { useTaskStore } from '../../../Store/task.store'
 
 interface TaskMultiListProps {
@@ -15,6 +15,8 @@ const TaskMultiList: FC<TaskMultiListProps> = ({ className }) => {
   const doingTasks = useTaskStore(taskTypedListSelector('doing'))
   const doneTasks = useTaskStore(taskTypedListSelector('done'))
 
+  const taskAddtoToConfirmDone = useTaskStore(taskAddToConfirmDoneActionSelector)
+
   const taskMove = useTaskStore(taskMoveItemSelector)
 
   const taskLists = useMemo(
@@ -25,6 +27,7 @@ const TaskMultiList: FC<TaskMultiListProps> = ({ className }) => {
   const handleTaskMove = useCallback(
     (data: { fromIndex: number; fromListId: TaskType; item: Task; toIndex: number; toListId?: TaskType }) => {
       if (data.toListId === 'done') {
+        taskAddtoToConfirmDone(data.item.id)
       } else {
         taskMove({
           fromListType: data.fromListId,

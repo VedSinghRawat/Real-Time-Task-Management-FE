@@ -9,6 +9,7 @@ interface TodayProps {}
 
 const Today: FC<TodayProps> = ({}) => {
   const tasksToConfirm = useTaskStore(taskToConfirmDoneListSelector)
+  console.log(tasksToConfirm)
 
   return (
     <>

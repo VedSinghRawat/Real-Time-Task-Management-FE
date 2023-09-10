@@ -3,10 +3,13 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
 import { taskTypedListSelector } from './task.selector'
+import { subDays } from 'date-fns'
+import { faker } from '@faker-js/faker'
+import { generateToken, getRandomInt } from '../utils'
 
 export type Keys = {
   taskMap: { [id: string]: Task }
-  taskToConfirmDoneIds: Task['id'][]
+  taskIdsToConfirmDone: Task['id'][]
 }
 
 export type Actions = {
@@ -25,42 +28,53 @@ export type State = Keys & Actions
 export const useTaskStore = create(
   persist(
     immer<State>((set) => ({
-      taskMap: {
-        asdf: { description: 'task', timeLeft: 1000, estimatedTime: 1000, id: 'asdf', order: 1, type: 'todo', overTime: 0, created_at: new Date() },
-        avndk: {
-          description: 'task 1',
-          timeLeft: 10000,
-          estimatedTime: 10000,
-          id: 'avndk',
-          order: 2,
-          type: 'todo',
-          overTime: 0,
-          created_at: new Date(),
-        },
-        nkald: { description: 'task 2', timeLeft: 100, estimatedTime: 100, id: 'nkald', order: 3, type: 'todo', overTime: 0, created_at: new Date() },
-        nliia: {
-          description: 'task 3',
-          timeLeft: 100000,
-          estimatedTime: 100000,
-          id: 'nliia',
-          order: 4,
-          type: 'todo',
-          overTime: 0,
-          created_at: new Date(),
-        },
-        aslkanln: {
-          description: 'task 4',
-          timeLeft: 10,
-          estimatedTime: 10,
-          id: 'aslkanln',
-          order: 5,
-          type: 'todo',
-          overTime: 0,
-          created_at: new Date(),
-        },
-      },
+      taskMap: Array.from({ length: 1000 }).reduce<Keys['taskMap']>((curr, _, i) => {
+        if (i === 0) return curr
 
-      taskToConfirmDoneIds: [],
+        const doneCount = getRandomInt(2, 5)
+        const doingCount = getRandomInt(2, 5)
+        const todoCount = getRandomInt(2, 5)
+
+        Array.from({ length: todoCount }).forEach((_, j) => {
+          const id = generateToken()
+          const time = getRandomInt(30, 60 * 60 * 2)
+          curr[id] = {
+            id,
+            created_at: subDays(new Date(), i),
+            description: faker.lorem.lines(),
+            estimatedTime: time,
+            order: j + 1,
+            overTime: 0,
+            timeLeft: time,
+            type: 'todo',
+          }
+        })
+
+        Array.from({ length: doneCount + doingCount }).forEach((_, j) => {
+          const id = generateToken()
+          const time = getRandomInt(30, 60 * 60 * 2)
+          const timeTaken = getRandomInt(time / 2, time * 1.1)
+
+          let overTime = time - timeTaken
+          const timeLeft = overTime > 0 ? 0 : overTime
+          if (timeLeft !== 0) overTime = 0
+
+          curr[id] = {
+            id,
+            created_at: subDays(new Date(), i),
+            description: faker.lorem.lines(),
+            estimatedTime: time,
+            order: j + 1,
+            overTime,
+            timeLeft,
+            type: j < doneCount ? 'done' : 'doing',
+          }
+        })
+
+        return curr
+      }, {}),
+
+      taskIdsToConfirmDone: [],
 
       isDonePopupOpen: false,
 
@@ -136,17 +150,17 @@ export const useTaskStore = create(
 
       removeTaskToConfimDone: (id) =>
         set((state) => {
-          state.taskToConfirmDoneIds = state.taskToConfirmDoneIds.filter((tId) => tId !== id)
+          state.taskIdsToConfirmDone = state.taskIdsToConfirmDone.filter((tId) => tId !== id)
         }),
 
       addTaskToConfimDone: (id) =>
         set((state) => {
-          state.taskToConfirmDoneIds.push(id)
+          state.taskIdsToConfirmDone.push(id)
         }),
 
       clearTaskToConfimDone: () =>
         set((state) => {
-          state.taskToConfirmDoneIds = []
+          state.taskIdsToConfirmDone = []
         }),
     })),
     { name: 'state-zustand' }

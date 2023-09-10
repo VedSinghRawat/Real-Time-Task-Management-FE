@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect'
 import { State } from './task.store'
-import { getHistoryParam } from '../utils'
 import { isSameDay, isToday } from 'date-fns'
+import { getHistoryParam } from '../utils'
 
 export const baseStateSelector = (state: State) => state
 
@@ -29,7 +29,7 @@ export const taskUpdateAction = createSelector(baseStateSelector, (state) => sta
 
 export const taskRemoveAction = createSelector(baseStateSelector, (state) => state.removeTask)
 
-export const taskTotalRemainingTime = createSelector(taskListSelector, (taskList) =>
+export const taskTotalRemainingTimeSelector = createSelector(taskTodayListSelector, (taskList) =>
   taskList.reduce((totalTime, task) => {
     if (task.type !== 'done') totalTime += task.timeLeft
 
@@ -41,7 +41,7 @@ export const taskAddToConfirmDoneActionSelector = createSelector(baseStateSelect
 
 export const taskRemoveToConfirmDoneActionSelector = createSelector(baseStateSelector, (state) => state.removeTaskToConfimDone)
 
-export const taskToConfirmDoneIdsSelector = createSelector(baseStateSelector, (state) => state.taskToConfirmDoneIds)
+export const taskToConfirmDoneIdsSelector = createSelector(baseStateSelector, (state) => state.taskIdsToConfirmDone)
 
 export const taskToConfirmDoneListSelector = createSelector([taskToConfirmDoneIdsSelector, taskMapSelector], (ids, map) =>
   ids.map((id) => map[id]).filter((t) => !!t)
