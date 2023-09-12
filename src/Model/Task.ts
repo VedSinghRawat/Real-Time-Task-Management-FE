@@ -1,6 +1,8 @@
-type TaskType = 'todo' | 'doing' | 'done'
+export const TASK_TYPES = ['todo', 'doing', 'done'] as const
 
-interface Task {
+export type TaskType = (typeof TASK_TYPES)[number]
+
+export interface Task {
   description: string
   estimatedTime: number
   timeLeft: number

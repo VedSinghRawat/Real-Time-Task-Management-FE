@@ -23,11 +23,14 @@
     "react-icons": "^4.10.1",
     "react-router": "^6.15.0",
     "react-router-dom": "^6.15.0",
+    "recharts": "^2.8.0",
     "reselect": "^4.1.8",
     "uuid": "^9.0.0",
     "zustand": "^4.3.8"
   },
   "devDependencies": {
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
     "@types/lodash": "^4.14.195",
     "@types/react": "^18.0.37",
     "@types/react-beautiful-dnd": "^13.1.4",

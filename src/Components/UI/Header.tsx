@@ -14,7 +14,7 @@ const Header: FC<HeaderProps> = () => {
 
   return (
     <>
-      <header className={`max-w-[100vw] sticky inset-x-0 bg-primary-800 rounded-b-xl py-1.5`}>
+      <header className={`max-w-[100vw] sticky top-0 inset-x-0 bg-primary-800 rounded-b-xl py-1.5`}>
         <ul className={`flex ${history ? 'justify-around' : 'justify-center'}`}>
           {history && (
             <li>
@@ -39,11 +39,11 @@ const Header: FC<HeaderProps> = () => {
       </header>
 
       <DatePickerPopup
-        onChange={(newDate, [_, setDate]) => {
+        onChange={(newDate, setDate) => {
           setIsDatePickerOpen(false)
 
           if (newDate) {
-            navigator(`/${newDate.toISOString()}`)
+            navigator(`/${newDate.toUTCString()}`)
 
             setDate(newDate)
           }

@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+/* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path')
 
 module.exports = {
@@ -80,7 +82,7 @@ module.exports = {
           },
         ],
 
-        'no-mixed-operators': 'error',
+        'no-mixed-operators': 'warn',
 
         '@typescript-eslint/no-empty-interface': 'off',
       },

@@ -6,10 +6,12 @@ import { taskTypedListSelector } from './task.selector'
 import { subDays } from 'date-fns'
 import { faker } from '@faker-js/faker'
 import { generateToken, getRandomInt } from '../utils'
+import { Task, TaskType } from '../Model/Task'
 
 export type Keys = {
   taskMap: { [id: string]: Task }
   taskIdsToConfirmDone: Task['id'][]
+  filterDate: Date | null
 }
 
 export type Actions = {
@@ -21,6 +23,7 @@ export type Actions = {
   removeTaskToConfimDone: (id: Task['id']) => void
   addTaskToConfimDone: (id: Task['id']) => void
   clearTaskToConfimDone: () => void
+  setFilterDate: (date: Date) => void
 }
 
 export type State = Keys & Actions
@@ -31,13 +34,13 @@ export const useTaskStore = create(
       taskMap: Array.from({ length: 1000 }).reduce<Keys['taskMap']>((curr, _, i) => {
         if (i === 0) return curr
 
-        const doneCount = getRandomInt(2, 5)
-        const doingCount = getRandomInt(2, 5)
-        const todoCount = getRandomInt(2, 5)
+        const doneCount = getRandomInt(5, 8)
+        const doingCount = getRandomInt(1, 3)
+        const todoCount = getRandomInt(1, 2)
 
         Array.from({ length: todoCount }).forEach((_, j) => {
           const id = generateToken()
-          const time = getRandomInt(30, 60 * 60 * 2)
+          const time = getRandomInt(30, 60 * 60 * 1)
           curr[id] = {
             id,
             created_at: subDays(new Date(), i),
@@ -52,8 +55,8 @@ export const useTaskStore = create(
 
         Array.from({ length: doneCount + doingCount }).forEach((_, j) => {
           const id = generateToken()
-          const time = getRandomInt(30, 60 * 60 * 2)
-          const timeTaken = getRandomInt(time / 2, time * 1.1)
+          const time = getRandomInt(30, 60 * 60 * 1)
+          const timeTaken = getRandomInt(time / 1.4, time * 1.1)
 
           let overTime = time - timeTaken
           const timeLeft = overTime > 0 ? 0 : overTime
@@ -78,6 +81,8 @@ export const useTaskStore = create(
 
       isDonePopupOpen: false,
 
+      filterDate: null,
+
       addTask: (newTask) =>
         set((state) => {
           const newId = uuid()
@@ -100,7 +105,9 @@ export const useTaskStore = create(
           const old = state.taskMap[id]
 
           for (const key in updatePayload) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             old[key] = updatePayload[key]
           }
         }),
@@ -161,6 +168,11 @@ export const useTaskStore = create(
       clearTaskToConfimDone: () =>
         set((state) => {
           state.taskIdsToConfirmDone = []
+        }),
+
+      setFilterDate: (date) =>
+        set((state) => {
+          state.filterDate = date
         }),
     })),
     { name: 'state-zustand' }
