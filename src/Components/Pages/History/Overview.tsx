@@ -36,7 +36,7 @@ const Overview: FC<OverviewProps> = ({ tasks }) => {
 
       <p className={`text-center my-1`}>Out of which</p>
 
-      <div className={`flex text-black text-center gap-x-2`}>
+      <div className={`flex text-primary-300 font-medium text-center gap-x-2`}>
         {listsData.map((data) => (
           <h3 className={`px-3 py-1.5 rounded-xl flex-1`} style={{ background: data.color }}>
             {data.label}: {data.list.length}
@@ -57,7 +57,7 @@ const Overview: FC<OverviewProps> = ({ tasks }) => {
               const y = cy + radius * Math.sin(-midAngle * RADIAN)
 
               return (
-                <text x={x} y={y} fill="white" textAnchor={'middle'} dominantBaseline="central">
+                <text x={x} y={y} fill="#3D3D3D" textAnchor={'middle'} className={`text-2xl font-semibold `} dominantBaseline="central">
                   {`${(percent * 100).toFixed(0)}%`}
                 </text>
               )
