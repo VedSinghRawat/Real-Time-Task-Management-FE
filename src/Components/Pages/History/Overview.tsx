@@ -38,7 +38,7 @@ const Overview: FC<OverviewProps> = ({ tasks }) => {
 
       <div className={`flex text-primary-300 font-medium text-center gap-x-2`}>
         {listsData.map((data) => (
-          <h3 className={`px-3 py-1.5 rounded-xl flex-1`} style={{ background: data.color }}>
+          <h3 className={`px-3 py-1.5 rounded-xl flex-1`} style={{ background: data.color }} key={data.label}>
             {data.label}: {data.list.length}
           </h3>
         ))}

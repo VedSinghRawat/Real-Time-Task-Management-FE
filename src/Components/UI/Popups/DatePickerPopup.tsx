@@ -2,20 +2,26 @@ import { FC, memo } from 'react'
 import Popup, { PopupProps } from './Popup'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-import { useTaskStore } from '../../../Store/task.store'
-import { taskFilterDateStateSelector } from '../../../Store/task.selector'
+import { useParams } from 'react-router'
 
 interface DatePickerPopupProps extends Omit<PopupProps, 'children'> {
-  onChange: (date: Date, setters: (date: Date) => void) => void
+  onChange: (date: Date) => void
 }
 
-const DatePickerPopup: FC<DatePickerPopupProps> = ({ onChange, className, ...rest }) => {
-  const [date, setDate] = useTaskStore(taskFilterDateStateSelector)
+const DatePickerPopup: FC<DatePickerPopupProps> = ({ onChange, className = '', ...rest }) => {
+  const { history } = useParams()
 
   return (
     <Popup {...rest} className={`!p-0 ${className}`}>
       <div>
-        <DatePicker maxDate={new Date()} selected={date} onChange={(newDate) => newDate && onChange(newDate, setDate)} inline />
+        <DatePicker
+          maxDate={new Date()}
+          selected={history ? new Date(history) : new Date()}
+          onChange={(newDate) => {
+            newDate && onChange(newDate)
+          }}
+          inline
+        />
       </div>
     </Popup>
   )

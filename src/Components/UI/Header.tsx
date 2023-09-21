@@ -23,6 +23,7 @@ const Header: FC<HeaderProps> = () => {
                 onClick={() => {
                   navigator('/')
                 }}
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                 Icon={MdToday}
               >
                 Today
@@ -31,6 +32,7 @@ const Header: FC<HeaderProps> = () => {
           )}
 
           <li>
+            {/*  eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
             <NavLink Icon={FaHistory} className={`px-6 min-w-[8rem] max-w-max`} onClick={() => setIsDatePickerOpen(true)}>
               History
             </NavLink>
@@ -39,13 +41,11 @@ const Header: FC<HeaderProps> = () => {
       </header>
 
       <DatePickerPopup
-        onChange={(newDate, setDate) => {
+        onChange={(newDate) => {
           setIsDatePickerOpen(false)
 
           if (newDate) {
             navigator(`/${newDate.toUTCString()}`)
-
-            setDate(newDate)
           }
         }}
         isOpen={isDatePickerOpen}

@@ -1,17 +1,27 @@
 import { format } from 'date-fns'
 import { FC, memo } from 'react'
 import { secondsToHHMMSS } from '../../../utils'
+import { Task } from '../../../Model/Task'
 
 interface TimeSpentProps {
-  totalEstimatedTime: number
-  totalTimeWorked: number
-  overTimeWorked: number
-  underEstimate: number
+  taskList: Task[]
   historyDate: Date
   className?: string
 }
 
-const TimeSpent: FC<TimeSpentProps> = ({ overTimeWorked, className, historyDate, totalEstimatedTime, totalTimeWorked, underEstimate }) => {
+const TimeSpent: FC<TimeSpentProps> = ({ taskList, historyDate, className }) => {
+  let totalEstimatedTime = 0
+  let totalTimeWorked = 0
+  let overTimeWorked = 0
+  let underEstimate = 0
+
+  taskList.forEach((task) => {
+    task.overTime > 0 ? (totalTimeWorked += task.overTime + task.estimatedTime) : (totalTimeWorked += task.estimatedTime - task.timeLeft)
+    overTimeWorked += task.overTime
+    totalEstimatedTime += task.estimatedTime
+    underEstimate += task.timeLeft
+  }, 0)
+
   return (
     <section className={className}>
       <h2 className={`text-xl mb-2`}>Time Spent</h2>

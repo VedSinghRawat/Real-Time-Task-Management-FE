@@ -11,7 +11,6 @@ import { Task, TaskType } from '../Model/Task'
 export type Keys = {
   taskMap: { [id: string]: Task }
   taskIdsToConfirmDone: Task['id'][]
-  filterDate: Date | null
 }
 
 export type Actions = {
@@ -23,7 +22,6 @@ export type Actions = {
   removeTaskToConfimDone: (id: Task['id']) => void
   addTaskToConfimDone: (id: Task['id']) => void
   clearTaskToConfimDone: () => void
-  setFilterDate: (date: Date) => void
 }
 
 export type State = Keys & Actions
@@ -40,11 +38,11 @@ export const useTaskStore = create(
 
         Array.from({ length: todoCount }).forEach((_, j) => {
           const id = generateToken()
-          const time = getRandomInt(30, 60 * 60 * 1)
+          const time = getRandomInt(450, 60 * 60 * 1)
           curr[id] = {
             id,
             created_at: subDays(new Date(), i),
-            description: faker.lorem.lines(),
+            description: faker.lorem.lines({ min: 2, max: 3 }),
             estimatedTime: time,
             order: j + 1,
             overTime: 0,
@@ -55,22 +53,22 @@ export const useTaskStore = create(
 
         Array.from({ length: doneCount + doingCount }).forEach((_, j) => {
           const id = generateToken()
-          const time = getRandomInt(30, 60 * 60 * 1)
-          const timeTaken = getRandomInt(time / 1.4, time * 1.1)
+          const estimatedTime = getRandomInt(450, 60 * 60 * 1)
+          const timeTaken = getRandomInt(estimatedTime / 1.2, estimatedTime * 1.1)
 
-          let overTime = time - timeTaken
-          const timeLeft = overTime > 0 ? 0 : overTime
-          if (timeLeft !== 0) overTime = 0
+          let timeLeft = estimatedTime - timeTaken
+          const overTime = timeLeft > 0 ? 0 : Math.abs(timeLeft)
+          if (overTime !== 0) timeLeft = 0
 
           curr[id] = {
             id,
             created_at: subDays(new Date(), i),
-            description: faker.lorem.lines(),
-            estimatedTime: time,
+            description: faker.lorem.lines({ min: 2, max: 3 }),
             order: j + 1,
+            type: j < doneCount ? 'done' : 'doing',
+            estimatedTime,
             overTime,
             timeLeft,
-            type: j < doneCount ? 'done' : 'doing',
           }
         })
 
@@ -80,8 +78,6 @@ export const useTaskStore = create(
       taskIdsToConfirmDone: [],
 
       isDonePopupOpen: false,
-
-      filterDate: null,
 
       addTask: (newTask) =>
         set((state) => {
@@ -168,11 +164,6 @@ export const useTaskStore = create(
       clearTaskToConfimDone: () =>
         set((state) => {
           state.taskIdsToConfirmDone = []
-        }),
-
-      setFilterDate: (date) =>
-        set((state) => {
-          state.filterDate = date
         }),
     })),
     { name: 'state-zustand' }

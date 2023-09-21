@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect'
 import { State } from './task.store'
 import { isSameDay, isToday } from 'date-fns'
+import { TaskType, Task } from '../Model/Task'
 
 export const baseStateSelector = (state: State) => state
 
@@ -46,11 +47,9 @@ export const taskToConfirmDoneListSelector = createSelector([taskToConfirmDoneId
   ids.map((id) => map[id]).filter((t) => !!t)
 )
 
-export const taskListParamFilteredListSelector = createSelector(taskListSelector, (list) => {
-  const history = window.location.pathname.split('/').pop()?.replaceAll('%20', ' ')
-  const filterDate = new Date(history || '')
-
-  return list.filter((task) => isSameDay(typeof task.created_at === 'string' ? new Date(task.created_at) : task.created_at, filterDate))
-})
-
-export const taskFilterDateStateSelector = createSelector(baseStateSelector, (state) => [state.filterDate, state.setFilterDate] as const)
+export const taskListDateFilteredSelector = (filterDate?: Date) =>
+  createSelector(taskListSelector, (list) => {
+    return filterDate
+      ? list.filter((task) => isSameDay(typeof task.created_at === 'string' ? new Date(task.created_at) : task.created_at, filterDate))
+      : []
+  })
