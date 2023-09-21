@@ -19,7 +19,7 @@ const History: FC<HistoryProps> = () => {
 
   return (
     <div className={`max-w-[100vw] w-full px-6 text-secondary-600 py-4 `}>
-      <h1 className={`text-2xl text-center`}>History for {format(historyDate, 'io LLLL yyyy')}</h1>
+      <h1 className={`text-2xl text-center`}>History for {format(historyDate, ' do LLLL yyyy')}</h1>
 
       <Overview tasks={taskList} />
 

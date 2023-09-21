@@ -19,7 +19,7 @@ const TimeSpent: FC<TimeSpentProps> = ({ taskList, historyDate, className }) => 
     task.overTime > 0 ? (totalTimeWorked += task.overTime + task.estimatedTime) : (totalTimeWorked += task.estimatedTime - task.timeLeft)
     overTimeWorked += task.overTime
     totalEstimatedTime += task.estimatedTime
-    underEstimate += task.timeLeft
+    underEstimate += task.type !== 'todo' ? task.timeLeft : 0
   }, 0)
 
   return (
@@ -31,7 +31,7 @@ const TimeSpent: FC<TimeSpentProps> = ({ taskList, historyDate, className }) => 
       </p>
 
       <p>
-        Total time worked on {format(historyDate, 'io LLLL')}: <span className={`font-semibold text-lg`}>{secondsToHHMMSS(totalTimeWorked)}</span>
+        Total time worked on {format(historyDate, 'do LLLL')}: <span className={`font-semibold text-lg`}>{secondsToHHMMSS(totalTimeWorked)}</span>
       </p>
 
       <p>
