@@ -39,7 +39,7 @@ const TimeSpent: FC<TimeSpentProps> = ({ taskList, historyDate, className }) => 
       </p>
 
       <p>
-        Time saved under your estimate: <span className={`font-semibold  text-[#48e629] text-lg`}>{secondsToHHMMSS(underEstimate)}</span>
+        Time saved under your estimate: <span className={`font-semibold  text-[#82ca9d] text-lg`}>{secondsToHHMMSS(underEstimate)}</span>
       </p>
     </section>
   )

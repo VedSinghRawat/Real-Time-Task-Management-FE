@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { FC, memo, useState } from 'react'
 import Popup from './Popup'
 import Button from '../Button'
@@ -5,6 +6,7 @@ import { BsFillCheckCircleFill } from 'react-icons/bs'
 import { HiXCircle } from 'react-icons/hi'
 import { taskRemoveToConfirmDoneActionSelector, taskUpdateAction } from '../../../Store/task.selector'
 import { useTaskStore } from '../../../Store/task.store'
+import { Task } from '../../../Model/Task'
 
 interface TaskDonePopupProps {
   task: Task
@@ -17,6 +19,7 @@ const TaskDonePopup: FC<TaskDonePopupProps> = ({ task }) => {
   const [isOpen] = useState(true)
 
   return (
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     <Popup isOpen={isOpen} setIsOpen={() => {}} className={`font-semibold text-tertiary-700`}>
       <h3>
         Are you <span className={`text-primary-700 font-bold`}>DONE</span> with this task?

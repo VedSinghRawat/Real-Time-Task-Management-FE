@@ -12,6 +12,7 @@
   "dependencies": {
     "@faker-js/faker": "^8.0.2",
     "@headlessui/react": "^1.7.16",
+    "@types/react-icons": "^3.0.0",
     "date-fns": "^2.30.0",
     "immer": "^10.0.2",
     "lodash": "^4.17.21",
@@ -29,8 +30,6 @@
     "zustand": "^4.3.8"
   },
   "devDependencies": {
-    "eslint-config-prettier": "^9.0.0",
-    "eslint-plugin-prettier": "^5.0.0",
     "@types/lodash": "^4.14.195",
     "@types/react": "^18.0.37",
     "@types/react-beautiful-dnd": "^13.1.4",
@@ -42,6 +41,8 @@
     "@vitejs/plugin-react-swc": "^3.0.0",
     "autoprefixer": "^10.4.14",
     "eslint": "^8.38.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.3.4",
     "postcss": "^8.4.24",
