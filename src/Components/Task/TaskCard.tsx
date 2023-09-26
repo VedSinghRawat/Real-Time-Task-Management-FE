@@ -3,13 +3,14 @@ import { useTaskStore } from '../../Store/task.store'
 import { taskRemoveAction } from '../../Store/task.selector'
 import { AiFillDelete } from 'react-icons/ai'
 import TaskTimer from './TaskTimer'
+import { Task } from '../../Model/Task'
 
 interface TaskCardProps {
   task: Task
   className?: string
 }
 
-const TaskCard: FC<TaskCardProps> = ({ task, className }) => {
+const TaskCard: FC<TaskCardProps> = ({ task, className = '' }) => {
   const textAreaRef = useRef<HTMLTextAreaElement>(null)
 
   const taskRemove = useTaskStore(taskRemoveAction)

@@ -3,6 +3,7 @@ import Timer from '../UI/Timer'
 import alert from '../../assets/audio/alert.wav'
 import { taskAddToConfirmDoneActionSelector, taskSetTimerActions, taskToConfirmDoneIdsSelector, taskUpdateAction } from '../../Store/task.selector'
 import { useTaskStore } from '../../Store/task.store'
+import { Task } from '../../Model/Task'
 
 const alertAudio = new Audio(alert)
 
@@ -17,19 +18,19 @@ const TaskTimer: FC<TaskTimerProps> = ({ task }) => {
   const taskToConfirmDoneIds = useTaskStore(taskToConfirmDoneIdsSelector)
 
   const [inc, dec] = useTaskStore(taskSetTimerActions)
-  const [increaseTimeEstimate, decreaseTimeEstimate] = useMemo(() => [() => inc(task.id, 60), () => dec(task.id, 60)], [])
+  const [increaseTimeEstimate, decreaseTimeEstimate] = useMemo(() => [() => inc(task.id, 60), () => dec(task.id, 60)], [dec, inc, task.id])
 
   const handleTimeChange: (newTime: number) => void = useCallback(
     (newTime) => {
       if (newTime === 0 && !taskToConfirmDoneIds.includes(task.id)) {
-        alertAudio.play()
+        void alertAudio.play()
         taskAddtoToConfirmDone(task.id)
       }
 
       const prop = task.timeLeft > 0 ? 'timeLeft' : 'overTime'
       taskUpdate(task.id, { [prop]: newTime })
     },
-    [task.timeLeft, taskUpdate]
+    [task.id, task.timeLeft, taskAddtoToConfirmDone, taskToConfirmDoneIds, taskUpdate]
   )
 
   return (

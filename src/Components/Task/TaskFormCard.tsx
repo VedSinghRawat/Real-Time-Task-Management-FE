@@ -6,6 +6,7 @@ import { HHMMSSToSeconds, TimeString } from '../../utils'
 import TimeInput from '../UI/Form/Input/TimeInput'
 import { useTaskStore } from '../../Store/task.store'
 import { taskFormActions } from '../../Store/task.selector'
+import { Task } from '../../Model/Task'
 
 type TaskFormCardProps = {
   className?: string
@@ -31,7 +32,7 @@ const TaskFormCard: FC<TaskFormCardProps> = ({ task, className = '', onClose }) 
         onClose && onClose()
       }
     }
-  }, [onAdd, onUpdate, timerValue])
+  }, [onAdd, onUpdate, timerValue, onClose, task])
 
   useEffect(() => {
     textAreaRef.current?.focus()

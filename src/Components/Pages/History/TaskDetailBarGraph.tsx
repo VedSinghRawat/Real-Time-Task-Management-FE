@@ -42,13 +42,17 @@ const TaskDetailBarGraph: FC<TaskDetailBarGraphProps> = ({ className = '', taskL
   let tasksOverTimeCount = 0
   let tasksInTimeCount = 0
 
-  const mainGraphData: {
+  const timeGraphData: {
     description: string
     type: 'todo' | 'doing' | 'done'
     timeLeft: number
     timeSaved: number
     overTime: number
     timeTaken: number
+  }[] = []
+
+  const progressGraphData: {
+    progress: number
   }[] = []
 
   startedTasks.forEach(({ description, type, estimatedTime, overTime, timeLeft }) => {
@@ -60,7 +64,7 @@ const TaskDetailBarGraph: FC<TaskDetailBarGraphProps> = ({ className = '', taskL
       else tasksInTimeCount++
     }
 
-    mainGraphData.push({
+    timeGraphData.push({
       description,
       type,
       timeLeft: type === 'done' ? 0 : timeLeft,
@@ -68,7 +72,14 @@ const TaskDetailBarGraph: FC<TaskDetailBarGraphProps> = ({ className = '', taskL
       overTime,
       timeTaken,
     })
+
+    type === 'doing' && progressGraphData.push({ progress: +((timeTaken / estimatedTime) * 100).toFixed(2) })
   })
+
+  progressGraphData.push(...progressGraphData, ...progressGraphData)
+
+  let progressGraphHeight: number | string = progressGraphData.length * 50
+  if (progressGraphHeight < 200) progressGraphHeight = '100%'
 
   return (
     <section className={`${className}`}>
@@ -79,7 +90,7 @@ const TaskDetailBarGraph: FC<TaskDetailBarGraphProps> = ({ className = '', taskL
 
         <div className={`relative overflow-x-auto my-4 py-2`}>
           <ResponsiveContainer height={'100%'} maxHeight={300} aspect={1} width={taskList.length * 50}>
-            <BarChart data={mainGraphData} margin={{ left: 25 }}>
+            <BarChart data={timeGraphData} margin={{ left: 25 }}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="type" />
               <YAxis tickFormatter={secondsToHHMMSS} />
@@ -116,13 +127,13 @@ const TaskDetailBarGraph: FC<TaskDetailBarGraphProps> = ({ className = '', taskL
         <h3 className={`text-lg`}>Of Doing Tasks</h3>
 
         <div className={`relative overflow-x-auto my-4 py-2`}>
-          <ResponsiveContainer height={'100%'} maxHeight={300} aspect={1} width={taskList.length * 50}>
-            <BarChart data={mainGraphData} margin={{ left: 25 }}>
+          <ResponsiveContainer height={progressGraphHeight} minHeight={200}>
+            <BarChart data={progressGraphData} layout="vertical">
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis />
-              <YAxis dataKey="type" />
+              <XAxis type="number" domain={[0, Math.max(100, ...progressGraphData.map(({ progress }) => progress))]} />
+              <YAxis dataKey={'progress'} type="category" />
               <Legend />
-              <Tooltip content={<CustomTooltip />} />
+              <Tooltip />
               <Bar dataKey="progress" stackId="a" fill="#F03C3D" />
             </BarChart>
           </ResponsiveContainer>

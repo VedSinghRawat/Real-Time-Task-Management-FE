@@ -5,12 +5,13 @@ import TaskDoneList from './TaskDoneList'
 import TaskTodoList from './TaskTodoList'
 import { taskAddToConfirmDoneActionSelector, taskMoveItemSelector, taskTypedListSelector } from '../../../Store/task.selector'
 import { useTaskStore } from '../../../Store/task.store'
+import { TaskType, Task } from '../../../Model/Task'
 
 interface TaskMultiListProps {
   className?: string
 }
 
-const TaskMultiList: FC<TaskMultiListProps> = ({ className }) => {
+const TaskMultiList: FC<TaskMultiListProps> = ({ className = '' }) => {
   const todoTasks = useTaskStore(taskTypedListSelector('todo'))
   const doingTasks = useTaskStore(taskTypedListSelector('doing'))
   const doneTasks = useTaskStore(taskTypedListSelector('done'))
@@ -37,7 +38,7 @@ const TaskMultiList: FC<TaskMultiListProps> = ({ className }) => {
         })
       }
     },
-    [taskLists]
+    [taskAddtoToConfirmDone, taskMove]
   )
 
   return (
