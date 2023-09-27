@@ -11,15 +11,20 @@ interface TaskDetailBarGraphProps {
 
 const CustomTooltip: TooltipProps<ValueType, NameType>['content'] = ({ active, payload }) => {
   if (active && payload && payload.length) {
-    const taskData = payload[0].payload as { description: string; timeLeft: number; overTime: number; timeTaken: number }
+    const taskData = payload[0].payload as { description: string } & (
+      | { timeLeft: number; timeTaken: number; overTime: number }
+      | { progress: number; overEstimate: number }
+    )
 
     return (
       <div className="max-w-[15rem] bg-primary-500 bg-opacity-80 p-2 text-secondary-500 rounded-sm">
         <div className={`grid grid-cols-2 gap-x-2`}>
           {payload.map((props) => {
+            const val = +taskData[props.dataKey as keyof typeof taskData]
+
             return props.dataKey ? (
               <p key={props.color} style={{ color: props.color }}>
-                {secondsToHHMMSS(+taskData[props.dataKey as keyof typeof taskData])}
+                {props.dataKey === 'progress' || props.dataKey === 'overEstimate' ? `${val}%` : secondsToHHMMSS(val)}
               </p>
             ) : (
               <></>
@@ -53,7 +58,11 @@ const TaskDetailBarGraph: FC<TaskDetailBarGraphProps> = ({ className = '', taskL
 
   const progressGraphData: {
     progress: number
+    overEstimate: number
+    description: string
   }[] = []
+
+  let maxProgress = 0
 
   startedTasks.forEach(({ description, type, estimatedTime, overTime, timeLeft }) => {
     const timeTaken = estimatedTime - timeLeft
@@ -73,13 +82,23 @@ const TaskDetailBarGraph: FC<TaskDetailBarGraphProps> = ({ className = '', taskL
       timeTaken,
     })
 
-    type === 'doing' && progressGraphData.push({ progress: +((timeTaken / estimatedTime) * 100).toFixed(2) })
-  })
+    if (type === 'doing') {
+      const progress = +((timeTaken / estimatedTime) * 100).toFixed(2)
+      const overEstimate = +((overTime / estimatedTime) * 100).toFixed(2)
 
-  progressGraphData.push(...progressGraphData, ...progressGraphData)
+      const totalProgress = progress + overEstimate
+      if (totalProgress > maxProgress) maxProgress = totalProgress
+
+      progressGraphData.push({ progress, overEstimate, description })
+    }
+  })
 
   let progressGraphHeight: number | string = progressGraphData.length * 50
   if (progressGraphHeight < 200) progressGraphHeight = '100%'
+
+  const progressChartMax = Math.ceil((Math.max(100, maxProgress) + 1) / 10) * 10
+  // prettier-ignore
+  const progressChartIntervalCount = (progressChartMax / 10) + 1
 
   return (
     <section className={`${className}`}>
@@ -127,14 +146,15 @@ const TaskDetailBarGraph: FC<TaskDetailBarGraphProps> = ({ className = '', taskL
         <h3 className={`text-lg`}>Of Doing Tasks</h3>
 
         <div className={`relative overflow-x-auto my-4 py-2`}>
-          <ResponsiveContainer height={progressGraphHeight} minHeight={200}>
+          <ResponsiveContainer height={progressGraphHeight} minHeight={200} width={progressChartIntervalCount * 30}>
             <BarChart data={progressGraphData} layout="vertical">
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis type="number" domain={[0, Math.max(100, ...progressGraphData.map(({ progress }) => progress))]} />
+              <XAxis type="number" tickCount={progressChartIntervalCount} domain={[0, progressChartMax]} />
               <YAxis dataKey={'progress'} type="category" />
               <Legend />
-              <Tooltip />
-              <Bar dataKey="progress" stackId="a" fill="#F03C3D" />
+              <Tooltip content={<CustomTooltip />} />
+              <Bar dataKey="progress" stackId="a" barSize={30} fill="#8884d8" />
+              <Bar dataKey="overEstimate" stackId="a" barSize={30} fill="#F03C3D" />
             </BarChart>
           </ResponsiveContainer>
         </div>
