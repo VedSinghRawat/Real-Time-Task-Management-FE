@@ -5,7 +5,7 @@ import { useParams } from 'react-router'
 import { format } from 'date-fns'
 import Overview from '../Components/Pages/History/Overview'
 import TimeSpent from '../Components/Pages/History/TimeSpent'
-import TaskDetailBarGraph from '../Components/Pages/History/TaskDetailBarGraph'
+import TasksDetail from '../Components/Pages/History/TasksDetail'
 
 interface HistoryProps {}
 
@@ -25,7 +25,7 @@ const History: FC<HistoryProps> = () => {
 
       <TimeSpent className={`my-4`} historyDate={historyDate} taskList={taskList} />
 
-      <TaskDetailBarGraph taskList={taskList} className={'my-4'} />
+      <TasksDetail taskList={taskList} className={'my-4'} />
     </div>
   )
 }

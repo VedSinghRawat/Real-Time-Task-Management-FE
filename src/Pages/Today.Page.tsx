@@ -7,14 +7,14 @@ import { useTaskStore } from '../Store/task.store'
 
 interface TodayProps {}
 
-const Today: FC<TodayProps> = ({}) => {
+const Today: FC<TodayProps> = () => {
   const tasksToConfirm = useTaskStore(taskToConfirmDoneListSelector)
 
   return (
     <>
       <Info />
 
-      <TaskMultiList className={`gap-x-8 h-[65vh] px-8`} />
+      <TaskMultiList className={`gap-x-8 max-h-[65vh] px-8 grow`} />
 
       {tasksToConfirm.map((task) => (
         <TaskDonePopup key={task.id} task={task} />

@@ -40,7 +40,7 @@ const CustomTooltip: TooltipProps<ValueType, NameType>['content'] = ({ active, p
   return null
 }
 
-const TaskDetailBarGraph: FC<TaskDetailBarGraphProps> = ({ className = '', taskList }) => {
+const TasksDetail: FC<TaskDetailBarGraphProps> = ({ className = '', taskList }) => {
   const startedTasks = taskList.filter((t) => t.type !== 'todo')
 
   let tasksUnderTimeCount = 0
@@ -99,6 +99,7 @@ const TaskDetailBarGraph: FC<TaskDetailBarGraphProps> = ({ className = '', taskL
   const progressChartMax = Math.ceil((Math.max(100, maxProgress) + 1) / 10) * 10
   // prettier-ignore
   const progressChartIntervalCount = (progressChartMax / 10) + 1
+  console.log(progressChartIntervalCount)
 
   return (
     <section className={`${className}`}>
@@ -111,7 +112,7 @@ const TaskDetailBarGraph: FC<TaskDetailBarGraphProps> = ({ className = '', taskL
           <ResponsiveContainer height={'100%'} maxHeight={300} aspect={1} width={taskList.length * 50}>
             <BarChart data={timeGraphData} margin={{ left: 25 }}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="type" />
+              <XAxis dataKey="type" interval={0} />
               <YAxis tickFormatter={secondsToHHMMSS} />
               <Legend />
               <Tooltip content={<CustomTooltip />} />
@@ -146,11 +147,11 @@ const TaskDetailBarGraph: FC<TaskDetailBarGraphProps> = ({ className = '', taskL
         <h3 className={`text-lg`}>Of Doing Tasks</h3>
 
         <div className={`relative overflow-x-auto my-4 py-2`}>
-          <ResponsiveContainer height={progressGraphHeight} minHeight={200} width={progressChartIntervalCount * 30}>
+          <ResponsiveContainer height={progressGraphHeight} minHeight={200} width={progressChartIntervalCount * 35}>
             <BarChart data={progressGraphData} layout="vertical">
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis type="number" tickCount={progressChartIntervalCount} domain={[0, progressChartMax]} />
-              <YAxis dataKey={'progress'} type="category" />
+              <XAxis type="number" tickCount={progressChartIntervalCount} interval={0} domain={[0, progressChartMax]} padding={{ right: 10 }} />
+              <YAxis dataKey={'progress'} type="category" tickFormatter={(val: string) => `${val}%`} />
               <Legend />
               <Tooltip content={<CustomTooltip />} />
               <Bar dataKey="progress" stackId="a" barSize={30} fill="#8884d8" />
@@ -163,4 +164,4 @@ const TaskDetailBarGraph: FC<TaskDetailBarGraphProps> = ({ className = '', taskL
   )
 }
 
-export default memo(TaskDetailBarGraph)
+export default memo(TasksDetail)
