@@ -4,12 +4,13 @@ import { NameType, ValueType } from 'recharts/types/component/DefaultTooltipCont
 
 export const CustomTooltip: FC<
   TooltipProps<ValueType, NameType> & {
-    mainNode: (dataPoint: unknown) => ReactNode
+    mainNode: (dataPoint: any) => ReactNode
     tickNode?: (tickVal: ValueType) => ReactNode
   }
 > = ({ active, payload: ticks, mainNode, tickNode }) => {
   if (active && ticks && ticks[0]) {
-    const dataPoint = ticks[0].payload as unknown
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const dataPoint = ticks[0].payload
 
     return (
       <div className="max-w-[15rem] bg-primary-500 bg-opacity-80 p-2 text-secondary-500 rounded-sm">

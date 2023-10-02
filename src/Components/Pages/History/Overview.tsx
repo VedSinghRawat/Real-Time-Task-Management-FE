@@ -1,17 +1,10 @@
 import { FC, memo } from 'react'
 import { ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
 import { Task } from '../../../Model/Task'
+import { COLORS, RADIAN } from '../../../constants'
 
 interface OverviewProps {
   tasks: Task[]
-}
-
-const RADIAN = Math.PI / 180
-
-const COLORS = {
-  done: '#0FFF95',
-  doing: '#FEE12B',
-  todo: '#F03C3D',
 }
 
 const LABELS = {
