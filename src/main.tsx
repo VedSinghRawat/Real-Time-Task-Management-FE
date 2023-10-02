@@ -4,6 +4,7 @@ import './index.css'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import TodayPage from './Pages/Today.Page.tsx'
 import HistoryPage from './Pages/History.Page.tsx'
+import DashboardPage from './Pages/Dashboard.Page.tsx'
 
 const router = createBrowserRouter([
   {
@@ -14,7 +15,10 @@ const router = createBrowserRouter([
         path: '',
         element: <TodayPage />,
       },
-
+      {
+        path: 'dashboard',
+        element: <DashboardPage />,
+      },
       {
         path: ':history',
         element: <HistoryPage />,

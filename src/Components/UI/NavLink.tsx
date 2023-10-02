@@ -2,7 +2,7 @@ import { ButtonHTMLAttributes, FC, memo } from 'react'
 import { IconType } from 'react-icons'
 
 interface NavLinkProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  Icon: IconType
+  Icon?: IconType
 }
 
 const NavLink: FC<NavLinkProps> = ({ className = '', Icon, children, ...rest }) => {

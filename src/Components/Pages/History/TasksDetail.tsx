@@ -1,43 +1,12 @@
 import { FC, memo } from 'react'
 import { Task } from '../../../Model/Task'
-import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, TooltipProps, XAxis, YAxis } from 'recharts'
-import { NameType, ValueType } from 'recharts/types/component/DefaultTooltipContent'
+import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { secondsToHHMMSS } from '../../../utils'
+import { CustomTooltip } from '../../UI/CustomTooltip'
 
 interface TaskDetailBarGraphProps {
   taskList: Task[]
   className?: string
-}
-
-const CustomTooltip: TooltipProps<ValueType, NameType>['content'] = ({ active, payload }) => {
-  if (active && payload && payload.length) {
-    const taskData = payload[0].payload as { description: string } & (
-      | { timeLeft: number; timeTaken: number; overTime: number }
-      | { progress: number; overEstimate: number }
-    )
-
-    return (
-      <div className="max-w-[15rem] bg-primary-500 bg-opacity-80 p-2 text-secondary-500 rounded-sm">
-        <div className={`grid grid-cols-2 gap-x-2`}>
-          {payload.map((props) => {
-            const val = +taskData[props.dataKey as keyof typeof taskData]
-
-            return props.dataKey ? (
-              <p key={props.color} style={{ color: props.color }}>
-                {props.dataKey === 'progress' || props.dataKey === 'overEstimate' ? `${val}%` : secondsToHHMMSS(val)}
-              </p>
-            ) : (
-              <></>
-            )
-          })}
-        </div>
-
-        <p className="text-sm">{taskData.description}</p>
-      </div>
-    )
-  }
-
-  return null
 }
 
 const TasksDetail: FC<TaskDetailBarGraphProps> = ({ className = '', taskList }) => {
@@ -99,13 +68,12 @@ const TasksDetail: FC<TaskDetailBarGraphProps> = ({ className = '', taskList }) 
   const progressChartMax = Math.ceil((Math.max(100, maxProgress) + 1) / 10) * 10
   // prettier-ignore
   const progressChartIntervalCount = (progressChartMax / 10) + 1
-  console.log(progressChartIntervalCount)
 
   return (
     <section className={`${className}`}>
       <h2 className={`text-xl sticky inset-x-0`}>Detailed Task analysis</h2>
 
-      <div className={`my-4`}>
+      <section className={`my-4`}>
         <h3 className={`text-lg `}>Of Started Tasks</h3>
 
         <div className={`relative overflow-x-auto my-4 py-2`}>
@@ -115,7 +83,17 @@ const TasksDetail: FC<TaskDetailBarGraphProps> = ({ className = '', taskList }) 
               <XAxis dataKey="type" interval={0} />
               <YAxis tickFormatter={secondsToHHMMSS} />
               <Legend />
-              <Tooltip content={<CustomTooltip />} />
+              <Tooltip
+                content={
+                  <CustomTooltip
+                    mainNode={(dataPoint) => {
+                      const dp = dataPoint as (typeof timeGraphData)[number]
+                      return <p>{dp.description}</p>
+                    }}
+                    tickNode={(tickVal) => secondsToHHMMSS(+tickVal)}
+                  />
+                }
+              />
               <Bar dataKey="timeTaken" stackId="a" fill="#8884d8" />
               <Bar dataKey="timeSaved" stackId="a" fill="#82ca9d" />
               <Bar dataKey="timeLeft" stackId="a" fill="#d1f532" />
@@ -123,9 +101,9 @@ const TasksDetail: FC<TaskDetailBarGraphProps> = ({ className = '', taskList }) 
             </BarChart>
           </ResponsiveContainer>
         </div>
-      </div>
+      </section>
 
-      <div>
+      <section>
         <h3 className={`text-lg `}>Of Completed Tasks</h3>
 
         <ul className={`list-disc ml-8`}>
@@ -141,9 +119,9 @@ const TasksDetail: FC<TaskDetailBarGraphProps> = ({ className = '', taskList }) 
             Time
           </li>
         </ul>
-      </div>
+      </section>
 
-      <div className={`my-4`}>
+      <section className={`my-4`}>
         <h3 className={`text-lg`}>Of Doing Tasks</h3>
 
         <div className={`relative overflow-x-auto my-4 py-2`}>
@@ -153,13 +131,23 @@ const TasksDetail: FC<TaskDetailBarGraphProps> = ({ className = '', taskList }) 
               <XAxis type="number" tickCount={progressChartIntervalCount} interval={0} domain={[0, progressChartMax]} padding={{ right: 10 }} />
               <YAxis dataKey={'progress'} type="category" tickFormatter={(val: string) => `${val}%`} />
               <Legend />
-              <Tooltip content={<CustomTooltip />} />
+              <Tooltip
+                content={
+                  <CustomTooltip
+                    mainNode={(dataPoint) => {
+                      const dp = dataPoint as (typeof timeGraphData)[number]
+                      return <p>{dp.description}</p>
+                    }}
+                    tickNode={(tickVal) => `${tickVal.toString()}%`}
+                  />
+                }
+              />
               <Bar dataKey="progress" stackId="a" barSize={30} fill="#8884d8" />
               <Bar dataKey="overEstimate" stackId="a" barSize={30} fill="#F03C3D" />
             </BarChart>
           </ResponsiveContainer>
         </div>
-      </div>
+      </section>
     </section>
   )
 }
