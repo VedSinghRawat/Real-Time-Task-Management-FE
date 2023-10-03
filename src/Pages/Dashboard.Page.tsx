@@ -5,6 +5,7 @@ import { taskListLastWeekSelector } from '../Store/task.selector'
 import { COLORS, RADIAN } from '../constants'
 import { CustomTooltip } from '../Components/UI/CustomTooltip'
 import { secondsToHHMMSS } from '../utils'
+import { format, subDays } from 'date-fns'
 
 interface DashboardProps {}
 
@@ -52,12 +53,12 @@ const Dashboard: FC<DashboardProps> = () => {
     }
   })
 
-  console.log(activityData)
-
   return (
-    <div className={`max-w-[100vw]`}>
-      <section className={`px-4 py-7 text-secondary-700`}>
-        <h1 className={`text-2xl`}>Weekly Activity Report</h1>
+    <section className={`max-w-[100vw] px-4 py-7 text-secondary-700`}>
+      <h2 className={`text-2xl `}>Weekly Report</h2>
+
+      <section className={`mt-6`}>
+        <h3 className={`text-xl`}>Overview</h3>
 
         <div className={`mt-4 relative overflow-x-auto`}>
           <ResponsiveContainer width="100%" height={250}>
@@ -65,7 +66,20 @@ const Dashboard: FC<DashboardProps> = () => {
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis interval={0} dataKey="day" tickSize={10} tickFormatter={(day: string) => day.substring(0, 3)} />
               <YAxis />
-              <Tooltip />
+              <Tooltip
+                content={
+                  <CustomTooltip
+                    mainNode={(dataPoint) => (
+                      <p>
+                        {dataPoint.day} ({format(subDays(new Date(), 7 - activityData.findIndex((d) => d.day === dataPoint.day)), 'dd-MM-yyyy')})
+                      </p>
+                    )}
+                    tickNode={(tick) => {
+                      return tick.dataKey && tick.value ? `${tick.dataKey}: ${tick.value.toString()}` : ''
+                    }}
+                  />
+                }
+              />
               <Legend />
               <Line dataKey="done" stroke="#8884d8" activeDot={{ r: 8 }} />
               <Line dataKey="notDone" stroke="#F03C3D" activeDot={{ r: 8 }} />
@@ -80,15 +94,26 @@ const Dashboard: FC<DashboardProps> = () => {
               <XAxis interval={0} dataKey="day" tickSize={10} tickFormatter={(day: string) => day.substring(0, 3)} />
               <YAxis tickFormatter={secondsToHHMMSS} />
               <Legend />
-              <Tooltip content={<CustomTooltip mainNode={() => <></>} tickNode={(tickVal) => secondsToHHMMSS(+tickVal)} />} />
+              <Tooltip
+                content={
+                  <CustomTooltip
+                    mainNode={(dataPoint) => (
+                      <p>
+                        {dataPoint.day} ({format(subDays(new Date(), 7 - activityData.findIndex((d) => d.day === dataPoint.day)), 'dd-MM-yyyy')})
+                      </p>
+                    )}
+                    tickNode={(tick) => secondsToHHMMSS(+tick.value! || 0)}
+                  />
+                }
+              />
               <Bar dataKey="timeSpent" stackId="a" fill="#8884d8" />
             </BarChart>
           </ResponsiveContainer>
         </div>
       </section>
 
-      <section className={`px-4 py-7 text-secondary-700`}>
-        <h1 className={`text-2xl mb-4`}>Totals</h1>
+      <section className={`mt-6`}>
+        <h3 className={`text-xl `}>Totals</h3>
 
         <div className={`text-lg text-secondary-300 flex items-center`}>
           <div>
@@ -120,7 +145,7 @@ const Dashboard: FC<DashboardProps> = () => {
                       </text>
                     )
                   }}
-                  innerRadius={'70%'}
+                  innerRadius={'50%'}
                   labelLine={false}
                   cy={'50%'}
                   cx={'50%'}
@@ -134,7 +159,7 @@ const Dashboard: FC<DashboardProps> = () => {
           </div>
         </div>
       </section>
-    </div>
+    </section>
   )
 }
 

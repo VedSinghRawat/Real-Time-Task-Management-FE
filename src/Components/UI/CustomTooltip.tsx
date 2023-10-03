@@ -1,11 +1,11 @@
 import { FC, ReactNode } from 'react'
 import { TooltipProps } from 'recharts'
-import { NameType, ValueType } from 'recharts/types/component/DefaultTooltipContent'
+import { NameType, Payload, ValueType } from 'recharts/types/component/DefaultTooltipContent'
 
 export const CustomTooltip: FC<
   TooltipProps<ValueType, NameType> & {
     mainNode: (dataPoint: any) => ReactNode
-    tickNode?: (tickVal: ValueType) => ReactNode
+    tickNode?: (tickVal: Payload<ValueType, NameType>) => ReactNode
   }
 > = ({ active, payload: ticks, mainNode, tickNode }) => {
   if (active && ticks && ticks[0]) {
@@ -20,7 +20,7 @@ export const CustomTooltip: FC<
               if (tick.dataKey && tick.value) {
                 return (
                   <p key={tick.color} style={{ color: tick.color }}>
-                    {tickNode(tick.value)}
+                    {tickNode(tick)}
                   </p>
                 )
               }
