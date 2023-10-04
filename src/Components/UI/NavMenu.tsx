@@ -6,9 +6,9 @@ import DatePickerPopup from './Popups/DatePickerPopup'
 import NavLink from './NavLink'
 import { Link } from 'react-router-dom'
 
-interface SideBarProps {}
+interface NavMenuProps {}
 
-const SideBar: FC<SideBarProps> = () => {
+const NavMenu: FC<NavMenuProps> = () => {
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false)
   const navigator = useNavigate()
 
@@ -62,4 +62,4 @@ const SideBar: FC<SideBarProps> = () => {
   )
 }
 
-export default memo(SideBar)
+export default memo(NavMenu)

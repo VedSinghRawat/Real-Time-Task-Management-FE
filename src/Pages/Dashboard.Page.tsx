@@ -69,11 +69,9 @@ const Dashboard: FC<DashboardProps> = () => {
               <Tooltip
                 content={
                   <CustomTooltip
-                    mainNode={(dataPoint) => (
-                      <p>
-                        {dataPoint.day} ({format(subDays(new Date(), 7 - activityData.findIndex((d) => d.day === dataPoint.day)), 'dd-MM-yyyy')})
-                      </p>
-                    )}
+                    mainNode={(dataPoint: (typeof activityData)[number]) =>
+                      `${dataPoint.day} (${format(subDays(new Date(), 7 - activityData.findIndex((d) => d.day === dataPoint.day)), 'dd-MM-yyyy')})`
+                    }
                     tickNode={(tick) => {
                       return tick.dataKey && tick.value ? `${tick.dataKey}: ${tick.value.toString()}` : ''
                     }}
@@ -97,11 +95,9 @@ const Dashboard: FC<DashboardProps> = () => {
               <Tooltip
                 content={
                   <CustomTooltip
-                    mainNode={(dataPoint) => (
-                      <p>
-                        {dataPoint.day} ({format(subDays(new Date(), 7 - activityData.findIndex((d) => d.day === dataPoint.day)), 'dd-MM-yyyy')})
-                      </p>
-                    )}
+                    mainNode={(dataPoint: (typeof activityData)[number]) =>
+                      `${dataPoint.day} (${format(subDays(new Date(), 7 - activityData.findIndex((d) => d.day === dataPoint.day)), 'dd-MM-yyyy')})`
+                    }
                     tickNode={(tick) => secondsToHHMMSS(+tick.value! || 0)}
                   />
                 }
@@ -116,7 +112,7 @@ const Dashboard: FC<DashboardProps> = () => {
         <h3 className={`text-xl `}>Totals</h3>
 
         <div className={`text-lg text-secondary-300 flex items-center`}>
-          <div>
+          <div className={`shrink-0`}>
             {radialGraphData.map((data) => {
               return (
                 <p className={`px-3 py-1.5 mb-4 rounded-xl flex-1 `} style={{ background: data.color }}>
