@@ -4,6 +4,7 @@ import Info from '../Components/UI/Info'
 import TaskDonePopup from '../Components/UI/Popups/TaskDonePopup'
 import { taskToConfirmDoneListSelector } from '../Store/task.selector'
 import { useTaskStore } from '../Store/task.store'
+import LeftoverTasksPopup from '../Components/UI/Popups/LeftoverTasksPopup'
 
 interface TodayProps {}
 
@@ -12,6 +13,8 @@ const Today: FC<TodayProps> = () => {
 
   return (
     <>
+      <LeftoverTasksPopup />
+
       <Info />
 
       <TaskMultiList className={`gap-x-8 max-h-[65vh] px-8 grow`} />

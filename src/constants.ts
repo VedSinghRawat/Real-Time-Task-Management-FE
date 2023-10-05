@@ -5,3 +5,5 @@ export const COLORS = {
 }
 
 export const RADIAN = Math.PI / 180
+
+export const LOCAL_STORAGE_LEFTOVER_DATE = 'leftover_date'

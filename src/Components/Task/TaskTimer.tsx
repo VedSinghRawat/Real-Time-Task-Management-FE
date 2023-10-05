@@ -1,7 +1,12 @@
 import { FC, memo, useCallback, useMemo } from 'react'
 import Timer from '../UI/Timer'
 import alert from '../../assets/audio/alert.wav'
-import { taskAddToConfirmDoneActionSelector, taskSetTimerActions, taskToConfirmDoneIdsSelector, taskUpdateAction } from '../../Store/task.selector'
+import {
+  taskAddToConfirmDoneActionSelector,
+  taskSetTimerActions,
+  taskToConfirmDoneIdsSelector,
+  taskUpdateActionSelector,
+} from '../../Store/task.selector'
 import { useTaskStore } from '../../Store/task.store'
 import { Task } from '../../Model/Task'
 
@@ -12,7 +17,7 @@ interface TaskTimerProps {
 }
 
 const TaskTimer: FC<TaskTimerProps> = ({ task }) => {
-  const taskUpdate = useTaskStore(taskUpdateAction)
+  const taskUpdate = useTaskStore(taskUpdateActionSelector)
 
   const taskAddtoToConfirmDone = useTaskStore(taskAddToConfirmDoneActionSelector)
   const taskToConfirmDoneIds = useTaskStore(taskToConfirmDoneIdsSelector)

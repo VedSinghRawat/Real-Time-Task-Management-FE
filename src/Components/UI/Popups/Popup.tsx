@@ -6,6 +6,7 @@ export interface PopupProps {
   children: ReactNode
   isOpen: boolean
   setIsOpen: (arg: boolean) => void
+  onClose?: () => void
   className?: string
 }
 
@@ -21,8 +22,11 @@ const PopupCloseButton: FC<PopupCloseButtonProps> = ({ className = '', ...rest }
   )
 }
 
-const Popup: FC<PopupProps> = ({ children, className = '', setIsOpen, isOpen }) => {
-  const closePopup = useCallback(() => setIsOpen(false), [setIsOpen])
+const Popup: FC<PopupProps> = ({ children, className = '', setIsOpen, isOpen, onClose }) => {
+  const closePopup = useCallback(() => {
+    onClose && onClose()
+    setIsOpen(false)
+  }, [setIsOpen, onClose])
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
@@ -49,9 +53,9 @@ const Popup: FC<PopupProps> = ({ children, className = '', setIsOpen, isOpen }) 
           leaveFrom={`scale-100 opacity-100`}
           leaveTo="scale-150 opacity-0"
         >
-          <div className={`relative max-w-full max-h-full flex my-auto scale`}>
+          <div className={`relative max-w-full max-h-full flex my-auto scale `}>
             <Dialog.Panel
-              className={`overflow-y-auto max-h-full mx-auto bg-secondary-600 border-4 shadow-popup border-primary-700 rounded-2xl p-6 sm:p-12 ${className} `}
+              className={`shadow-secondary-600 shadow-lg overflow-y-auto max-h-full mx-auto bg-secondary-600 border-4 shadow-popup border-primary-700 rounded-2xl p-6 sm:p-12 ${className} `}
             >
               {children}
             </Dialog.Panel>

@@ -4,7 +4,7 @@ import Popup from './Popup'
 import Button from '../Button'
 import { BsFillCheckCircleFill } from 'react-icons/bs'
 import { HiXCircle } from 'react-icons/hi'
-import { taskRemoveToConfirmDoneActionSelector, taskUpdateAction } from '../../../Store/task.selector'
+import { taskRemoveToConfirmDoneActionSelector, taskUpdateActionSelector } from '../../../Store/task.selector'
 import { useTaskStore } from '../../../Store/task.store'
 import { Task } from '../../../Model/Task'
 
@@ -13,7 +13,7 @@ interface TaskDonePopupProps {
 }
 
 const TaskDonePopup: FC<TaskDonePopupProps> = ({ task }) => {
-  const taskUpdate = useTaskStore(taskUpdateAction)
+  const taskUpdate = useTaskStore(taskUpdateActionSelector)
   const removeTaskToConfimDone = useTaskStore(taskRemoveToConfirmDoneActionSelector)
 
   const [isOpen] = useState(true)

@@ -21,11 +21,13 @@ export const taskSetTimerActions = createSelector(
 
 export const taskFormActions = createSelector(baseStateSelector, (state) => [state.addTask, state.updateTask] as const)
 
-export const taskMoveItemSelector = createSelector(baseStateSelector, (state) => state.moveTodo)
+export const taskAddActionSelector = createSelector(baseStateSelector, (state) => state.addTask)
 
-export const taskUpdateAction = createSelector(baseStateSelector, (state) => state.updateTask)
+export const taskMoveActionSelector = createSelector(baseStateSelector, (state) => state.moveTodo)
 
-export const taskRemoveAction = createSelector(baseStateSelector, (state) => state.removeTask)
+export const taskUpdateActionSelector = createSelector(baseStateSelector, (state) => state.updateTask)
+
+export const taskRemoveActionSelector = createSelector(baseStateSelector, (state) => state.removeTask)
 
 export const taskTotalRemainingTimeSelector = createSelector(taskTodayListSelector, (taskList) =>
   taskList.reduce((totalTime, task) => {
@@ -41,15 +43,16 @@ export const taskRemoveToConfirmDoneActionSelector = createSelector(baseStateSel
 
 export const taskToConfirmDoneIdsSelector = createSelector(baseStateSelector, (state) => state.taskIdsToConfirmDone)
 
-export const taskToConfirmDoneListSelector = createSelector([taskToConfirmDoneIdsSelector, taskMapSelector], (ids, map) =>
-  ids.map((id) => map[id]).filter((t) => !!t)
+export const taskToConfirmDoneListSelector = createSelector(
+  [taskToConfirmDoneIdsSelector, taskMapSelector],
+  (ids, map) => ids.map((id) => map[id]).filter((t) => !!t) as Task[]
 )
 
 export const taskListDateFilteredSelector = (filterDate?: Date) =>
-  createSelector(taskListSelector, (list) => {
-    return filterDate ? list.filter((task) => isSameDay(task.created_at, filterDate)) : []
-  })
+  createSelector(taskListSelector, (list) => (filterDate ? list.filter((task) => isSameDay(task.created_at, filterDate)) : []))
 
-export const taskListLastWeekSelector = createSelector(taskListSelector, (list) => {
-  return list.filter((t) => isAfter(t.created_at, subDays(new Date(), 8)))
-})
+export const taskListLastWeekSelector = createSelector(taskListSelector, (list) => list.filter((t) => isAfter(t.created_at, subDays(new Date(), 8))))
+
+export const taskYesterdayLeftoverListSelector = createSelector(taskListSelector, (list) =>
+  list.filter((t) => t.type !== 'done' && isSameDay(t.created_at, subDays(new Date(), 1)))
+)

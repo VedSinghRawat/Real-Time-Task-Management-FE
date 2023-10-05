@@ -1,21 +1,21 @@
-import { Dispatch, FC, HTMLAttributes, SetStateAction, memo, useEffect, useState } from 'react'
+import { Dispatch, FC, SetStateAction, memo, useEffect, useState } from 'react'
 import { secondsToHHMMSS } from '../../utils'
 import { AiFillPlusCircle, AiFillMinusCircle } from 'react-icons/ai'
 
-type TimerProps = HTMLAttributes<HTMLParagraphElement> & {
+type TimerProps = {
   timeInSeconds: number
   active?: boolean
   dir?: 'inc' | 'dec'
 
   onTimeChange?: (newTime: number) => void
 } & (
-    | { showControls?: false }
-    | {
-        showControls?: true
-        onIncreaseControlClick: (internalSetter: Dispatch<SetStateAction<number>>) => void
-        onDecreaseControlClick: (internalSetter: Dispatch<SetStateAction<number>>) => void
-      }
-  )
+  | { showControls?: false }
+  | {
+      showControls?: true
+      onIncreaseControlClick: (internalSetter: Dispatch<SetStateAction<number>>) => void
+      onDecreaseControlClick: (internalSetter: Dispatch<SetStateAction<number>>) => void
+    }
+)
 
 const Timer: FC<TimerProps> = ({ timeInSeconds, active, dir, onTimeChange, ...rest }) => {
   const [currTime, setCurrTime] = useState(timeInSeconds)
@@ -38,7 +38,7 @@ const Timer: FC<TimerProps> = ({ timeInSeconds, active, dir, onTimeChange, ...re
 
   return (
     <div className={`flex items-center`}>
-      <p {...rest}>{secondsToHHMMSS(currTime)}</p>
+      <p>{secondsToHHMMSS(currTime)}</p>
 
       {rest.showControls && (
         <div className={`flex flex-col ml-2 gap-y-1 `}>

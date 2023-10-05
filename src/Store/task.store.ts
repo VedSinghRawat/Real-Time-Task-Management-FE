@@ -114,13 +114,15 @@ export const useTaskStore = create(
         set((state) => {
           const taskToDelete = state.taskMap[id]
 
-          const deletedFromList = taskTypedListSelector(taskToDelete.type)(state)
+          if (taskToDelete) {
+            const deletedFromList = taskTypedListSelector(taskToDelete.type)(state)
 
-          deletedFromList.forEach((t) => {
-            if (t.order > taskToDelete.order) t.order -= 1
-          })
+            deletedFromList.forEach((t) => {
+              if (t.order > taskToDelete.order) t.order -= 1
+            })
 
-          delete state.taskMap[id]
+            delete state.taskMap[id]
+          }
         }),
 
       changeTimer: (id, by, type) =>
@@ -135,22 +137,25 @@ export const useTaskStore = create(
 
       moveTodo: (data) =>
         set((state) => {
-          const { fromListType, task, toOrder, toListType } = data
-          const stateTask = state.taskMap[task.id]
+          const stateTask = state.taskMap[data.task.id]
 
-          const fromList = taskTypedListSelector(fromListType)(state)
-          const toList = taskTypedListSelector(toListType || fromListType)(state)
+          if (stateTask) {
+            const { fromListType, toOrder, toListType } = data
 
-          fromList.forEach((task) => {
-            if (task.order > stateTask.order && task.id !== stateTask.id) task.order -= 1
-          })
+            const fromList = taskTypedListSelector(fromListType)(state)
+            const toList = taskTypedListSelector(toListType || fromListType)(state)
 
-          toList.forEach((task) => {
-            if (task.order >= toOrder && task.id !== stateTask.id) task.order += 1
-          })
+            fromList.forEach((task) => {
+              if (task.order > stateTask.order && task.id !== stateTask.id) task.order -= 1
+            })
 
-          stateTask.order = toOrder
-          stateTask.type = toListType ? toListType : stateTask.type
+            toList.forEach((task) => {
+              if (task.order >= toOrder && task.id !== stateTask.id) task.order += 1
+            })
+
+            stateTask.order = toOrder
+            stateTask.type = toListType ? toListType : stateTask.type
+          }
         }),
 
       removeTaskToConfimDone: (id) =>
