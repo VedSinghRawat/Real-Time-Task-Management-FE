@@ -174,7 +174,7 @@ export const useTaskStore = create(
         }),
     })),
     {
-      name: 'state-zustand',
+      name: 'todo-state-zustand',
       storage: createJSONStorage(() => localStorage, {
         reviver: (_key, value) => {
           // check if value is a Date ISO string

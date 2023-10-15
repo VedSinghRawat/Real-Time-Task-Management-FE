@@ -8,7 +8,7 @@ interface TimeInputProps extends InputProps {
   className?: string
 }
 
-const TimeInput: FC<TimeInputProps> = ({ className, containerClasses, getValue, ...rest }) => {
+const TimeInput: FC<TimeInputProps> = ({ className = '', containerClasses = '', getValue, ...rest }) => {
   const hourInputRef = useRef<HTMLInputElement>(null)
   const minuteInputRef = useRef<HTMLInputElement>(null)
   const secondInputRef = useRef<HTMLInputElement>(null)
@@ -17,7 +17,7 @@ const TimeInput: FC<TimeInputProps> = ({ className, containerClasses, getValue, 
   const [minuteValue, setMinuteValue] = useState('')
   const [secondValue, setSecondValue] = useState('')
 
-  const inputVals = [hourValue, minuteValue, secondValue]
+  const inputVals = useMemo(() => [hourValue, minuteValue, secondValue] as const, [hourValue, minuteValue, secondValue])
 
   const inputsData = useMemo(() => {
     return [
@@ -46,11 +46,11 @@ const TimeInput: FC<TimeInputProps> = ({ className, containerClasses, getValue, 
         disable: false,
       },
     ]
-  }, [className, hourInputRef, minuteInputRef, secondInputRef, setHourValue, setMinuteValue, setSecondValue, ...inputVals])
+  }, [className, inputVals])
 
   useEffect(() => {
     getValue && getValue(inputVals.join(':') as TimeString)
-  }, inputVals)
+  }, [getValue, inputVals])
 
   return (
     <div className={`${containerClasses} flex`}>

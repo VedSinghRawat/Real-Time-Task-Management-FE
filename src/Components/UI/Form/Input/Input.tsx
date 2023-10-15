@@ -4,7 +4,7 @@ export interface InputProps extends ButtonHTMLAttributes<HTMLInputElement> {
   setRef?: RefObject<HTMLInputElement>
 }
 
-const Input: FC<InputProps> = ({ className, setRef, ...rest }) => {
+const Input: FC<InputProps> = ({ className = '', setRef, ...rest }) => {
   return (
     <input
       ref={setRef}
