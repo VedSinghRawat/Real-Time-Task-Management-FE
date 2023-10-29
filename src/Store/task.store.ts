@@ -1,12 +1,23 @@
 import { v4 as uuid } from 'uuid'
 import { create } from 'zustand'
-import { createJSONStorage, persist } from 'zustand/middleware'
+import { StateStorage, createJSONStorage, persist } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
 import { taskTypedListSelector } from './task.selector'
-import { subDays } from 'date-fns'
-import { faker } from '@faker-js/faker'
-import { generateToken, getRandomInt } from '../utils'
 import { Task, TaskType } from '../Model/Task'
+import { DUMMY_TASKS } from '../constants'
+import { del, get, set } from 'idb-keyval'
+
+const storage: StateStorage = {
+  getItem: async (name: string): Promise<string | null> => {
+    return (await get(name)) || null
+  },
+  setItem: async (name: string, value: string): Promise<void> => {
+    await set(name, value)
+  },
+  removeItem: async (name: string): Promise<void> => {
+    await del(name)
+  },
+}
 
 export type Keys = {
   taskMap: { [id: string]: Task }
@@ -29,53 +40,7 @@ export type State = Keys & Actions
 export const useTaskStore = create(
   persist(
     immer<State>((set) => ({
-      taskMap: import.meta.env.DEV
-        ? Array.from({ length: 1000 }).reduce<Keys['taskMap']>((curr, _, i) => {
-            if (i === 0) return curr
-
-            const doneCount = getRandomInt(5, 8)
-            const doingCount = getRandomInt(1, 3)
-            const todoCount = getRandomInt(1, 2)
-
-            Array.from({ length: todoCount }).forEach((_, j) => {
-              const id = generateToken()
-              const time = getRandomInt(450, 60 * 60 * 1)
-              curr[id] = {
-                id,
-                created_at: subDays(new Date(), i),
-                description: faker.lorem.lines({ min: 2, max: 3 }),
-                estimatedTime: time,
-                order: j + 1,
-                overTime: 0,
-                timeLeft: time,
-                type: 'todo',
-              }
-            })
-
-            Array.from({ length: doneCount + doingCount }).forEach((_, j) => {
-              const id = generateToken()
-              const estimatedTime = getRandomInt(450, 60 * 60 * 1)
-              const timeTaken = getRandomInt(estimatedTime / 1.2, estimatedTime * 1.1)
-
-              let timeLeft = estimatedTime - timeTaken
-              const overTime = timeLeft > 0 ? 0 : Math.abs(timeLeft)
-              if (overTime !== 0) timeLeft = 0
-
-              curr[id] = {
-                id,
-                created_at: subDays(new Date(), i),
-                description: faker.lorem.lines({ min: 2, max: 3 }),
-                order: j + 1,
-                type: j < doneCount ? 'done' : 'doing',
-                estimatedTime,
-                overTime,
-                timeLeft,
-              }
-            })
-
-            return curr
-          }, {})
-        : {},
+      taskMap: import.meta.env.DEV ? DUMMY_TASKS() : {},
 
       taskIdsToConfirmDone: [],
 
@@ -175,7 +140,7 @@ export const useTaskStore = create(
     })),
     {
       name: 'todo-state-zustand',
-      storage: createJSONStorage(() => localStorage, {
+      storage: createJSONStorage(() => storage, {
         reviver: (_key, value) => {
           // check if value is a Date ISO string
           if (typeof value === 'string' && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/.test(value)) {

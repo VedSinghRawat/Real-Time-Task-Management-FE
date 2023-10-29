@@ -5,7 +5,7 @@ import { taskListLastMonthSelector, taskListLastSixMonthsSelector, taskListLastW
 import { COLORS, RADIAN } from '../constants'
 import { CustomTooltip } from '../Components/UI/CustomTooltip'
 import { secondsToHHMMSS } from '../utils'
-import { format, subDays } from 'date-fns'
+import { addDays, format, getDaysInMonth, isToday, subDays, subMonths } from 'date-fns'
 import { Task } from '../Model/Task'
 import Listbox from '../Components/UI/Form/Listbox'
 
@@ -20,6 +20,34 @@ const TIME_FRAME = ['Weekly', 'Monthly', 'Half-Yearly'] as const
 const TIME_FRAME_OPTS = TIME_FRAME.map((tf) => ({ id: tf, label: tf, value: tf }))
 type TimeFrame = (typeof TIME_FRAME)[number]
 
+type GraphData = {
+  label: string
+  done: number
+  notDone: number
+  timeSpent: number
+}
+
+function updateGraphFigures(
+  taskList: Task[],
+  radialGraphData: { label: string; color: string; val: number }[],
+  getRelatedDataPoint: (t: Task) => GraphData
+) {
+  taskList.forEach((t) => {
+    const curr = getRelatedDataPoint(t)
+
+    if (curr) {
+      if (t.type === 'done') {
+        radialGraphData[0]!.val++
+        curr.done++
+      } else {
+        radialGraphData[1]!.val++
+        curr.notDone++
+      }
+      curr.timeSpent += t.overTime + (t.estimatedTime - t.timeLeft)
+    }
+  })
+}
+
 const getGraphFormattedData = (
   type: TimeFrame,
   taskList: Task[],
@@ -31,45 +59,68 @@ const getGraphFormattedData = (
 ) => {
   switch (type) {
     case 'Weekly': {
-      const data = [
-        { label: 'Sunday', done: 0, notDone: 0, timeSpent: 0 },
-        { label: 'Monday', done: 0, notDone: 0, timeSpent: 0 },
-        { label: 'Tuesday', done: 0, notDone: 0, timeSpent: 0 },
-        { label: 'Wednesday', done: 0, notDone: 0, timeSpent: 0 },
-        { label: 'Thursday', done: 0, notDone: 0, timeSpent: 0 },
-        { label: 'Friday', done: 0, notDone: 0, timeSpent: 0 },
-        { label: 'Saturday', done: 0, notDone: 0, timeSpent: 0 },
-      ]
+      const data: GraphData[] = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].map((label) => ({
+        label,
+        done: 0,
+        notDone: 0,
+        timeSpent: 0,
+      }))
+
+      updateGraphFigures(taskList, radialGraphData, (t) => data[t.created_at.getDay()] || data[0]!)
+
       for (let i = new Date().getDay(); i > 0; i--) {
         const temp = data.shift()
         temp && data.push(temp)
       }
 
-      taskList.forEach((t) => {
-        const day = t.created_at.getDay()
+      return data
+    }
 
-        const curr = data[day]
+    case 'Monthly': {
+      const today = new Date()
+      let initDate = subMonths(today, 1)
 
-        if (curr) {
-          if (t.type === 'done') {
-            radialGraphData[0]!.val++
-            curr.done++
-          } else {
-            radialGraphData[1]!.val++
-            curr.notDone++
-          }
-          curr.timeSpent += t.overTime + (t.estimatedTime - t.timeLeft)
-        }
+      const todayDate = today.getDate()
+      const todayMonth = today.getMonth()
+
+      const prevMonthDays = getDaysInMonth(initDate)
+      const shift = prevMonthDays - todayDate
+
+      const data: GraphData[] = []
+
+      while (true) {
+        if (isToday(initDate)) break
+
+        data.push({ label: format(initDate, 'do MMM'), done: 0, notDone: 0, timeSpent: 0 })
+        initDate = addDays(initDate, 1)
+      }
+
+      updateGraphFigures(taskList, radialGraphData, (t) => {
+        const date = t.created_at.getDate()
+        const month = t.created_at.getMonth()
+
+        const indx = month === todayMonth ? date + shift : date - todayDate
+        return data[indx] || data[0]!
       })
 
       return data
     }
 
-    case 'Monthly': {
-      return []
-    }
-
     case 'Half-Yearly': {
+      // const data = [
+      //   { label: 'January', done: 0, notDone: 0, timeSpent: 0 },
+      //   { label: 'February', done: 0, notDone: 0, timeSpent: 0 },
+      //   { label: 'March', done: 0, notDone: 0, timeSpent: 0 },
+      //   { label: 'April', done: 0, notDone: 0, timeSpent: 0 },
+      //   { label: 'May', done: 0, notDone: 0, timeSpent: 0 },
+      //   { label: 'June', done: 0, notDone: 0, timeSpent: 0 },
+      //   { label: 'July', done: 0, notDone: 0, timeSpent: 0 },
+      //   { label: 'August', done: 0, notDone: 0, timeSpent: 0 },
+      //   { label: 'September', done: 0, notDone: 0, timeSpent: 0 },
+      //   { label: 'October', done: 0, notDone: 0, timeSpent: 0 },
+      //   { label: 'November', done: 0, notDone: 0, timeSpent: 0 },
+      //   { label: 'December', done: 0, notDone: 0, timeSpent: 0 },
+      // ]
       return []
     }
 
