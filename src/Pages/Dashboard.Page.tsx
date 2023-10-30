@@ -4,10 +4,11 @@ import { useTaskStore } from '../Store/task.store'
 import { taskListLastMonthSelector, taskListLastSixMonthsSelector, taskListLastWeekSelector } from '../Store/task.selector'
 import { COLORS, RADIAN } from '../constants'
 import { CustomTooltip } from '../Components/UI/CustomTooltip'
-import { secondsToHHMMSS } from '../utils'
+import { DAYS, TODAY } from '../constants'
 import { addDays, format, getDaysInMonth, isToday, subDays, subMonths } from 'date-fns'
 import { Task } from '../Model/Task'
 import Listbox from '../Components/UI/Form/Listbox'
+import { secondsToHHMMSS } from '../utils'
 
 interface DashboardProps {}
 
@@ -59,7 +60,7 @@ const getGraphFormattedData = (
 ) => {
   switch (type) {
     case 'Weekly': {
-      const data: GraphData[] = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].map((label) => ({
+      const data: GraphData[] = DAYS.map((label) => ({
         label,
         done: 0,
         notDone: 0,
@@ -68,7 +69,7 @@ const getGraphFormattedData = (
 
       updateGraphFigures(taskList, radialGraphData, (t) => data[t.created_at.getDay()] || data[0]!)
 
-      for (let i = new Date().getDay(); i > 0; i--) {
+      for (let i = TODAY.getDay(); i > 0; i--) {
         const temp = data.shift()
         temp && data.push(temp)
       }
@@ -77,11 +78,10 @@ const getGraphFormattedData = (
     }
 
     case 'Monthly': {
-      const today = new Date()
-      let initDate = subMonths(today, 1)
+      let initDate = subMonths(TODAY, 1)
 
-      const todayDate = today.getDate()
-      const todayMonth = today.getMonth()
+      const todayDate = TODAY.getDate()
+      const todayMonth = TODAY.getMonth()
 
       const prevMonthDays = getDaysInMonth(initDate)
       const shift = prevMonthDays - todayDate
@@ -163,20 +163,30 @@ const Dashboard: FC<DashboardProps> = () => {
           <h4>Tasks Done</h4>
 
           <div className={`mt-4 relative overflow-x-auto`}>
-            <ResponsiveContainer width="100%" height={250}>
-              <LineChart width={500} height={300} data={graphData} margin={{ right: 16 }}>
+            <ResponsiveContainer width={timeFrame === 'Monthly' ? graphData.length * 42 : undefined} minWidth={'100%'} height={280}>
+              <LineChart height={300} data={graphData} margin={{ right: 16 }}>
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis interval={0} dataKey="label" tickSize={10} tickFormatter={(day: string) => day.substring(0, 3)} />
+                <XAxis
+                  interval={0}
+                  dataKey="label"
+                  tickSize={10}
+                  tickFormatter={(tick: string) => tick.substring(0, timeFrame === 'Monthly' ? 4 : 3)}
+                />
                 <YAxis />
                 <Tooltip
                   content={
                     <CustomTooltip
-                      mainNode={(dataPoint: (typeof graphData)[number]) =>
-                        `${dataPoint.label} (${format(
-                          subDays(new Date(), 7 - graphData.findIndex((d) => d.label === dataPoint.label)),
+                      mainNode={(dataPoint: (typeof graphData)[number]) => {
+                        return `${dataPoint.label} (${format(
+                          timeFrame !== 'Half-Yearly'
+                            ? subDays(
+                                TODAY,
+                                (timeFrame === 'Weekly' ? 7 : getDaysInMonth(TODAY)) - graphData.findIndex((d) => d.label === dataPoint.label)
+                              )
+                            : TODAY,
                           'dd-MM-yyyy'
                         )})`
-                      }
+                      }}
                       tickNode={(tick) => {
                         return tick.dataKey && tick.value ? `${tick.dataKey}: ${tick.value.toString()}` : ''
                       }}
@@ -191,24 +201,21 @@ const Dashboard: FC<DashboardProps> = () => {
           </div>
         </div>
 
-        <div>
+        <div className={`overflow-x-auto`}>
           <h4>Time spent</h4>
 
           <div className={`mt-4`}>
-            <ResponsiveContainer width={'100%'} height={250}>
+            <ResponsiveContainer width={timeFrame === 'Monthly' ? graphData.length * 42 : undefined} height={250}>
               <BarChart data={graphData} margin={{ left: 22, right: 16 }}>
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis interval={0} dataKey="day" tickSize={10} tickFormatter={(day: string) => day.substring(0, 3)} />
+                <XAxis interval={0} dataKey="label" tickSize={10} tickFormatter={(day: string) => day.substring(0, 3)} />
                 <YAxis tickFormatter={secondsToHHMMSS} />
                 <Legend />
                 <Tooltip
                   content={
                     <CustomTooltip
                       mainNode={(dataPoint: (typeof graphData)[number]) =>
-                        `${dataPoint.label} (${format(
-                          subDays(new Date(), 7 - graphData.findIndex((d) => d.label === dataPoint.label)),
-                          'dd-MM-yyyy'
-                        )})`
+                        `${dataPoint.label} (${format(subDays(TODAY, 7 - graphData.findIndex((d) => d.label === dataPoint.label)), 'dd-MM-yyyy')})`
                       }
                       tickNode={(tick) => secondsToHHMMSS(+tick.value! || 0)}
                     />

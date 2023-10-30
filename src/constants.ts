@@ -15,6 +15,8 @@ export const LOCAL_STORAGE_LEFTOVER_DATE = 'leftover_date'
 
 export const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'] as const
 
+export const TODAY = new Date()
+
 export const DUMMY_TASKS = () =>
   Array.from({ length: 10000 }).reduce<Keys['taskMap']>((curr, _, i) => {
     if (i === 0) return curr
@@ -28,7 +30,7 @@ export const DUMMY_TASKS = () =>
       const time = getRandomInt(450, 60 * 60 * 1)
       curr[id] = {
         id,
-        created_at: subDays(new Date(), i),
+        created_at: subDays(TODAY, i),
         description: faker.lorem.lines({ min: 2, max: 3 }),
         estimatedTime: time,
         order: j + 1,
@@ -49,7 +51,7 @@ export const DUMMY_TASKS = () =>
 
       curr[id] = {
         id,
-        created_at: subDays(new Date(), i),
+        created_at: subDays(TODAY, i),
         description: faker.lorem.lines({ min: 2, max: 3 }),
         order: j + 1,
         type: j < doneCount ? 'done' : 'doing',

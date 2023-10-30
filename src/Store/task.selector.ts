@@ -2,6 +2,7 @@ import { createSelector } from 'reselect'
 import { State } from './task.store'
 import { isAfter, isSameDay, isToday, startOfDay, subDays, subMonths } from 'date-fns'
 import { TaskType, Task } from '../Model/Task'
+import { TODAY } from '../constants'
 
 export const baseStateSelector = (state: State) => state
 
@@ -52,17 +53,17 @@ export const taskListDateFilteredSelector = (filterDate?: Date) =>
   createSelector(taskListSelector, (list) => (filterDate ? list.filter((task) => isSameDay(task.created_at, filterDate)) : []))
 
 export const taskListLastWeekSelector = createSelector(taskListSelector, (list) =>
-  list.filter((t) => isAfter(t.created_at, startOfDay(subDays(new Date(), 7))))
+  list.filter((t) => isAfter(t.created_at, startOfDay(subDays(TODAY, 7))))
 )
 
 export const taskListLastMonthSelector = createSelector(taskListSelector, (list) =>
-  list.filter((t) => isAfter(t.created_at, startOfDay(subMonths(new Date(), 1))))
+  list.filter((t) => isAfter(t.created_at, startOfDay(subMonths(TODAY, 1))))
 )
 
 export const taskListLastSixMonthsSelector = createSelector(taskListSelector, (list) =>
-  list.filter((t) => isAfter(t.created_at, startOfDay(subMonths(new Date(), 6))))
+  list.filter((t) => isAfter(t.created_at, startOfDay(subMonths(TODAY, 6))))
 )
 
 export const taskYesterdayLeftoverListSelector = createSelector(taskListSelector, (list) =>
-  list.filter((t) => t.type !== 'done' && isSameDay(t.created_at, subDays(new Date(), 1)))
+  list.filter((t) => t.type !== 'done' && isSameDay(t.created_at, subDays(TODAY, 1)))
 )

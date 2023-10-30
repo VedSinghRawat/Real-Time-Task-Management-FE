@@ -6,7 +6,7 @@ type TimerProps = {
   timeInSeconds: number
   active?: boolean
   dir?: 'inc' | 'dec'
-
+  className?: string
   onTimeChange?: (newTime: number) => void
 } & (
   | { showControls?: false }
@@ -17,7 +17,7 @@ type TimerProps = {
     }
 )
 
-const Timer: FC<TimerProps> = ({ timeInSeconds, active, dir, onTimeChange, ...rest }) => {
+const Timer: FC<TimerProps> = ({ timeInSeconds, active, dir, onTimeChange, className, ...rest }) => {
   const [currTime, setCurrTime] = useState(timeInSeconds)
 
   useEffect(() => {
@@ -37,7 +37,7 @@ const Timer: FC<TimerProps> = ({ timeInSeconds, active, dir, onTimeChange, ...re
   }, [onTimeChange, active, dir])
 
   return (
-    <div className={`flex items-center`}>
+    <div className={`flex items-center ${className || ''}`}>
       <p>{secondsToHHMMSS(currTime)}</p>
 
       {rest.showControls && (

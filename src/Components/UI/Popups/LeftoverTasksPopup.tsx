@@ -4,7 +4,7 @@ import { taskAddActionSelector, taskYesterdayLeftoverListSelector } from '../../
 import Popup from './Popup'
 import Button from '../Button'
 import { isSameDay } from 'date-fns'
-import { LOCAL_STORAGE_LEFTOVER_DATE } from '../../../constants'
+import { LOCAL_STORAGE_LEFTOVER_DATE, TODAY } from '../../../constants'
 
 interface LeftoverTasksProps {}
 
@@ -15,10 +15,10 @@ const LeftoverTasks: FC<LeftoverTasksProps> = () => {
   let interactedOn: Date | string | null = localStorage.getItem(LOCAL_STORAGE_LEFTOVER_DATE)
   if (interactedOn) interactedOn = new Date(interactedOn)
 
-  const [isOpen, setIsOpen] = useState(!isSameDay(new Date(), new Date(interactedOn!)) && !!yesterdayTasks.length)
+  const [isOpen, setIsOpen] = useState(!isSameDay(TODAY, new Date(interactedOn!)) && !!yesterdayTasks.length)
 
   const actionChosen = useCallback(() => {
-    localStorage.setItem(LOCAL_STORAGE_LEFTOVER_DATE, new Date().toString())
+    localStorage.setItem(LOCAL_STORAGE_LEFTOVER_DATE, TODAY.toString())
   }, [])
 
   return (

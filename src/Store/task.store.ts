@@ -6,6 +6,7 @@ import { taskTypedListSelector } from './task.selector'
 import { Task, TaskType } from '../Model/Task'
 import { DUMMY_TASKS } from '../constants'
 import { del, get, set } from 'idb-keyval'
+import { TODAY } from '../constants'
 
 const storage: StateStorage = {
   getItem: async (name: string): Promise<string | null> => {
@@ -59,7 +60,7 @@ export const useTaskStore = create(
             order: 1,
             overTime: 0,
             timeLeft: newTask.estimatedTime,
-            created_at: new Date(),
+            created_at: TODAY,
           }
         }),
 

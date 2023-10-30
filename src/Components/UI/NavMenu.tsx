@@ -28,7 +28,7 @@ const NavMenu: FC<NavMenuProps> = () => {
           leaveFrom="opacity-100 translate-y-0"
           leaveTo="opacity-0 translate-y-1"
         >
-          <Popover.Panel className="absolute z-10 px-2 py-1 rounded-lg top-[4.3rem] left-4 bg-secondary-600">
+          <Popover.Panel className="fixed z-10 px-2 py-1 rounded-lg top-[4.3rem] left-4 bg-secondary-600">
             <div className={`m-auto w-0 h-0 border-x-[0.8rem] border-x-transparent border-b-[1rem] absolute -top-4 border-secondary-600`}></div>
 
             <ul className="flex flex-col gap-1">

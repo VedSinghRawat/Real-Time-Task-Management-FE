@@ -17,26 +17,24 @@ const MultiDraggableListWithContext = <T extends { id: number | string }, L exte
       onDragEnd={(result) => {
         if (result.destination) {
           const movedFromList = lists.find((list) => list.id.toString() === result.source.droppableId)
-          if (movedFromList) {
-            const item = movedFromList.items[result.source.index]
+          if (!movedFromList) return
 
-            if (result.source.droppableId !== result.destination.droppableId) {
-              handleItemMove({
-                fromIndex: result.source.index,
-                toIndex: result.destination.index,
-                fromListId: result.source.droppableId,
-                toListId: result.destination.droppableId,
-                item,
-              })
-            } else {
-              handleItemMove({
-                fromIndex: result.source.index,
-                fromListId: result.source.droppableId,
-                toIndex: result.destination.index,
-                item,
-              })
-            }
+          const item = movedFromList.items[result.source.index]
+          if (!item) return
+
+          const payload: Parameters<typeof handleItemMove>[0] = {
+            fromIndex: result.source.index,
+            fromListId: result.source.droppableId,
+            toIndex: result.destination.index,
+            item,
           }
+
+          if (result.source.droppableId !== result.destination.droppableId) {
+            payload.toIndex = result.destination.index
+            payload.toListId = result.destination.droppableId
+          }
+
+          handleItemMove(payload)
         }
       }}
     >

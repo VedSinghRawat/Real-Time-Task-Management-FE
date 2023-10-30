@@ -27,7 +27,7 @@ export const HHMMSSToSeconds = (timeString: TimeString) => {
   const [hours, minutes, seconds] = timeChunks
 
   // prettier-ignore
-  const totalSeconds = (hours * 60 * 60) + (minutes * 60) + seconds
+  const totalSeconds = (hours! * 60 * 60) + (minutes! * 60) + seconds!
 
   return totalSeconds
 }

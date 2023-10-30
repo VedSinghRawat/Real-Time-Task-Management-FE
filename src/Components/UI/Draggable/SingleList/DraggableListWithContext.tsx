@@ -6,14 +6,12 @@ interface DraggableListWithContextProps<T extends { id: number }> extends Dragga
   type: string
   handleItemMove: (data: { fromIndex: number; toIndex: number; item: T }) => void
   extendOnDrag?: (result: DropResult, provided: ResponderProvided) => void
-  getUpdatedOrderedIds?: (orderedIds?: (string | number)[]) => void
 }
 
 const DraggableListWithContext = <T extends { id: number }>({
   items,
   type,
   extendOnDrag,
-  getUpdatedOrderedIds,
   handleItemMove,
   ...rest
 }: DraggableListWithContextProps<T>) => {
@@ -22,8 +20,9 @@ const DraggableListWithContext = <T extends { id: number }>({
       onDragEnd={(result, provided) => {
         extendOnDrag && extendOnDrag(result, provided)
 
-        if (result.type === type && result.destination) {
-          handleItemMove({ fromIndex: result.source.index, toIndex: result.destination.index, item: items[result.source.index] })
+        const item = items[result.source.index]
+        if (result.type === type && result.destination && item) {
+          handleItemMove({ fromIndex: result.source.index, toIndex: result.destination.index, item })
         }
       }}
     >
