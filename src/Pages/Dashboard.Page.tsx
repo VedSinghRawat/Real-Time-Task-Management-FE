@@ -67,7 +67,7 @@ const getGraphFormattedData = (
         timeSpent: 0,
       }))
 
-      updateGraphFigures(taskList, radialGraphData, (t) => data[t.created_at.getDay()] || data[0]!)
+      updateGraphFigures(taskList, radialGraphData, (t) => data[t.created_at.getDay()]!)
 
       for (let i = TODAY.getDay(); i > 0; i--) {
         const temp = data.shift()
@@ -107,21 +107,24 @@ const getGraphFormattedData = (
     }
 
     case 'Half-Yearly': {
-      // const data = [
-      //   { label: 'January', done: 0, notDone: 0, timeSpent: 0 },
-      //   { label: 'February', done: 0, notDone: 0, timeSpent: 0 },
-      //   { label: 'March', done: 0, notDone: 0, timeSpent: 0 },
-      //   { label: 'April', done: 0, notDone: 0, timeSpent: 0 },
-      //   { label: 'May', done: 0, notDone: 0, timeSpent: 0 },
-      //   { label: 'June', done: 0, notDone: 0, timeSpent: 0 },
-      //   { label: 'July', done: 0, notDone: 0, timeSpent: 0 },
-      //   { label: 'August', done: 0, notDone: 0, timeSpent: 0 },
-      //   { label: 'September', done: 0, notDone: 0, timeSpent: 0 },
-      //   { label: 'October', done: 0, notDone: 0, timeSpent: 0 },
-      //   { label: 'November', done: 0, notDone: 0, timeSpent: 0 },
-      //   { label: 'December', done: 0, notDone: 0, timeSpent: 0 },
-      // ]
-      return []
+      const data = [
+        { label: 'January', done: 0, notDone: 0, timeSpent: 0 },
+        { label: 'February', done: 0, notDone: 0, timeSpent: 0 },
+        { label: 'March', done: 0, notDone: 0, timeSpent: 0 },
+        { label: 'April', done: 0, notDone: 0, timeSpent: 0 },
+        { label: 'May', done: 0, notDone: 0, timeSpent: 0 },
+        { label: 'June', done: 0, notDone: 0, timeSpent: 0 },
+        { label: 'July', done: 0, notDone: 0, timeSpent: 0 },
+        { label: 'August', done: 0, notDone: 0, timeSpent: 0 },
+        { label: 'September', done: 0, notDone: 0, timeSpent: 0 },
+        { label: 'October', done: 0, notDone: 0, timeSpent: 0 },
+        { label: 'November', done: 0, notDone: 0, timeSpent: 0 },
+        { label: 'December', done: 0, notDone: 0, timeSpent: 0 },
+      ]
+
+      updateGraphFigures(taskList, radialGraphData, (t) => data[t.created_at.getMonth()]!)
+
+      return data.slice(TODAY.getMonth() - 6, TODAY.getMonth())
     }
 
     default:
@@ -181,7 +184,7 @@ const Dashboard: FC<DashboardProps> = () => {
                           timeFrame !== 'Half-Yearly'
                             ? subDays(
                                 TODAY,
-                                (timeFrame === 'Weekly' ? 7 : getDaysInMonth(TODAY)) - graphData.findIndex((d) => d.label === dataPoint.label)
+                                (timeFrame === 'Weekly' ? 7 : getDaysInMonth(TODAY) + 1) - graphData.findIndex((d) => d.label === dataPoint.label)
                               )
                             : TODAY,
                           'dd-MM-yyyy'
