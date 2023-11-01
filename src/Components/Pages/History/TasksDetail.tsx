@@ -90,7 +90,7 @@ const TasksDetail: FC<TaskDetailBarGraphProps> = ({ className = '', taskList }) 
                       const dp = dataPoint as (typeof timeGraphData)[number]
                       return <p>{dp.description}</p>
                     }}
-                    tickNode={(tickVal) => secondsToHHMMSS(+tickVal)}
+                    tickNode={(tick) => secondsToHHMMSS(tick.value ? +tick.value : 0)}
                   />
                 }
               />
@@ -138,7 +138,7 @@ const TasksDetail: FC<TaskDetailBarGraphProps> = ({ className = '', taskList }) 
                       const dp = dataPoint as (typeof timeGraphData)[number]
                       return <p>{dp.description}</p>
                     }}
-                    tickNode={(tickVal) => `${tickVal.toString()}%`}
+                    tickNode={(tick) => `${tick.value ? tick.value.toString() : 0}%`}
                   />
                 }
               />
