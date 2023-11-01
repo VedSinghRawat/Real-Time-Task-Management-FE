@@ -17,7 +17,7 @@ const Today: FC<TodayProps> = () => {
 
       <Info />
 
-      <TaskMultiList className={`gap-x-8 max-h-[65vh] px-8 grow`} />
+      <TaskMultiList className={`gap-x-8 max-h-[65vh] px-8 grow max-w-4xl md:gap-x-12 mx-auto`} />
 
       {tasksToConfirm.map((task) => (
         <TaskDonePopup key={task.id} task={task} />

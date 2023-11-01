@@ -4,7 +4,6 @@ import { StateStorage, createJSONStorage, persist } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
 import { taskTypedListSelector } from './task.selector'
 import { Task, TaskType } from '../Model/Task'
-import { DUMMY_TASKS } from '../constants'
 import { del, get, set } from 'idb-keyval'
 import { TODAY } from '../constants'
 
@@ -23,6 +22,7 @@ const storage: StateStorage = {
 export type Keys = {
   taskMap: { [id: string]: Task }
   taskIdsToConfirmDone: Task['id'][]
+  hasHydrated: boolean
 }
 
 export type Actions = {
@@ -34,6 +34,7 @@ export type Actions = {
   removeTaskToConfimDone: (id: Task['id']) => void
   addTaskToConfimDone: (id: Task['id']) => void
   clearTaskToConfimDone: () => void
+  setHasHydrated: (isHyd: boolean) => void
 }
 
 export type State = Keys & Actions
@@ -41,11 +42,9 @@ export type State = Keys & Actions
 export const useTaskStore = create(
   persist(
     immer<State>((set) => ({
-      taskMap: import.meta.env.DEV ? DUMMY_TASKS() : {},
-
+      taskMap: {},
       taskIdsToConfirmDone: [],
-
-      isDonePopupOpen: false,
+      hasHydrated: false,
 
       addTask: (newTask) =>
         set((state) => {
@@ -138,9 +137,16 @@ export const useTaskStore = create(
         set((state) => {
           state.taskIdsToConfirmDone = []
         }),
+
+      setHasHydrated: (isHyd) => {
+        set({ hasHydrated: isHyd })
+      },
     })),
     {
       name: 'todo-state-zustand',
+      onRehydrateStorage: () => (state) => {
+        state && state.setHasHydrated(true)
+      },
       storage: createJSONStorage(() => storage, {
         reviver: (_key, value) => {
           // check if value is a Date ISO string

@@ -46,11 +46,11 @@ const TaskMultiList: FC<TaskMultiListProps> = ({ className = '' }) => {
       <MultiDraggableListWithContext handleItemMove={handleTaskMove} lists={taskLists}>
         {(list) =>
           list.id === 'todo' ? (
-            <TaskTodoList className={``} key={list.id} />
+            <TaskTodoList className={`flex-1`} key={list.id} />
           ) : list.id === 'doing' ? (
-            <TaskDoingList className={``} key={list.id} />
+            <TaskDoingList className={`flex-1`} key={list.id} />
           ) : (
-            <TaskDoneList className={``} key={list.id} />
+            <TaskDoneList className={`flex-1`} key={list.id} />
           )
         }
       </MultiDraggableListWithContext>
