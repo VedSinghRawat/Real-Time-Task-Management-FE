@@ -18,15 +18,15 @@ const History: FC<HistoryProps> = () => {
   if (!historyDate) return
 
   return (
-    <div className={`max-w-[100vw] w-full px-6 text-secondary-600 py-4 `}>
+    <section>
       <h1 className={`text-2xl text-center`}>History for {format(historyDate, ' do LLLL yyyy')}</h1>
 
       <Overview tasks={taskList} />
 
-      <TimeSpent className={`my-4`} historyDate={historyDate} taskList={taskList} />
+      <TimeSpent className={`mt-12`} historyDate={historyDate} taskList={taskList} />
 
-      <TasksDetail taskList={taskList} className={'my-4'} />
-    </div>
+      <TasksDetail taskList={taskList} className={'mt-12'} />
+    </section>
   )
 }
 

@@ -154,7 +154,7 @@ const Dashboard: FC<DashboardProps> = () => {
   const graphData = getGraphFormattedData(timeFrame, taskList, radialGraphData)
 
   return (
-    <section className={`max-w-[100vw] px-4 py-7 text-secondary-700`}>
+    <section>
       <h2 className={`text-2xl flex items-center gap-x-2`}>
         <Listbox showNoneOpt={false} options={TIME_FRAME_OPTS} defaultSelected={TIME_FRAME_OPTS[0]} onChange={setTimeFrame} /> Report
       </h2>

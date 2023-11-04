@@ -5,13 +5,13 @@ import { secondsToHHMMSS } from '../../utils'
 
 interface InfoProps {}
 
-const Info: FC<InfoProps> = ({}) => {
+const Info: FC<InfoProps> = () => {
   const totalRemainingTime = useTaskStore(taskTotalRemainingTimeSelector)
   const doneTaskList = useTaskStore(taskTypedListSelector('done'))
   const taskList = useTaskStore(taskTodayListSelector)
 
   return (
-    <div className={`text-center py-6 text-secondary-600 max-w-[100vw] sticky inset-x-0`}>
+    <section className={`text-center py-6 text-secondary-600 max-w-[100vw] sticky inset-x-0 -mx-6`}>
       <h1 className={`text-2xl`}>Total Estimated Time:</h1>
 
       <p className={`text-3xl`}>{secondsToHHMMSS(totalRemainingTime)}</p>
@@ -22,7 +22,7 @@ const Info: FC<InfoProps> = ({}) => {
           {doneTaskList.length}/{taskList.length}
         </span>
       </h2>
-    </div>
+    </section>
   )
 }
 
