@@ -21,7 +21,7 @@ const Base = ({ className = '', children, ...rest }: TaskListProps) => {
   return (
     <TaskListContext.Provider value={rest}>
       <div
-        className={`bg-primary-700 flex flex-col justify-between p-3.5 sm:p-6 rounded-2xl gap-y-3.5 sm:min-w-[16rem] min-w-[12.5rem] sm:gap-y-6 ${className}`}
+        className={`bg-primary-700 flex flex-col justify-between p-3.5 sm:p-6 rounded-2xl gap-y-3.5 md:min-w-[16rem] min-w-[12.5rem] sm:gap-y-6 ${className}`}
       >
         {children}
       </div>

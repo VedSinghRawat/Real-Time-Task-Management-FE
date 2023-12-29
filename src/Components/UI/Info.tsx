@@ -11,18 +11,18 @@ const Info: FC<InfoProps> = () => {
   const taskList = useTaskStore(taskTodayListSelector)
 
   return (
-    <section className={`text-center py-6 text-secondary-600 max-w-[100vw] sticky inset-x-0 -mx-6`}>
-      <h1 className={`text-2xl`}>Total Estimated Time:</h1>
+    <div className={`text-center text-secondary-600 sticky inset-x-0 max-w-[100vw] -mx-6 md:-mx-[4.5rem]`}>
+      <h1 className={`text-2xl md:text-4xl`}>Total Estimated Time:</h1>
 
-      <p className={`text-3xl`}>{secondsToHHMMSS(totalRemainingTime)}</p>
+      <p className={`text-3xl md:text-5xl`}>{secondsToHHMMSS(totalRemainingTime)}</p>
 
-      <h2 className={`text-2xl`}>
+      <h2 className={`text-2xl md:text-4xl`}>
         Done{' '}
-        <span className={`text-3xl`}>
+        <span className={`text-3xl md:text-5xl`}>
           {doneTaskList.length}/{taskList.length}
         </span>
       </h2>
-    </section>
+    </div>
   )
 }
 

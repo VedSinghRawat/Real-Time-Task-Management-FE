@@ -1,16 +1,10 @@
 import { FC } from 'react'
-import { Outlet, useLocation } from 'react-router-dom'
+import { Outlet } from 'react-router-dom'
 import NavMenu from './Components/UI/NavMenu'
 
 const App: FC = () => {
-  const { pathname } = useLocation()
-
   return (
-    <div
-      className={`bg-primary-600 text-secondary-600 px-6 py-11 min-w-[100vw] ${
-        pathname === '/' ? 'lg:min-h-screen min-h-[calc(100vh-0.5rem)] ' : ''
-      } relative w-fit min-w-full flex flex-col`}
-    >
+    <div className={`bg-primary-600 text-secondary-600 px-6 py-11 md:pt-[4.5rem] md:px-[4.5rem] w-fit min-w-full`}>
       <NavMenu />
 
       <Outlet />

@@ -41,7 +41,7 @@ function Listbox<V, T extends { id: string; value: V; label: string }>({
           className={`relative overflow-hidden text-left rounded-lg shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm ${className}`}
         >
           <HeadlessListbox.Button
-            className={`relative w-full py-1 px-4 pr-8 text-left rounded-lg shadow-md cursor-default bg-primary-400 focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm ${buttonClasses}`}
+            className={`relative w-full py-1 px-4 pr-8 text-left rounded-lg shadow-md cursor-default bg-primary-400 focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 ${buttonClasses}`}
           >
             <span className="block truncate">{selected.label || placeholder}</span>
 

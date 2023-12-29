@@ -1,4 +1,4 @@
-import { FC, memo, useState } from 'react'
+import { FC, memo, useMemo, useState } from 'react'
 import { ResponsiveContainer, LineChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, Line, Cell, Pie, PieChart, Bar, BarChart } from 'recharts'
 import { useTaskStore } from '../Store/task.store'
 import { taskListLastMonthSelector, taskListLastSixMonthsSelector, taskListLastWeekSelector } from '../Store/task.selector'
@@ -9,6 +9,7 @@ import { addDays, format, getDaysInMonth, isToday, subDays, subMonths } from 'da
 import { Task } from '../Model/Task'
 import Listbox from '../Components/UI/Form/Listbox'
 import { secondsToHHMMSS } from '../utils'
+import { useWindowSize } from '../Hooks/useWindowSize'
 
 interface DashboardProps {}
 
@@ -132,6 +133,10 @@ const getGraphFormattedData = (
   }
 }
 
+const radialGraphData = (['done', 'todo'] as const).map((type) => {
+  return { label: LABELS[type], color: COLORS[type], val: 0 }
+})
+
 const Dashboard: FC<DashboardProps> = () => {
   const [timeFrame, setTimeFrame] = useState<TimeFrame>('Weekly')
 
@@ -139,102 +144,111 @@ const Dashboard: FC<DashboardProps> = () => {
   const taskListLastMonth = useTaskStore(taskListLastMonthSelector)
   const taskListLastSixMonths = useTaskStore(taskListLastSixMonthsSelector)
 
-  const timeTypeToListMap = {
-    'Half-Yearly': taskListLastSixMonths,
-    'Monthly': taskListLastMonth,
-    'Weekly': taskListLastWeek,
-  } as const
+  const graphData = useMemo(() => {
+    const timeTypeToListMap = {
+      'Half-Yearly': taskListLastSixMonths,
+      'Monthly': taskListLastMonth,
+      'Weekly': taskListLastWeek,
+    } as const
 
-  const taskList = timeTypeToListMap[timeFrame]
+    const taskList = timeTypeToListMap[timeFrame]
 
-  const radialGraphData = (['done', 'todo'] as const).map((type) => {
-    return { label: LABELS[type], color: COLORS[type], val: 0 }
-  })
+    return getGraphFormattedData(timeFrame, taskList, radialGraphData)
+  }, [taskListLastMonth, taskListLastSixMonths, taskListLastWeek, timeFrame])
 
-  const graphData = getGraphFormattedData(timeFrame, taskList, radialGraphData)
+  const { width } = useWindowSize()
 
   return (
-    <section>
+    <section className={`max-w-[calc(100vw-3rem)] md:max-w-[calc(100vw-9rem)] mt-4 lg:min-h-[calc(100vh-8.25rem)]`}>
       <h2 className={`text-2xl flex items-center gap-x-2`}>
-        <Listbox showNoneOpt={false} options={TIME_FRAME_OPTS} defaultSelected={TIME_FRAME_OPTS[0]} onChange={setTimeFrame} /> Report
+        <Listbox
+          buttonClasses="text-2xl "
+          showNoneOpt={false}
+          options={TIME_FRAME_OPTS}
+          defaultSelected={TIME_FRAME_OPTS[0]}
+          onChange={setTimeFrame}
+        />{' '}
+        Report
       </h2>
 
-      <section className={`mt-6`}>
+      <section className={`mt-6 w-full`}>
         <h3 className={`text-xl`}>Overview</h3>
 
-        <div className={`my-4`}>
-          <h4>Tasks Done</h4>
+        <div className={`lg:flex w-full my-4`}>
+          <div className={`my-4 lg:my-0 flex-1`}>
+            <h4>Tasks Done</h4>
 
-          <div className={`mt-4 relative overflow-x-auto`}>
-            <ResponsiveContainer width={timeFrame === 'Monthly' ? graphData.length * 42 : undefined} minWidth={'100%'} height={280}>
-              <LineChart height={300} data={graphData} margin={{ right: 16 }}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis
-                  interval={0}
-                  dataKey="label"
-                  tickSize={10}
-                  tickFormatter={(tick: string) => tick.substring(0, timeFrame === 'Monthly' ? 4 : 3)}
-                />
-                <YAxis />
-                <Tooltip
-                  content={
-                    <CustomTooltip
-                      mainNode={(dataPoint: (typeof graphData)[number]) => {
-                        return `${dataPoint.label} (${format(
-                          timeFrame !== 'Half-Yearly'
-                            ? subDays(
-                                TODAY,
-                                (timeFrame === 'Weekly' ? 7 : getDaysInMonth(TODAY) + 1) - graphData.findIndex((d) => d.label === dataPoint.label)
-                              )
-                            : TODAY,
-                          'dd-MM-yyyy'
-                        )})`
-                      }}
-                      tickNode={(tick) => {
-                        return tick.dataKey && tick.value ? `${tick.dataKey}: ${tick.value.toString()}` : ''
-                      }}
-                    />
-                  }
-                />
-                <Legend />
-                <Line dataKey="done" stroke="#8884d8" activeDot={{ r: 8 }} />
-                <Line dataKey="notDone" stroke="#F03C3D" activeDot={{ r: 8 }} />
-              </LineChart>
-            </ResponsiveContainer>
+            <div className={`mt-4 relative overflow-x-auto`}>
+              <ResponsiveContainer width={timeFrame === 'Monthly' ? graphData.length * 42 : width >= 1024 ? '95%' : '100%'} height={280}>
+                <LineChart height={300} data={graphData} margin={{ right: 16 }}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis
+                    interval={0}
+                    dataKey="label"
+                    tickSize={10}
+                    tickFormatter={(tick: string) => tick.substring(0, timeFrame === 'Monthly' ? 4 : 3)}
+                  />
+                  <YAxis />
+                  <Tooltip
+                    content={
+                      <CustomTooltip
+                        mainNode={(dataPoint: (typeof graphData)[number]) => {
+                          return `${dataPoint.label} (${format(
+                            timeFrame !== 'Half-Yearly'
+                              ? subDays(
+                                  TODAY,
+                                  (timeFrame === 'Weekly' ? 7 : getDaysInMonth(TODAY) + 1) - graphData.findIndex((d) => d.label === dataPoint.label)
+                                )
+                              : TODAY,
+                            'dd-MM-yyyy'
+                          )})`
+                        }}
+                        tickNode={(tick) => {
+                          return tick.dataKey && tick.value ? `${tick.dataKey}: ${tick.value.toString()}` : ''
+                        }}
+                      />
+                    }
+                  />
+                  <Legend />
+                  <Line dataKey="done" stroke="#8884d8" activeDot={{ r: 8 }} />
+                  <Line dataKey="notDone" stroke="#F03C3D" activeDot={{ r: 8 }} />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
           </div>
-        </div>
 
-        <div className={`overflow-x-auto`}>
-          <h4>Time spent</h4>
+          <div className={`overflow-x-auto flex-1`}>
+            <h4>Time spent</h4>
 
-          <div className={`mt-4`}>
-            <ResponsiveContainer width={timeFrame === 'Monthly' ? graphData.length * 42 : undefined} height={250}>
-              <BarChart data={graphData} margin={{ left: 22, right: 16 }}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis interval={0} dataKey="label" tickSize={10} tickFormatter={(day: string) => day.substring(0, 3)} />
-                <YAxis tickFormatter={secondsToHHMMSS} />
-                <Legend />
-                <Tooltip
-                  content={
-                    <CustomTooltip
-                      mainNode={(dataPoint: (typeof graphData)[number]) =>
-                        `${dataPoint.label} (${format(subDays(TODAY, 7 - graphData.findIndex((d) => d.label === dataPoint.label)), 'dd-MM-yyyy')})`
-                      }
-                      tickNode={(tick) => secondsToHHMMSS(+tick.value! || 0)}
-                    />
-                  }
-                />
-                <Bar dataKey="timeSpent" stackId="a" fill="#8884d8" />
-              </BarChart>
-            </ResponsiveContainer>
+            <div className={`mt-4`}>
+              <ResponsiveContainer width={timeFrame === 'Monthly' ? graphData.length * 42 : '100%'} height={280}>
+                <BarChart data={graphData} margin={{ left: 22, right: 16 }}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis interval={0} dataKey="label" tickSize={10} tickFormatter={(day: string) => day.substring(0, 3)} />
+                  <YAxis tickFormatter={secondsToHHMMSS} />
+                  <Legend />
+                  <Tooltip
+                    content={
+                      <CustomTooltip
+                        mainNode={(dataPoint: (typeof graphData)[number]) =>
+                          `${dataPoint.label} (${format(subDays(TODAY, 7 - graphData.findIndex((d) => d.label === dataPoint.label)), 'dd-MM-yyyy')})`
+                        }
+                        tickNode={(tick) => secondsToHHMMSS(+tick.value! || 0)}
+                      />
+                    }
+                  />
+                  <Bar dataKey="timeSpent" stackId="a" fill="#8884d8" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
           </div>
         </div>
       </section>
 
-      <section className={`mt-6`}>
+      <section className={`mt-6 -mb-6 md:mb-3`}>
         <h3 className={`text-xl `}>Totals</h3>
 
-        <div className={`text-lg text-secondary-300 flex items-center  w-full`}>
+        <div className={`text-lg text-secondary-300 flex items-center max-w-lg gap-x-8`}>
           <div className={`shrink-0`}>
             {radialGraphData.map((data) => {
               return (
@@ -245,7 +259,7 @@ const Dashboard: FC<DashboardProps> = () => {
             })}
           </div>
 
-          <ResponsiveContainer aspect={1} width={'100%'} height={250} className={`max-w-xs mx-auto`}>
+          <ResponsiveContainer aspect={1} width={'100%'} className={`max-w-xs mx-auto`}>
             <PieChart className={`w-1/2 h-1/2`}>
               <Pie
                 dataKey={'val'}
@@ -276,8 +290,6 @@ const Dashboard: FC<DashboardProps> = () => {
           </ResponsiveContainer>
         </div>
       </section>
-
-      <section className={`mt-6`}></section>
     </section>
   )
 }
