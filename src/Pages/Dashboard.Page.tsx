@@ -159,7 +159,7 @@ const Dashboard: FC<DashboardProps> = () => {
   const { width } = useWindowSize()
 
   return (
-    <section className={`max-w-[calc(100vw-3rem)] md:max-w-[calc(100vw-9rem)] mt-4 lg:min-h-[calc(100vh-8.25rem)]`}>
+    <section className={`max-w-[calc(100vw-3rem)] md:max-w-[calc(100vw-9rem)] mt-4 `}>
       <h2 className={`text-2xl flex items-center gap-x-2`}>
         <Listbox
           buttonClasses="text-2xl "

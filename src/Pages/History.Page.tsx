@@ -18,10 +18,10 @@ const History: FC<HistoryProps> = () => {
   if (!historyDate) return
 
   return (
-    <section>
+    <section className={``}>
       <h1 className={`text-2xl text-center`}>History for {format(historyDate, ' do LLLL yyyy')}</h1>
 
-      <Overview tasks={taskList} />
+      <Overview className={`mt-12`} tasks={taskList} />
 
       <TimeSpent className={`mt-12`} historyDate={historyDate} taskList={taskList} />
 

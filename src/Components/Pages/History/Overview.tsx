@@ -5,6 +5,7 @@ import { COLORS, RADIAN } from '../../../constants'
 
 interface OverviewProps {
   tasks: Task[]
+  className?: string
 }
 
 const LABELS = {
@@ -13,14 +14,14 @@ const LABELS = {
   todo: 'Not Started',
 }
 
-const Overview: FC<OverviewProps> = ({ tasks }) => {
+const Overview: FC<OverviewProps> = ({ tasks, className }) => {
   const listsData = (['done', 'doing', 'todo'] as const).map((type) => {
     const list = tasks.filter((t) => t.type === type)
     return { list, color: COLORS[type], label: LABELS[type], val: list.length }
   })
 
   return (
-    <section>
+    <section className={className}>
       <h2 className={`text-xl `}>Overview</h2>
 
       <h3 className={`mt-2`}>
