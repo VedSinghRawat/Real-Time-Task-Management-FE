@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker'
 import { subDays } from 'date-fns'
-import { Keys } from './Store/task.store'
+import { Keys } from './state/store/task.store'
 import { getRandomInt, generateToken } from './utils'
 
 export const COLORS = {
