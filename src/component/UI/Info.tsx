@@ -11,7 +11,7 @@ const Info: FC<InfoProps> = () => {
   const taskList = useTaskStore(taskTodayListSelector)
 
   return (
-    <div className={`text-center text-secondary-600 sticky inset-x-0 max-w-[100vw] -mx-6 md:-mx-[4.5rem]`}>
+    <div className={`text-center text-secondary-light sticky inset-x-0 max-w-[100vw] -mx-6 md:-mx-[4.5rem]`}>
       <h1 className={`text-2xl md:text-4xl`}>Total Estimated Time:</h1>
 
       <p className={`text-3xl md:text-5xl`}>{secondsToHHMMSS(totalRemainingTime)}</p>

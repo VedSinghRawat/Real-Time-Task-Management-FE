@@ -8,7 +8,7 @@ interface NavLinkProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 const NavLink: FC<NavLinkProps> = ({ className = '', Icon, children, ...rest }) => {
   return (
     <button
-      className={`bg-primary-700 text-tertiary-700 px-4 flex items-center rounded-lg py-1 justify-around border-2 border-tertiary-700 ${className}`}
+      className={`bg-secondary-dark text-tertiary-light px-4 flex items-center rounded-lg py-1 justify-around border-2 border-secondary-medium ${className}`}
       {...rest}
     >
       {children}

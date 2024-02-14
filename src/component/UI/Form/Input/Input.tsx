@@ -8,7 +8,7 @@ const Input: FC<InputProps> = ({ className = '', setRef, ...rest }) => {
   return (
     <input
       ref={setRef}
-      className={`font-medium outline-[3px] p-0.5 outline-secondary-400 outline rounded-sm focus:outline-primary-800 ${className}`}
+      className={`font-medium outline-[3px] p-0.5 outline-secondary-light outline rounded-sm focus:outline-primary-dark ${className}`}
       {...rest}
     />
   )

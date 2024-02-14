@@ -40,7 +40,7 @@ const TaskFormCard: FC<TaskFormCardProps> = ({ task, className = '', onClose }) 
 
   return (
     <div
-      className={`relative text-sm sm:text-base rounded-xl bg-primary-800 group ${className} focus-within:bg-secondary-600 p-2.5 transition-all duration-100 ease-in-out text-tertiary-600  focus-within:text-tertiary-800`}
+      className={`relative text-sm sm:text-base rounded-xl bg-primary-dark group ${className} focus-within:bg-secondary-medium p-2.5 transition-all duration-100 ease-in-out text-tertiary-normal  focus-within:text-tertiary-dark`}
     >
       <form
         onSubmit={(e) => {
@@ -48,23 +48,23 @@ const TaskFormCard: FC<TaskFormCardProps> = ({ task, className = '', onClose }) 
           handleSubmit()
         }}
       >
-        <TextArea setRef={textAreaRef} className={`bg-transparent group-focus-within:outline-primary-800 `} />
+        <TextArea setRef={textAreaRef} className={`bg-transparent group-focus-within:outline-primary-medium `} />
 
         <div className={`relative mt-4 gap-x-4 flex`}>
           <TimeInput
             getValue={setTimerValue}
-            containerClasses="w-full outline-[3px] outline-secondary-400 outline group-focus-within:outline-primary-800 rounded-md"
-            className={`bg-transparent placeholder-tertiary-300 placeholder-opacity-70 group-focus-within:placeholder-tertiary-800`}
+            containerClasses="w-full outline-[3px] outline-secondary-normal outline group-focus-within:outline-primary-dark rounded-md"
+            className={`bg-transparent placeholder-tertiary-light placeholder-opacity-70 group-focus-within:placeholder-tertiary-dark`}
           />
 
-          <Button type="submit" className={`group-focus-within:outline-primary-800 group-focus-within:text-primary-700`} onClick={handleSubmit}>
+          <Button type="submit" className={`group-focus-within:outline-primary-medium group-focus-within:text-primary-medium`} onClick={handleSubmit}>
             {task ? 'Update' : 'Add'}
           </Button>
         </div>
       </form>
 
       <HiXCircle
-        className={`absolute cursor-pointer w-7 h-7 -top-3.5 -right-3.5 bg-secondary-300 rounded-full group-focus-within:bg-primary-800`}
+        className={`absolute cursor-pointer w-7 h-7 -top-3.5 -right-3.5 bg-secondary-light rounded-full group-focus-within:bg-primary-dark`}
         onClick={onClose}
       />
     </div>

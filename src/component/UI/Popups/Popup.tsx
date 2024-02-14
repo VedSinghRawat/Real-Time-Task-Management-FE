@@ -16,7 +16,7 @@ interface PopupCloseButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> 
 
 const PopupCloseButton: FC<PopupCloseButtonProps> = ({ className = '', ...rest }) => {
   return (
-    <button {...rest} className={`rounded-full bg-tertiary-800 p-2 border-4 border-primary-700 text-primary-700 ${className}`}>
+    <button {...rest} className={`rounded-full bg-tertiary-800 p-2 border-4 border-primary-medium text-primary-medium ${className}`}>
       <ImCross className={`h-2.5 w-2.5`} />
     </button>
   )
@@ -55,7 +55,7 @@ const Popup: FC<PopupProps> = ({ children, className = '', setIsOpen, isOpen, on
         >
           <div className={`relative max-w-full max-h-full flex my-auto scale `}>
             <Dialog.Panel
-              className={`shadow-secondary-600 shadow-lg overflow-y-auto max-h-full mx-auto bg-secondary-600 border-4 shadow-popup border-primary-700 rounded-2xl p-6 sm:p-12 ${className} `}
+              className={`shadow-secondary-medium shadow-lg overflow-y-auto max-h-full mx-auto bg-secondary-medium border-4 shadow-popup border-primary-medium rounded-2xl p-6 sm:p-12 ${className} `}
             >
               {children}
             </Dialog.Panel>

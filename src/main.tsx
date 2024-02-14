@@ -7,6 +7,7 @@ import HistoryPage from './pages/App/History.Page.tsx'
 import DashboardPage from './pages/App/Dashboard.Page.tsx'
 import LoginPage from './pages/Auth/Login.Page.tsx'
 import Root from './component/Root.tsx'
+import TestPage from './pages/Test.Page.tsx'
 
 const router = createBrowserRouter([
   {
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
       {
         path: 'login',
         element: <LoginPage />,
+      },
+      {
+        path: 'test',
+        element: <TestPage />,
       },
     ],
   },

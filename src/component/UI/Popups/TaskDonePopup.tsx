@@ -22,7 +22,7 @@ const TaskDonePopup: FC<TaskDonePopupProps> = ({ task }) => {
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     <Popup isOpen={isOpen} setIsOpen={() => {}} className={`font-semibold text-tertiary-700`}>
       <h3>
-        Are you <span className={`text-primary-700 font-bold`}>DONE</span> with this task?
+        Are you <span className={`text-primary-medium font-bold`}>DONE</span> with this task?
       </h3>
 
       <pre className={`mt-4 whitespace-break-spaces`}>{task.description}</pre>
@@ -30,7 +30,7 @@ const TaskDonePopup: FC<TaskDonePopupProps> = ({ task }) => {
       <div className={`flex justify-around mt-10`}>
         <Button
           Icon={BsFillCheckCircleFill}
-          className={`flex-row-reverse !outline-primary-800 !text-primary-700`}
+          className={`flex-row-reverse !outline-primary-dark !text-primary-medium`}
           onClick={() => {
             taskUpdate(task.id, { type: 'done' })
 
@@ -42,7 +42,7 @@ const TaskDonePopup: FC<TaskDonePopupProps> = ({ task }) => {
 
         <Button
           Icon={HiXCircle}
-          className={`!bg-red-500 flex-row-reverse !outline-primary-800 !text-primary-700`}
+          className={`!bg-red-500 flex-row-reverse !outline-primary-dark !text-primary-medium`}
           iconClasses="h-5 w-5"
           onClick={() => {
             task.overTime === 0 && taskUpdate(task.id, { overTime: 1 })

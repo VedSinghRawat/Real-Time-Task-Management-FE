@@ -13,7 +13,7 @@ export const CustomTooltip: FC<
     const dataPoint = ticks[0].payload
 
     return (
-      <div className="max-w-[15rem] bg-primary-500 bg-opacity-80 p-2 text-secondary-500 rounded-sm">
+      <div className="max-w-[15rem] bg-primary-normal bg-opacity-80 p-2 text-secondary-normal rounded-sm">
         {tickNode && (
           <div className={`grid grid-cols-2 gap-x-2`}>
             {ticks.map((tick) => {

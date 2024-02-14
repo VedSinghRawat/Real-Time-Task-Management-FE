@@ -41,7 +41,7 @@ function Listbox<V, T extends { id: string; value: V; label: string }>({
           className={`relative overflow-hidden text-left rounded-lg shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm ${className}`}
         >
           <HeadlessListbox.Button
-            className={`relative w-full py-1 px-4 pr-8 text-left rounded-lg shadow-md cursor-default bg-primary-400 focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 ${buttonClasses}`}
+            className={`relative w-full py-1 px-4 pr-8 text-left rounded-lg shadow-md cursor-default bg-primary-light focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 ${buttonClasses}`}
           >
             <span className="block truncate">{selected.label || placeholder}</span>
 
@@ -51,7 +51,7 @@ function Listbox<V, T extends { id: string; value: V; label: string }>({
           </HeadlessListbox.Button>
         </div>
         <Transition as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
-          <HeadlessListbox.Options className="absolute z-10 py-1 mt-1 overflow-auto text-base rounded-md shadow-lg min-w-max bg-primary-400 max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+          <HeadlessListbox.Options className="absolute z-10 py-1 mt-1 overflow-auto text-base rounded-md shadow-lg min-w-max bg-primary-light max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
             {showNoneOpt ? (
               <HeadlessListbox.Option
                 className={({ active }) =>
