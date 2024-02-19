@@ -29,11 +29,11 @@ const TaskCard: FC<TaskCardProps> = ({ task, className = '' }) => {
 
   return (
     <div
-      className={`${className} relative rounded-xl bg-primary-medium group focus-within:bg-secondary-medium p-2.5 transition-all duration-100 ease-in-out text-tertiary-medium focus-within:text-tertiary-dark`}
+      className={`${className} relative rounded-xl bg-primary-medium group p-2.5 transition-all duration-100 ease-in-out text-secondary-medium outline outline-2 outline-tertiary-normal`}
     >
-      <div className={`absolute -top-2 -right-1 flex gap-x-2`}>
+      <div className={`absolute -top-3 -right-2 flex gap-x-2 z-10`}>
         <AiFillDelete
-          className={`bg-tertiary-light p-[1px] rounded-full h-5 w-5 cursor-pointer text-secondary-medium`}
+          className={`bg-secondary-dark text-tertiary-light p-[0.15rem] rounded-full h-5 w-5 cursor-pointer`}
           onClick={() => taskRemove(task.id)}
         />
       </div>

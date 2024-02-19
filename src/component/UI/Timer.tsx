@@ -43,11 +43,11 @@ const Timer: FC<TimerProps> = ({ timeInSeconds, active, dir, onTimeChange, class
       {rest.showControls && (
         <div className={`flex flex-col ml-2 gap-y-1 `}>
           <button onClick={() => rest.onIncreaseControlClick(setCurrTime)}>
-            <AiFillPlusCircle className={`bg-tertiary-light text-secondary-medium rounded-full h-3.5 w-3.5 `} />
+            <AiFillPlusCircle className={`bg-secondary-dark text-tertiary-light rounded-full h-3.5 w-3.5 `} />
           </button>
 
           <button onClick={() => rest.onDecreaseControlClick(setCurrTime)}>
-            <AiFillMinusCircle className={`bg-tertiary-light text-secondary-medium rounded-full h-3.5 w-3.5`} />
+            <AiFillMinusCircle className={`bg-secondary-dark text-tertiary-light rounded-full h-3.5 w-3.5`} />
           </button>
         </div>
       )}

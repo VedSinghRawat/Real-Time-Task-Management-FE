@@ -40,7 +40,7 @@ const TimeInput: FC<TimeInputProps> = ({ className = '', containerClasses = '', 
       {
         ref: secondInputRef,
         label: 's',
-        className: `!rounded-r-md !rounded-none pr-2.5 w-7 ${className}`,
+        className: `!rounded-r-md !rounded-none pr-2 w-7 ${className}`,
         setter: setSecondValue,
         value: inputVals[2],
         disable: false,
@@ -80,7 +80,7 @@ const TimeInput: FC<TimeInputProps> = ({ className = '', containerClasses = '', 
               {...rest}
             />
 
-            <span className={`right-1 top-1/2 -translate-y-1/2 absolute text-opacity-70`}>{label}</span>
+            <span className={`right-0.5 top-1/2 -translate-y-1/2 absolute text-opacity-70`}>{label}</span>
           </span>
         )
       })}

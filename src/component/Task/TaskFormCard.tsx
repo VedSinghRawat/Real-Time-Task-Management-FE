@@ -40,7 +40,7 @@ const TaskFormCard: FC<TaskFormCardProps> = ({ task, className = '', onClose }) 
 
   return (
     <div
-      className={`relative text-sm sm:text-base rounded-xl bg-primary-dark group ${className} focus-within:bg-secondary-medium p-2.5 transition-all duration-100 ease-in-out text-tertiary-normal  focus-within:text-tertiary-dark`}
+      className={`relative text-sm sm:text-base rounded-xl bg-primary-dark group ${className} focus-within:bg-tertiary-medium p-2.5 transition-all duration-100 ease-in-out text-tertiary-normal  focus-within:text-secondary-dark`}
     >
       <form
         onSubmit={(e) => {
@@ -54,7 +54,7 @@ const TaskFormCard: FC<TaskFormCardProps> = ({ task, className = '', onClose }) 
           <TimeInput
             getValue={setTimerValue}
             containerClasses="w-full outline-[3px] outline-secondary-normal outline group-focus-within:outline-primary-dark rounded-md"
-            className={`bg-transparent placeholder-tertiary-light placeholder-opacity-70 group-focus-within:placeholder-tertiary-dark`}
+            className={`bg-transparent placeholder-secondary-light placeholder-opacity-70 group-focus-within:placeholder-secondary-dark`}
           />
 
           <Button type="submit" className={`group-focus-within:outline-primary-medium group-focus-within:text-primary-medium`} onClick={handleSubmit}>
@@ -64,7 +64,7 @@ const TaskFormCard: FC<TaskFormCardProps> = ({ task, className = '', onClose }) 
       </form>
 
       <HiXCircle
-        className={`absolute cursor-pointer w-7 h-7 -top-3.5 -right-3.5 bg-secondary-light rounded-full group-focus-within:bg-primary-dark`}
+        className={`absolute cursor-pointer w-7 h-7 -top-3.5 -right-3.5 bg-tertiary-light rounded-full group-focus-within:bg-primary-dark text-secondary-normal  focus-within:text-tertiary-dark`}
         onClick={onClose}
       />
     </div>

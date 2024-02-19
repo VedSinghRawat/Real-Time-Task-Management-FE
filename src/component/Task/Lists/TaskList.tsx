@@ -41,7 +41,7 @@ MemoedBase.DragList = () => {
 
   return (
     <DraggableList
-      className={`grow mx-auto w-full overflow-auto p-2.5`}
+      className={`grow mx-auto w-full overflow-auto p-2.5 pt-3`}
       droppableId={context!.droppableId}
       items={context!.tasks}
       itemContianerClasses="mb-5"
