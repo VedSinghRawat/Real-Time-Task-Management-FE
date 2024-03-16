@@ -5,8 +5,8 @@ import Button from '../UI/Button'
 import { HHMMSSToSeconds, TimeString } from '../../utils'
 import TimeInput from '../UI/Form/Input/TimeInput'
 import { Task } from '../../model/Task'
-import { taskFormActions } from '../../state/selector/task.selector'
-import { useTaskStore } from '../../state/store/task.store'
+import { useAppStore } from '../../state/store'
+import TaskSelectors from '../../state/selector/task.selector'
 
 type TaskFormCardProps = {
   className?: string
@@ -15,7 +15,7 @@ type TaskFormCardProps = {
 }
 
 const TaskFormCard: FC<TaskFormCardProps> = ({ task, className = '', onClose }) => {
-  const [onAdd, onUpdate] = useTaskStore(taskFormActions)
+  const [onAdd, onUpdate] = useAppStore(TaskSelectors.form)
   const [timerValue, setTimerValue] = useState<TimeString | undefined>()
 
   const textAreaRef = useRef<HTMLTextAreaElement>(null)

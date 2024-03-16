@@ -49,3 +49,7 @@ export function getRandomInt(min: number, max: number) {
 
   return Math.floor(Math.random() * (max + 1 - min) + min)
 }
+
+export function sleep(dur?: number) {
+  return new Promise((res) => setTimeout(() => res('done'), dur || 1000))
+}

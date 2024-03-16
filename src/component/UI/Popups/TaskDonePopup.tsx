@@ -1,11 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import { useAppStore } from '../../../state/store'
 import { FC, memo, useState } from 'react'
 import Popup from './Popup'
 import Button from '../Button'
 import { BsFillCheckCircleFill } from 'react-icons/bs'
 import { HiXCircle } from 'react-icons/hi'
-import { taskRemoveToConfirmDoneActionSelector, taskUpdateActionSelector } from '../../../state/selector/task.selector'
-import { useTaskStore } from '../../../state/store/task.store'
+import TaskSelectors from '../../../state/selector/task.selector'
 import { Task } from '../../../model/Task'
 
 interface TaskDonePopupProps {
@@ -13,8 +12,8 @@ interface TaskDonePopupProps {
 }
 
 const TaskDonePopup: FC<TaskDonePopupProps> = ({ task }) => {
-  const taskUpdate = useTaskStore(taskUpdateActionSelector)
-  const removeTaskToConfimDone = useTaskStore(taskRemoveToConfirmDoneActionSelector)
+  const taskUpdate = useAppStore(TaskSelectors.base.update)
+  const removeTaskToConfimDone = useAppStore(TaskSelectors.base.removeFromConfirm)
 
   const [isOpen] = useState(true)
 

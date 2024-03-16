@@ -1,14 +1,9 @@
 import { FC, memo, useCallback, useMemo } from 'react'
 import Timer from '../UI/Timer'
 import alert from '../../assets/audio/alert.wav'
-import {
-  taskAddToConfirmDoneActionSelector,
-  taskSetTimerActions,
-  taskToConfirmDoneIdsSelector,
-  taskUpdateActionSelector,
-} from '../../state/selector/task.selector'
-import { useTaskStore } from '../../state/store/task.store'
 import { Task } from '../../model/Task'
+import { useAppStore } from '../../state/store'
+import TaskSelectors from '../../state/selector/task.selector'
 
 const alertAudio = new Audio(alert)
 
@@ -17,12 +12,12 @@ interface TaskTimerProps {
 }
 
 const TaskTimer: FC<TaskTimerProps> = ({ task }) => {
-  const taskUpdate = useTaskStore(taskUpdateActionSelector)
+  const taskUpdate = useAppStore(TaskSelectors.base.update)
 
-  const taskAddtoToConfirmDone = useTaskStore(taskAddToConfirmDoneActionSelector)
-  const taskToConfirmDoneIds = useTaskStore(taskToConfirmDoneIdsSelector)
+  const taskAddtoToConfirmDone = useAppStore(TaskSelectors.base.addToConfirm)
+  const taskToConfirmDoneIds = useAppStore(TaskSelectors.base.idsToConfirm)
 
-  const [inc, dec] = useTaskStore(taskSetTimerActions)
+  const [inc, dec] = useAppStore(TaskSelectors.setTimer)
   const [increaseTimeEstimate, decreaseTimeEstimate] = useMemo(() => [() => inc(task.id, 60), () => dec(task.id, 60)], [dec, inc, task.id])
 
   const handleTimeChange: (newTime: number) => void = useCallback(

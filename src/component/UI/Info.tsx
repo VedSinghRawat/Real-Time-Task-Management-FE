@@ -1,14 +1,14 @@
 import { FC, memo } from 'react'
-import { taskTotalRemainingTimeSelector, taskTypedListSelector, taskTodayListSelector } from '../../state/selector/task.selector'
-import { useTaskStore } from '../../state/store/task.store'
+import TaskSelectors from '../../state/selector/task.selector'
 import { secondsToHHMMSS } from '../../utils'
+import { useAppStore } from '../../state/store'
 
 interface InfoProps {}
 
 const Info: FC<InfoProps> = () => {
-  const totalRemainingTime = useTaskStore(taskTotalRemainingTimeSelector)
-  const doneTaskList = useTaskStore(taskTypedListSelector('done'))
-  const taskList = useTaskStore(taskTodayListSelector)
+  const totalRemainingTime = useAppStore(TaskSelectors.totalRemainingTime)
+  const doneTaskList = useAppStore(TaskSelectors.listByType('done'))
+  const taskList = useAppStore(TaskSelectors.todayList)
 
   return (
     <div className={`text-center text-secondary-light sticky inset-x-0 max-w-[100vw] -mx-6 md:-mx-[4.5rem]`}>

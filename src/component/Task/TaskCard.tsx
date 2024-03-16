@@ -2,8 +2,8 @@ import { FC, memo, useEffect, useRef } from 'react'
 import { AiFillDelete } from 'react-icons/ai'
 import TaskTimer from './TaskTimer'
 import { Task } from '../../model/Task'
-import { taskRemoveActionSelector } from '../../state/selector/task.selector'
-import { useTaskStore } from '../../state/store/task.store'
+import TaskSelectors from '../../state/selector/task.selector'
+import { useAppStore } from '../../state/store'
 
 interface TaskCardProps {
   task: Task
@@ -13,7 +13,7 @@ interface TaskCardProps {
 const TaskCard: FC<TaskCardProps> = ({ task, className = '' }) => {
   const textAreaRef = useRef<HTMLTextAreaElement>(null)
 
-  const taskRemove = useTaskStore(taskRemoveActionSelector)
+  const taskRemove = useAppStore(TaskSelectors.base.delete)
 
   useEffect(() => {
     textAreaRef.current?.focus()

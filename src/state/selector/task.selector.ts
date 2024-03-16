@@ -1,69 +1,60 @@
 import { createSelector } from 'reselect'
-import { State } from '../store/task.store'
 import { isAfter, isSameDay, isToday, startOfDay, subDays, subMonths } from 'date-fns'
 import { TaskType, Task } from '../../model/Task'
 import { TODAY } from '../../constants'
+import { createSliceSelectors, taskSliceSelector } from '../selector'
+import { TaskSlice } from '../slices/task.slice'
 
-export const baseStateSelector = (state: State) => state
+const taskStateInit: TaskSlice = {
+  map: {},
+  idsToConfirm: [],
 
-export const taskMapSelector = createSelector(baseStateSelector, (state) => state.taskMap)
-export const taskListSelector = createSelector(baseStateSelector, (state) => Object.values(state.taskMap))
+  add: () => undefined,
+  addToConfirm: () => undefined,
+  changeTimer: () => undefined,
+  clearConfirm: () => undefined,
+  delete: () => undefined,
+  move: () => undefined,
+  removeFromConfirm: () => undefined,
+  update: () => undefined,
+}
 
-export const taskTodayListSelector = createSelector(taskListSelector, (list) => list.filter((t) => isToday(t.created_at)))
+export default class TaskSelectors {
+  public static base = createSliceSelectors('task', taskStateInit, taskSliceSelector)
 
-export const taskTypedListSelector = (type: TaskType) =>
-  createSelector(taskTodayListSelector, (taskList) => taskList.filter((task) => task.type === type).sort((a, b) => a.order - b.order))
+  static list = createSelector(this.base.map, (map) => Object.values(map))
 
-export const taskSetTimerActions = createSelector(
-  baseStateSelector,
-  (state) =>
-    [(id: Task['id'], by: number) => state.changeTimer(id, by, 'inc'), (id: Task['id'], by: number) => state.changeTimer(id, by, 'dec')] as const
-)
+  static todayList = createSelector(this.list, (list) => list.filter((t) => isToday(t.created_at)))
 
-export const taskFormActions = createSelector(baseStateSelector, (state) => [state.addTask, state.updateTask] as const)
+  static listByType = (type: TaskType) =>
+    createSelector(this.todayList, (taskList) => taskList.filter((task) => task.type === type).sort((a, b) => a.order - b.order))
 
-export const taskAddActionSelector = createSelector(baseStateSelector, (state) => state.addTask)
+  static setTimer = createSelector(
+    taskSliceSelector,
+    (state) =>
+      [(id: Task['id'], by: number) => state.changeTimer(id, by, 'inc'), (id: Task['id'], by: number) => state.changeTimer(id, by, 'dec')] as const
+  )
 
-export const taskMoveActionSelector = createSelector(baseStateSelector, (state) => state.moveTodo)
+  static form = createSelector(taskSliceSelector, (state) => [state.add, state.update] as const)
 
-export const taskUpdateActionSelector = createSelector(baseStateSelector, (state) => state.updateTask)
+  static totalRemainingTime = createSelector(this.todayList, (taskList) =>
+    taskList.reduce((totalTime, task) => {
+      if (task.type !== 'done') totalTime += task.timeLeft
 
-export const taskRemoveActionSelector = createSelector(baseStateSelector, (state) => state.removeTask)
+      return totalTime
+    }, 0)
+  )
 
-export const taskTotalRemainingTimeSelector = createSelector(taskTodayListSelector, (taskList) =>
-  taskList.reduce((totalTime, task) => {
-    if (task.type !== 'done') totalTime += task.timeLeft
+  static toConfirmList = createSelector([this.base.idsToConfirm, this.base.map], (ids, map) => ids.map((id) => map[id]).filter((t) => !!t) as Task[])
 
-    return totalTime
-  }, 0)
-)
+  static dateFilteredList = (filterDate?: Date) =>
+    createSelector(this.list, (list) => (filterDate ? list.filter((task) => isSameDay(task.created_at, filterDate)) : []))
 
-export const taskAddToConfirmDoneActionSelector = createSelector(baseStateSelector, (state) => state.addTaskToConfimDone)
+  static lastWeekList = createSelector(this.list, (list) => list.filter((t) => isAfter(t.created_at, startOfDay(subDays(TODAY, 7)))))
 
-export const taskRemoveToConfirmDoneActionSelector = createSelector(baseStateSelector, (state) => state.removeTaskToConfimDone)
+  static lastMonthList = createSelector(this.list, (list) => list.filter((t) => isAfter(t.created_at, startOfDay(subMonths(TODAY, 1)))))
 
-export const taskToConfirmDoneIdsSelector = createSelector(baseStateSelector, (state) => state.taskIdsToConfirmDone)
+  static lastSixMonthsList = createSelector(this.list, (list) => list.filter((t) => isAfter(t.created_at, startOfDay(subMonths(TODAY, 6)))))
 
-export const taskToConfirmDoneListSelector = createSelector(
-  [taskToConfirmDoneIdsSelector, taskMapSelector],
-  (ids, map) => ids.map((id) => map[id]).filter((t) => !!t) as Task[]
-)
-
-export const taskListDateFilteredSelector = (filterDate?: Date) =>
-  createSelector(taskListSelector, (list) => (filterDate ? list.filter((task) => isSameDay(task.created_at, filterDate)) : []))
-
-export const taskListLastWeekSelector = createSelector(taskListSelector, (list) =>
-  list.filter((t) => isAfter(t.created_at, startOfDay(subDays(TODAY, 7))))
-)
-
-export const taskListLastMonthSelector = createSelector(taskListSelector, (list) =>
-  list.filter((t) => isAfter(t.created_at, startOfDay(subMonths(TODAY, 1))))
-)
-
-export const taskListLastSixMonthsSelector = createSelector(taskListSelector, (list) =>
-  list.filter((t) => isAfter(t.created_at, startOfDay(subMonths(TODAY, 6))))
-)
-
-export const taskYesterdayLeftoverListSelector = createSelector(taskListSelector, (list) =>
-  list.filter((t) => t.type !== 'done' && isSameDay(t.created_at, subDays(TODAY, 1)))
-)
+  static yesterdayLeftList = createSelector(this.list, (list) => list.filter((t) => t.type !== 'done' && isSameDay(t.created_at, subDays(TODAY, 1))))
+}

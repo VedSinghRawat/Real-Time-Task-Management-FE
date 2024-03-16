@@ -3,13 +3,13 @@ import TaskMultiList from '../../component/Task/Lists/TaskMultiList'
 import Info from '../../component/UI/Info'
 import LeftoverTasksPopup from '../../component/UI/Popups/LeftoverTasksPopup'
 import TaskDonePopup from '../../component/UI/Popups/TaskDonePopup'
-import { useTaskStore } from '../../state/store/task.store'
-import { taskToConfirmDoneListSelector } from '../../state/selector/task.selector'
+import TaskSelectors from '../../state/selector/task.selector'
+import { useAppStore } from '../../state/store'
 
 interface TodayProps {}
 
 const Today: FC<TodayProps> = () => {
-  const tasksToConfirm = useTaskStore(taskToConfirmDoneListSelector)
+  const tasksToConfirm = useAppStore(TaskSelectors.todayList)
 
   return (
     <section className={`mt-4 flex flex-col grow`}>

@@ -4,21 +4,21 @@ import TaskDoingList from './TaskDoingList'
 import TaskDoneList from './TaskDoneList'
 import TaskTodoList from './TaskTodoList'
 import { TaskType, Task } from '../../../model/Task'
-import { taskTypedListSelector, taskAddToConfirmDoneActionSelector, taskMoveActionSelector } from '../../../state/selector/task.selector'
-import { useTaskStore } from '../../../state/store/task.store'
+import TaskSelectors from '../../../state/selector/task.selector'
+import { useAppStore } from '../../../state/store'
 
 interface TaskMultiListProps {
   className?: string
 }
 
 const TaskMultiList: FC<TaskMultiListProps> = ({ className = '' }) => {
-  const todoTasks = useTaskStore(taskTypedListSelector('todo'))
-  const doingTasks = useTaskStore(taskTypedListSelector('doing'))
-  const doneTasks = useTaskStore(taskTypedListSelector('done'))
+  const todoTasks = useAppStore(TaskSelectors.listByType('todo'))
+  const doingTasks = useAppStore(TaskSelectors.listByType('doing'))
+  const doneTasks = useAppStore(TaskSelectors.listByType('done'))
 
-  const taskAddtoToConfirmDone = useTaskStore(taskAddToConfirmDoneActionSelector)
+  const taskAddtoToConfirmDone = useAppStore(TaskSelectors.base.addToConfirm)
 
-  const taskMove = useTaskStore(taskMoveActionSelector)
+  const taskMove = useAppStore(TaskSelectors.base.move)
 
   const taskLists = useMemo(
     () => [{ id: 'todo', items: todoTasks } as const, { id: 'doing', items: doingTasks } as const, { id: 'done', items: doneTasks } as const],

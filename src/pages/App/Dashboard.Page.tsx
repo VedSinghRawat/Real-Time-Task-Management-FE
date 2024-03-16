@@ -1,7 +1,5 @@
 import { FC, memo, useMemo, useState } from 'react'
 import { ResponsiveContainer, LineChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, Line, Cell, Pie, PieChart, Bar, BarChart } from 'recharts'
-import { useTaskStore } from '../../state/store/task.store'
-import { taskListLastMonthSelector, taskListLastSixMonthsSelector, taskListLastWeekSelector } from '../../state/selector/task.selector'
 import { COLORS, RADIAN } from '../../constants'
 import { DAYS, TODAY } from '../../constants'
 import { addDays, format, getDaysInMonth, isToday, subDays, subMonths } from 'date-fns'
@@ -10,6 +8,8 @@ import { secondsToHHMMSS } from '../../utils'
 import { useWindowSize } from '../../hooks/useWindowSize'
 import { CustomTooltip } from '../../component/UI/CustomTooltip'
 import Listbox from '../../component/UI/Form/Listbox'
+import TaskSelectors from '../../state/selector/task.selector'
+import { useAppStore } from '../../state/store'
 
 interface DashboardProps {}
 
@@ -140,9 +140,9 @@ const radialGraphData = (['done', 'todo'] as const).map((type) => {
 const Dashboard: FC<DashboardProps> = () => {
   const [timeFrame, setTimeFrame] = useState<TimeFrame>('Weekly')
 
-  const taskListLastWeek = useTaskStore(taskListLastWeekSelector)
-  const taskListLastMonth = useTaskStore(taskListLastMonthSelector)
-  const taskListLastSixMonths = useTaskStore(taskListLastSixMonthsSelector)
+  const taskListLastWeek = useAppStore(TaskSelectors.lastWeekList)
+  const taskListLastMonth = useAppStore(TaskSelectors.lastMonthList)
+  const taskListLastSixMonths = useAppStore(TaskSelectors.lastSixMonthsList)
 
   const graphData = useMemo(() => {
     const timeTypeToListMap = {

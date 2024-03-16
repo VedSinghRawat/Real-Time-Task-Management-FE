@@ -1,6 +1,6 @@
 import { FC, memo, useCallback, useState } from 'react'
-import { useTaskStore } from '../../../state/store/task.store'
-import { taskAddActionSelector, taskYesterdayLeftoverListSelector } from '../../../state/selector/task.selector'
+import TaskSelectors from '../../../state/selector/task.selector'
+import { useAppStore } from '../../../state/store'
 import Popup from './Popup'
 import Button from '../Button'
 import { isSameDay } from 'date-fns'
@@ -9,8 +9,8 @@ import { LOCAL_STORAGE_LEFTOVER_DATE, TODAY } from '../../../constants'
 interface LeftoverTasksProps {}
 
 const LeftoverTasks: FC<LeftoverTasksProps> = () => {
-  const addTask = useTaskStore(taskAddActionSelector)
-  const yesterdayTasks = useTaskStore(taskYesterdayLeftoverListSelector)
+  const addTask = useAppStore(TaskSelectors.base.add)
+  const yesterdayTasks = useAppStore(TaskSelectors.yesterdayLeftList)
 
   let interactedOn: Date | string | null = localStorage.getItem(LOCAL_STORAGE_LEFTOVER_DATE)
   if (interactedOn) interactedOn = new Date(interactedOn)

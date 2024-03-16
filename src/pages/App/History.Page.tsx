@@ -4,8 +4,8 @@ import { format } from 'date-fns'
 import Overview from '../../component/Pages/History/Overview'
 import TasksDetail from '../../component/Pages/History/TasksDetail'
 import TimeSpent from '../../component/Pages/History/TimeSpent'
-import { useTaskStore } from '../../state/store/task.store'
-import { taskListDateFilteredSelector } from '../../state/selector/task.selector'
+import TaskSelectors from '../../state/selector/task.selector'
+import { useAppStore } from '../../state/store'
 
 interface HistoryProps {}
 
@@ -13,7 +13,7 @@ const History: FC<HistoryProps> = () => {
   const { history } = useParams()
 
   const historyDate = history ? new Date(history) : undefined
-  const taskList = useTaskStore(taskListDateFilteredSelector(historyDate))
+  const taskList = useAppStore(TaskSelectors.dateFilteredList(historyDate))
 
   if (!historyDate) return
 
