@@ -11,15 +11,18 @@ export function createSliceSelectors<
   E extends EntitySliceMap,
   EN extends keyof EntitySliceMap,
   ES extends E[EN],
-  SK extends Exclude<keyof ES, symbol>,
->(_entityName: EN, initState: ES, baseSelector: (s: E) => ES) {
-  const sliceKeys = Object.keys(initState) as SK[]
+  K extends Exclude<keyof ES, symbol>,
+  KM extends { [key in K]: null },
+>(_entityName: EN, keyMap: KM, baseSelector: (s: E) => ES) {
+  const keys = Object.keys(keyMap) as K[]
 
-  return sliceKeys.reduce(
+  const selectorMap = keys.reduce<{ [key in K]: (s: E) => ES[key] }>(
     (curr, k) => {
       curr[k] = createSelector(baseSelector, (s) => s[k])
       return curr
     },
-    {} as { [key in SK]: (s: E) => ES[key] }
+    {} as { [key in K]: (s: E) => ES[key] }
   )
+
+  return selectorMap
 }

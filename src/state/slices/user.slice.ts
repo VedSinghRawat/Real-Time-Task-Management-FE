@@ -14,12 +14,11 @@ type Actions = {
 
 export type UserSlice = Keys & Actions
 
-export const userStateInit: UserSlice = {
-  map: {},
-  meId: undefined,
-  loading: false,
-
-  fetchMe: async () => await userService.fetchMe(),
+export const userStateInit: { [key in keyof Keys | keyof Actions]: null } = {
+  map: null,
+  meId: null,
+  loading: null,
+  fetchMe: null,
 }
 
 export const createUserSlice: StateSlice<UserSlice> = (set) => ({
