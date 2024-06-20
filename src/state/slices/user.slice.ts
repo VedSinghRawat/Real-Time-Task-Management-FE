@@ -1,4 +1,5 @@
 import { User } from '../../entities/user.entity'
+import { ROUTES } from '../../routes'
 import userService from '../../services/user.service'
 import { StateSlice } from '../store'
 
@@ -38,6 +39,7 @@ export const createUserSlice: StateSlice<UserSlice> = (set) => ({
       return me
     } catch (error) {
       console.error(error)
+      if (window.location.pathname !== ROUTES.LOGIN) window.location.href = ROUTES.LOGIN
     }
   },
 })
