@@ -85,6 +85,8 @@ module.exports = {
         'no-mixed-operators': 'warn',
 
         '@typescript-eslint/no-empty-interface': 'off',
+
+        '@typescript-eslint/no-unnecessary-type-assertion': 'off',
       },
 
       parserOptions: {

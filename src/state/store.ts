@@ -19,6 +19,7 @@ const storage: StateStorage = {
 
 type ExtraState = {
   hasHydrated: boolean
+  loading: boolean
   setHasHydrated: (isHyd: boolean) => void
 }
 
@@ -35,13 +36,15 @@ export const useAppStore = create<Store>()(
   persist(
     immer(
       devtools((set, get, store) => ({
-        user: createUserSlice(set, get, store),
-        task: createTaskSlice(set, get, store),
+        hasHydrated: false,
+        loading: false,
 
-        hasHydrated: false as boolean,
         setHasHydrated: (isHyd) => {
           set({ hasHydrated: isHyd })
         },
+
+        user: createUserSlice(set, get, store),
+        task: createTaskSlice(set, get, store),
       }))
     ),
     {
@@ -61,3 +64,39 @@ export const useAppStore = create<Store>()(
     }
   )
 )
+
+export function actionCreatorGenerator<KT extends keyof EntitySliceMap>(name: KT, set: Parameters<StateSlice<EntitySliceMap[KT]>>[0]) {
+  return <P extends unknown[], T extends EntitySliceMap[KT]['map'][string], RT extends { [key in KT]: T } | { [key in KT]: T[] }>(
+      api: (...args: P) => Promise<RT>,
+      beforeReq?: () => void,
+      afterRes?: (data: RT) => void,
+      onError?: (error: unknown) => void
+    ) =>
+    async (...args: P) => {
+      set((state) => {
+        state.loading = true
+      })
+
+      try {
+        beforeReq?.()
+
+        const data = await api(...args)
+
+        set((state) => {
+          const ent = data[name]
+          if (Array.isArray(ent)) {
+            for (const item of ent as T[]) {
+              state[name].map[item.id] = item
+            }
+          } else {
+            state[name].map[ent.id] = ent
+          }
+        })
+
+        afterRes?.(data)
+      } catch (error) {
+        console.error(error)
+        onError?.(error)
+      }
+    }
+}

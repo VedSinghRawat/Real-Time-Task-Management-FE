@@ -1,24 +1,14 @@
 import { User } from '../entities/user.entity'
 import apiService from './api.service'
 
-class AuthService {
-  public static instance: AuthService
-
-  public static getInstance(): AuthService {
-    if (!this.instance) this.instance = new AuthService()
-
-    return this.instance
-  }
-
-  async login(data: { email: string; password: string }) {
-    const user = apiService.methods.POST<User>({ urlSuffix: '/login', data })
-    return user
-  }
-
-  async signup(data: { username: string; email: string; password: string }) {
-    const user = apiService.methods.POST<User>({ urlSuffix: '/signup', data })
-    return user
-  }
+export interface LoginRequest {
+  email: string
+  password: string
 }
 
-export default AuthService.getInstance()
+export default class AuthService {
+  static login = (data: LoginRequest) => apiService.methods.POST<{ access_token: string; user: User }>({ urlSuffix: '/login', data })
+
+  static signup = (data: { username: string; email: string; password: string }) =>
+    apiService.methods.POST<{ access_token: string; user: User }>({ urlSuffix: '/signup', data })
+}

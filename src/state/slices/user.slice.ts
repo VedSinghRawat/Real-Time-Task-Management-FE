@@ -1,16 +1,18 @@
 import { User } from '../../entities/user.entity'
 import { ROUTES } from '../../routes'
-import userService from '../../services/user.service'
-import { StateSlice } from '../store'
+import AuthService from '../../services/auth.service'
+import UserService from '../../services/user.service'
+import { StateSlice, actionCreatorGenerator } from '../store'
 
 type Keys = {
-  loading: boolean
-  map: { [id: User['id']]: User }
+  map: { [id: string]: User }
   meId: User['id'] | undefined
 }
 
 type Actions = {
-  fetchMe: () => Promise<User | undefined>
+  fetchMe: () => Promise<void>
+  login: (...args: Parameters<typeof AuthService.login>) => Promise<void>
+  signup: (...args: Parameters<typeof AuthService.signup>) => Promise<void>
 }
 
 export type UserSlice = Keys & Actions
@@ -18,28 +20,27 @@ export type UserSlice = Keys & Actions
 export const userStateInit: { [key in keyof Keys | keyof Actions]: null } = {
   map: null,
   meId: null,
-  loading: null,
   fetchMe: null,
+  login: null,
+  signup: null,
 }
 
-export const createUserSlice: StateSlice<UserSlice> = (set) => ({
-  map: {},
-  meId: undefined,
-  loading: false,
+export const createUserSlice: StateSlice<UserSlice> = (set) => {
+  function meIdSetter<T extends { user: User }>(data: T) {
+    set((state) => {
+      state.user.meId = data.user.id
+    })
+  }
+  const actionGenerator = actionCreatorGenerator('user', set)
+  return {
+    map: {},
+    meId: undefined,
 
-  fetchMe: async () => {
-    try {
-      const me = await userService.fetchMe()
-
-      set((state) => {
-        state.user.meId = me.id
-        state.user.map[me.id] = me
-      })
-
-      return me
-    } catch (error) {
-      console.error(error)
+    fetchMe: actionGenerator(UserService.fetchMe, undefined, meIdSetter, () => {
       if (window.location.pathname !== ROUTES.LOGIN) window.location.href = ROUTES.LOGIN
-    }
-  },
-})
+    }),
+
+    login: actionGenerator(AuthService.login, undefined, meIdSetter),
+    signup: actionGenerator(AuthService.signup, undefined, meIdSetter),
+  }
+}

@@ -11,23 +11,19 @@ type RequestParams<T> = {
   data?: unknown
 }
 
-class APIService {
-  public static instance: APIService
+export default class APIService {
+  private static API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 
-  public static getInstance(): APIService {
-    if (!this.instance) this.instance = new APIService()
-
-    return this.instance
-  }
-
-  private API_BASE_URL = import.meta.env.VITE_API_BASE_URL
-
-  private async request<T>(data: RequestParams<T>) {
+  private static async request<T>(data: RequestParams<T>) {
     try {
       const response = await axios.request<T>({
         ...data,
         ...data.config,
         baseURL: this.API_BASE_URL + data.urlSuffix,
+        headers: {
+          ...data.headers,
+          Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
+        },
       })
       return response.data
     } catch (error) {
@@ -37,7 +33,7 @@ class APIService {
     }
   }
 
-  public methods = API_METHODS.reduce(
+  public static methods = API_METHODS.reduce(
     (curr, method) => {
       curr[method] = async <T>(data: Omit<RequestParams<T>, 'method'>) => {
         return await this.request<T>({ ...data, method })
@@ -52,5 +48,3 @@ class APIService {
     }
   )
 }
-
-export default APIService.getInstance()
