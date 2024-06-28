@@ -65,6 +65,8 @@ export const useAppStore = create<Store>()(
   )
 )
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type ApiAction<T extends (...args: any[]) => any> = (...args: Parameters<T>) => Promise<void>
 export function actionCreatorGenerator<KT extends keyof EntitySliceMap>(name: KT, set: Parameters<StateSlice<EntitySliceMap[KT]>>[0]) {
   return <P extends unknown[], T extends EntitySliceMap[KT]['map'][string], RT extends { [key in KT]: T } | { [key in KT]: T[] }>(
       api: (...args: P) => Promise<RT>,

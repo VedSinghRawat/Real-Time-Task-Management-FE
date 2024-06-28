@@ -1,5 +1,4 @@
 import { z } from 'zod'
-import { Validator } from '../base.validator'
 
 export const signupSchema = z
   .object({
@@ -17,4 +16,3 @@ export const signupSchema = z
   .required()
 
 export type SignupDTO = z.infer<typeof signupSchema>
-export const SignupValidator = new Validator(signupSchema)

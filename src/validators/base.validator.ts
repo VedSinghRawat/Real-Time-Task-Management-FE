@@ -4,7 +4,7 @@ export function createValidator<T extends ZodType>(schema: T) {
   return (value: unknown) => {
     try {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      schema.parse(value) as T['_output']
+      return schema.parse(value) as T['_output']
     } catch (error) {
       if (error instanceof ZodError) {
         const errs = error.issues.reduce<{
@@ -16,8 +16,9 @@ export function createValidator<T extends ZodType>(schema: T) {
           return curr
         }, {})
 
-        return errs
+        throw errs
       }
+      throw 'Some error occured'
     }
   }
 }

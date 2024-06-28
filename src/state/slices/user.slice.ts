@@ -2,7 +2,7 @@ import { User } from '../../entities/user.entity'
 import { ROUTES } from '../../routes'
 import AuthService from '../../services/auth.service'
 import UserService from '../../services/user.service'
-import { StateSlice, actionCreatorGenerator } from '../store'
+import { ApiAction, StateSlice, actionCreatorGenerator } from '../store'
 
 type Keys = {
   map: { [id: string]: User }
@@ -11,8 +11,8 @@ type Keys = {
 
 type Actions = {
   fetchMe: () => Promise<void>
-  login: (...args: Parameters<typeof AuthService.login>) => Promise<void>
-  signup: (...args: Parameters<typeof AuthService.signup>) => Promise<void>
+  login: ApiAction<typeof AuthService.login>
+  signup: ApiAction<typeof AuthService.signup>
 }
 
 export type UserSlice = Keys & Actions
