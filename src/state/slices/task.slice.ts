@@ -7,6 +7,7 @@ import TaskSelectors from '../selector/task.selector'
 export type Keys = {
   map: { [id: string]: Task }
   idsToConfirm: Task['id'][]
+  loading: boolean
 }
 
 export type Actions = {
@@ -25,6 +26,7 @@ export type TaskSlice = Keys & Actions
 export const createTaskSlice: StateSlice<TaskSlice> = (set) => ({
   map: {},
   idsToConfirm: [],
+  loading: false,
 
   add: (newTask) =>
     set((state) => {

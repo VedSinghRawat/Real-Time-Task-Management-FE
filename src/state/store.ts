@@ -19,7 +19,7 @@ const storage: StateStorage = {
 
 type ExtraState = {
   hasHydrated: boolean
-  loading: boolean
+  pageLoading: boolean
   setHasHydrated: (isHyd: boolean) => void
 }
 
@@ -28,7 +28,7 @@ export type EntitySliceMap = {
   task: TaskSlice
 }
 
-type Store = EntitySliceMap & ExtraState
+export type Store = EntitySliceMap & ExtraState
 
 export type StateSlice<T> = StateCreator<Store, [['zustand/immer', never]], [['zustand/devtools', never]], T>
 
@@ -37,7 +37,7 @@ export const useAppStore = create<Store>()(
     immer(
       devtools((set, get, store) => ({
         hasHydrated: false,
-        loading: false,
+        pageLoading: false,
 
         setHasHydrated: (isHyd) => {
           set({ hasHydrated: isHyd })
@@ -76,7 +76,7 @@ export function actionCreatorGenerator<KT extends keyof EntitySliceMap>(name: KT
     ) =>
     async (...args: P) => {
       set((state) => {
-        state.loading = true
+        state[name].loading = true
       })
 
       try {
@@ -100,5 +100,9 @@ export function actionCreatorGenerator<KT extends keyof EntitySliceMap>(name: KT
         console.error(error)
         onError?.(error)
       }
+
+      set((state) => {
+        state[name].loading = false
+      })
     }
 }

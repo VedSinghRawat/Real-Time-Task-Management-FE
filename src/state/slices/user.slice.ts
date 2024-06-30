@@ -7,6 +7,7 @@ import { ApiAction, StateSlice, actionCreatorGenerator } from '../store'
 type Keys = {
   map: { [id: string]: User }
   meId: User['id'] | undefined
+  loading: boolean
 }
 
 type Actions = {
@@ -20,6 +21,7 @@ export type UserSlice = Keys & Actions
 export const userStateInit: { [key in keyof Keys | keyof Actions]: null } = {
   map: null,
   meId: null,
+  loading: null,
   fetchMe: null,
   login: null,
   signup: null,
@@ -35,10 +37,19 @@ export const createUserSlice: StateSlice<UserSlice> = (set) => {
   return {
     map: {},
     meId: undefined,
+    loading: false,
 
-    fetchMe: actionGenerator(UserService.fetchMe, undefined, meIdSetter, () => {
-      if (window.location.pathname !== ROUTES.LOGIN) window.location.href = ROUTES.LOGIN
-    }),
+    fetchMe: actionGenerator(
+      UserService.fetchMe,
+      () =>
+        set((state) => {
+          state.pageLoading = true
+        }),
+      meIdSetter,
+      () => {
+        if (window.location.pathname !== ROUTES.LOGIN) window.location.href = ROUTES.LOGIN
+      }
+    ),
 
     login: actionGenerator(AuthService.login, undefined, meIdSetter),
     signup: actionGenerator(AuthService.signup, undefined, meIdSetter),

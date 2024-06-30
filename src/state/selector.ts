@@ -1,11 +1,13 @@
 import { createSelector } from 'reselect'
-import { EntitySliceMap } from './store'
+import { EntitySliceMap, Store } from './store'
 
-const rootStateSelector = (state: EntitySliceMap) => state
+const rootStateSelector = (state: Store) => state
 
 export const userSliceSelector = createSelector(rootStateSelector, (state) => state.user)
 
 export const taskSliceSelector = createSelector(rootStateSelector, (state) => state.task)
+
+export const loadingSelector = createSelector(rootStateSelector, (state) => state.pageLoading)
 
 export function createSliceSelectors<
   E extends EntitySliceMap,
