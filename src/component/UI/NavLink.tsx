@@ -1,19 +1,15 @@
-import { ButtonHTMLAttributes, FC, memo } from 'react'
-import { IconType } from 'react-icons'
+import { AnchorHTMLAttributes, FC, memo } from 'react'
+import { Link } from 'react-router-dom'
 
-interface NavLinkProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  Icon?: IconType
+interface NavLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
+  to: string
 }
 
-const NavLink: FC<NavLinkProps> = ({ className = '', Icon, children, ...rest }) => {
+const NavLink: FC<NavLinkProps> = ({ className = '', children, ...rest }) => {
   return (
-    <button
-      className={`bg-secondary-dark text-tertiary-light px-4 flex items-center rounded-lg py-1 justify-around border-2 border-secondary-medium ${className}`}
-      {...rest}
-    >
+    <Link className={`text-primary-11 ${className}`} {...rest}>
       {children}
-      {Icon && <Icon className="" />}
-    </button>
+    </Link>
   )
 }
 
