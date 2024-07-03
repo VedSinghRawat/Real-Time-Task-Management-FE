@@ -17,14 +17,18 @@ const Login: FC<LoginProps> = () => {
   const onSubmit = useMemo(() => handleSubmit((val) => console.log(val)), [handleSubmit])
 
   return (
-    <div className={`grow flex flex-col items-center justify-center`}>
-      <div className={`border-primary-4 text-primary-12 border bg-primary-2 bg-opacity-30 backdrop-blur-sm p-8 rounded-xl w-full max-w-md`}>
-        <h1 className={`text-primary-12 text-center text-3xl`}>Login</h1>
-        <p className={`text-sm mt-3 `}>
+    <div className={`flex flex-col items-center justify-center grow`}>
+      <div
+        className={`w-full max-w-md px-8 py-5 border border-primary-4 text-primary-12 bg-primary-2 bg-opacity-30 backdrop-blur-sm sm:px-12 sm:py-9 rounded-xl sm:max-w-xl`}
+      >
+        <img src="/assets/img/logo.png" alt="logo" className={`w-full max-w-lg mx-auto`} />
+
+        <h1 className={`text-2xl text-center text-primary-12 sm:text-4xl lg:text-5xl`}>Login</h1>
+        <p className={`mt-3 text-xs sm:text-base lg:text-lg`}>
           Not Registered With Us. Click <NavLink to={ROUTES.REGISTER}>Here</NavLink> to register with us.
         </p>
 
-        <form onSubmit={void onSubmit} className={`flex flex-col gap-3 mt-8 `}>
+        <form onSubmit={void onSubmit} className={`flex flex-col gap-3 mt-8 text-sm sm:text-lg lg:text-xl`}>
           <Input {...register('email')} placeholder="Your Registered Email">
             Email
           </Input>
@@ -33,7 +37,7 @@ const Login: FC<LoginProps> = () => {
             Password
           </Input>
 
-          <Button className={`w-fit px-8 mx-auto mt-8`} type="submit">
+          <Button className={`px-8 mx-auto mt-8 w-fit`} type="submit">
             Submit
           </Button>
         </form>

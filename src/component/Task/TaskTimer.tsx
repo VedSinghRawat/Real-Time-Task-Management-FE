@@ -1,11 +1,10 @@
 import { FC, memo, useCallback, useMemo } from 'react'
 import Timer from '../UI/Timer'
-import alert from '../../assets/audio/alert.wav'
 import { Task } from '../../model/Task'
 import { useAppStore } from '../../state/store'
 import TaskSelectors from '../../state/selector/task.selector'
 
-const alertAudio = new Audio(alert)
+const alertAudio = new Audio('/assets/audio/alert.wav')
 
 interface TaskTimerProps {
   task: Task

@@ -13,7 +13,7 @@ export const Loading: FC<LoadingProps> = () => {
       setProgress((curr) => {
         return curr ? 0 : 140
       })
-      console.log({ progress })
+
       if (progress === 140) setDelay(100)
       else setDelay(ROUND_DURATION)
     }, delay)

@@ -48,9 +48,9 @@ const TaskFormCard: FC<TaskFormCardProps> = ({ task, className = '', onClose }) 
           handleSubmit()
         }}
       >
-        <TextArea setRef={textAreaRef} className={`bg-transparent group-focus-within:outline-primary-medium `} />
+        <TextArea setRef={textAreaRef} className={`bg-transparent group-focus-within:outline-primary-medium`} />
 
-        <div className={`relative mt-4 gap-x-4 flex`}>
+        <div className={`relative flex mt-4 gap-x-4`}>
           <TimeInput
             getValue={setTimerValue}
             containerClasses="w-full outline-[3px] outline-secondary-normal outline group-focus-within:outline-primary-dark rounded-md"
