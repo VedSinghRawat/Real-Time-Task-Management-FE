@@ -8,10 +8,10 @@ export const signupSchema = z
       .string()
       .min(8)
       .max(20)
-      .regex(/.*[A-Z].*/)
-      .regex(/.*\d.*/)
-      .regex(/.*[a-z].*/)
-      .regex(/..*[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~].*/),
+      .regex(/.*[A-Z].*/, 'Password should contain atleast one capital alphabet (A-Z)')
+      .regex(/.*\d.*/, 'Password should contain atleast one digit (0-9)')
+      .regex(/.*[a-z].*/, 'Password should contain atleast one small alphabet (a-z)')
+      .regex(/..*[!#$%&*+-./<=>?@^_|~].*/, 'Password should contain atleast one special character (!,#,$,%,&,*,+,-,<,=,>,?,@,^,_,|,~)'),
   })
   .required()
 

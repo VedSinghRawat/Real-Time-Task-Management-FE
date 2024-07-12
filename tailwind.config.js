@@ -36,6 +36,8 @@ export default {
 
       white: '#FCF7F8',
       black: '#141414',
+      red: '#FF3333',
+      green: '#4FBF26',
       transparent: 'transparent',
     },
   },

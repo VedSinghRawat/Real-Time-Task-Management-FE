@@ -2,7 +2,6 @@ import { FC, memo, useEffect } from 'react'
 import { Outlet } from 'react-router'
 import { useAppStore } from '../state/store'
 import UserSelectors from '../state/selector/user.selector'
-import { ROUTES } from '../routes'
 import { loadingSelector } from '../state/selector'
 import { Loading } from './UI/Loading'
 
@@ -23,9 +22,8 @@ const Root: FC<RootProps> = () => {
       </div>
     )
 
-  const bg = window.location.pathname === ROUTES.LOGIN ? 'pattern-bg' : 'bg-black'
   return (
-    <div className={`${bg} px-6 py-11 md:pt-[4.5rem] md:px-[4.5rem] min-w-full min-h-screen flex flex-col`}>
+    <div className={`min-w-full min-h-screen bg-black `}>
       <Outlet />
     </div>
   )

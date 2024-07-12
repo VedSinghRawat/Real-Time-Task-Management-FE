@@ -7,7 +7,7 @@ interface NavLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
 
 const NavLink: FC<NavLinkProps> = ({ className = '', children, ...rest }) => {
   return (
-    <Link className={`text-primary-11 ${className}`} {...rest}>
+    <Link className={`underline text-primary-11 ${className}`} {...rest}>
       {children}
     </Link>
   )

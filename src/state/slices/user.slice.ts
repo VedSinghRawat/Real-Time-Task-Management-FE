@@ -1,5 +1,5 @@
 import { User } from '../../entities/user.entity'
-import { ROUTES } from '../../routes'
+import ROUTES from '../../routes'
 import AuthService from '../../services/auth.service'
 import UserService from '../../services/user.service'
 import { ApiAction, StateSlice, actionCreatorGenerator } from '../store'
@@ -47,7 +47,7 @@ export const createUserSlice: StateSlice<UserSlice> = (set) => {
         }),
       meIdSetter,
       () => {
-        if (window.location.pathname !== ROUTES.LOGIN) window.location.href = ROUTES.LOGIN
+        if (!window.location.pathname.includes('auth')) window.location.href = ROUTES.login
       }
     ),
 

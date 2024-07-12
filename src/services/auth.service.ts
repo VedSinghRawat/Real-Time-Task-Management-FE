@@ -1,14 +1,21 @@
 import { User } from '../entities/user.entity'
 import apiService from './api.service'
 
-export interface LoginRequest {
+export type RegisterRequest = {
+  username: string
   email: string
   password: string
 }
 
-export default class AuthService {
-  static login = (data: LoginRequest) => apiService.methods.POST<{ access_token: string; user: User }>({ urlSuffix: '/login', data })
+export type LoginRequest = Omit<RegisterRequest, 'username'>
 
-  static signup = (data: { username: string; email: string; password: string }) =>
-    apiService.methods.POST<{ access_token: string; user: User }>({ urlSuffix: '/signup', data })
+export type AuthResponse = {
+  access_token: string
+  user: User
+}
+
+export default class AuthService {
+  static login = (data: LoginRequest) => apiService.methods.POST<AuthResponse>({ urlSuffix: '/login', data })
+
+  static signup = (data: RegisterRequest) => apiService.methods.POST<AuthResponse>({ urlSuffix: '/signup', data })
 }

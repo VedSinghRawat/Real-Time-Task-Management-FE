@@ -5,9 +5,11 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import TodayPage from './pages/App/Today.Page.tsx'
 import HistoryPage from './pages/App/History.Page.tsx'
 import DashboardPage from './pages/App/Dashboard.Page.tsx'
-import LoginPage from './pages/Auth/Login.Page.tsx'
 import Root from './component/Root.tsx'
 import TestPage from './pages/Test.Page.tsx'
+import RegisterPage from './component/Pages/Auth/RegisterForm.tsx'
+import AuthContainer from './component/Pages/Auth/AuthContainer.tsx'
+import LoginForm from './component/Pages/Auth/LoginForm.tsx'
 
 const router = createBrowserRouter([
   {
@@ -33,8 +35,18 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: 'login',
-        element: <LoginPage />,
+        path: 'auth',
+        element: <AuthContainer />,
+        children: [
+          {
+            path: 'login',
+            element: <LoginForm />,
+          },
+          {
+            path: 'register',
+            element: <RegisterPage />,
+          },
+        ],
       },
       {
         path: 'test',
