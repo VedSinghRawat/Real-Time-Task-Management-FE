@@ -67,12 +67,11 @@ export const useAppStore = create<Store>()(
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type ApiAction<T extends (...args: any[]) => any> = (...args: Parameters<T>) => Promise<void>
+
 export function actionCreatorGenerator<KT extends keyof EntitySliceMap>(name: KT, set: Parameters<StateSlice<EntitySliceMap[KT]>>[0]) {
   return <P extends unknown[], T extends EntitySliceMap[KT]['map'][string], RT extends { [key in KT]: T } | { [key in KT]: T[] }>(
       api: (...args: P) => Promise<RT>,
-      beforeReq?: () => void,
-      afterRes?: (data: RT) => void,
-      onError?: (error: unknown) => void
+      opts: { beforeReq?: () => void; onSuccess?: (data: RT) => void; onError?: (error: unknown) => void; onFinal?: () => void } | undefined
     ) =>
     async (...args: P) => {
       set((state) => {
@@ -80,7 +79,7 @@ export function actionCreatorGenerator<KT extends keyof EntitySliceMap>(name: KT
       })
 
       try {
-        beforeReq?.()
+        opts?.beforeReq?.()
 
         const data = await api(...args)
 
@@ -95,14 +94,16 @@ export function actionCreatorGenerator<KT extends keyof EntitySliceMap>(name: KT
           }
         })
 
-        afterRes?.(data)
+        opts?.onSuccess?.(data)
       } catch (error) {
         console.error(error)
-        onError?.(error)
+        opts?.onError?.(error)
       }
 
       set((state) => {
         state[name].loading = false
       })
+
+      opts?.onFinal?.()
     }
 }

@@ -7,7 +7,6 @@ import { useForm } from 'react-hook-form'
 import { LoginRequest } from '../../../services/auth.service'
 import { loginSchema } from '../../../validators/auth/login.validator'
 import NavLink from '../../UI/NavLink'
-import Form from '../../UI/Form/Form'
 
 const LoginForm = () => {
   const { handleSubmit, control } = useForm<LoginRequest>({
@@ -22,7 +21,7 @@ const LoginForm = () => {
         Not Registered With Us. Click <NavLink to={ROUTES.register}>Here</NavLink> to register with us.
       </p>
 
-      <Form onSubmit={void onSubmit} className={`flex flex-col gap-3 mt-8 text-sm sm:text-lg lg:text-xl`}>
+      <form onSubmit={onSubmit} className={`flex flex-col gap-3 mt-8 text-sm sm:text-lg lg:text-xl`}>
         <Input control={control} name="email" placeholder="Your Registered Email">
           Email
         </Input>
@@ -34,7 +33,7 @@ const LoginForm = () => {
         <Button className={`px-8 mx-auto mt-8 w-fit`} type="submit">
           Submit
         </Button>
-      </Form>
+      </form>
     </>
   )
 }

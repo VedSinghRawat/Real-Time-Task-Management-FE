@@ -1,16 +1,13 @@
-class Routes {
-  private get auth() {
+export default class Routes {
+  private static get auth() {
     return '/auth' as const
   }
 
-  public get login() {
-    return this.auth + '/login'
+  public static get login() {
+    return `${this.auth}/login` as const
   }
 
-  public get register() {
-    return this.auth + '/register'
+  public static get register() {
+    return `${this.auth}/register` as const
   }
 }
-
-const ROUTES = new Routes()
-export default ROUTES

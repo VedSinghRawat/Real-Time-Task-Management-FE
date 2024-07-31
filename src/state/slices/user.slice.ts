@@ -1,7 +1,6 @@
 import { User } from '../../entities/user.entity'
 import ROUTES from '../../routes'
 import AuthService from '../../services/auth.service'
-import UserService from '../../services/user.service'
 import { ApiAction, StateSlice, actionCreatorGenerator } from '../store'
 
 type Keys = {
@@ -28,30 +27,40 @@ export const userStateInit: { [key in keyof Keys | keyof Actions]: null } = {
 }
 
 export const createUserSlice: StateSlice<UserSlice> = (set) => {
-  function meIdSetter<T extends { user: User }>(data: T) {
+  function setMeId<T extends { user: User }>(data: T) {
     set((state) => {
       state.user.meId = data.user.id
     })
   }
+
   const actionGenerator = actionCreatorGenerator('user', set)
+
   return {
     map: {},
     meId: undefined,
     loading: false,
 
-    fetchMe: actionGenerator(
-      UserService.fetchMe,
-      () =>
+    fetchMe: actionGenerator(AuthService.fetchMe, {
+      beforeReq: () =>
         set((state) => {
           state.pageLoading = true
         }),
-      meIdSetter,
-      () => {
+      onSuccess: setMeId,
+      onError: () => {
         if (!window.location.pathname.includes('auth')) window.location.href = ROUTES.login
-      }
-    ),
+      },
+      onFinal: () => {
+        set((state) => {
+          state.pageLoading = false
+        })
+      },
+    }),
 
-    login: actionGenerator(AuthService.login, undefined, meIdSetter),
-    signup: actionGenerator(AuthService.signup, undefined, meIdSetter),
+    login: actionGenerator(AuthService.login, {
+      onSuccess: setMeId,
+    }),
+    signup: actionGenerator(AuthService.signup, {
+      onSuccess: setMeId,
+    }),
   }
 }

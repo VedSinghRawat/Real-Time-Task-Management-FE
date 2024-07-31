@@ -18,4 +18,6 @@ export default class AuthService {
   static login = (data: LoginRequest) => apiService.methods.POST<AuthResponse>({ urlSuffix: '/login', data })
 
   static signup = (data: RegisterRequest) => apiService.methods.POST<AuthResponse>({ urlSuffix: '/signup', data })
+
+  static fetchMe = () => apiService.methods.GET<{ user: User }>({ urlSuffix: '/me' })
 }

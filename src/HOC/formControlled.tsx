@@ -5,7 +5,6 @@ import { FieldValues, UseControllerProps, useController } from 'react-hook-form'
 function formControlled<P extends InputProps>(Comp: FC<P>) {
   function FormControlled<T extends FieldValues>(props: UseControllerProps<T> & { control: UseControllerProps<T>['control'] } & P) {
     const { field, fieldState } = useController(props)
-    console.log(fieldState)
     return (
       <div>
         <Comp {...field} {...props} className={`${!fieldState.error ? 'mb-[1.125rem] sm:mb-[1.375rem]' : ''} ${props.className || ''}`} />

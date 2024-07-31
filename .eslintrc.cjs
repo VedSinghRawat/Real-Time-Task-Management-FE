@@ -87,6 +87,15 @@ module.exports = {
         '@typescript-eslint/no-empty-interface': 'off',
 
         '@typescript-eslint/no-unnecessary-type-assertion': 'off',
+
+        '@typescript-eslint/no-misused-promises': [
+          2,
+          {
+            checksVoidReturn: {
+              attributes: false,
+            },
+          },
+        ],
       },
 
       parserOptions: {

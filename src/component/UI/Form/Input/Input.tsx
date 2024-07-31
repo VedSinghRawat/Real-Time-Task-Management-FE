@@ -26,5 +26,5 @@ const InputComp: FC<InputProps> = ({ className = '', children, setRef, ...rest }
   )
 }
 
-export default formControlled(memo(InputComp))
 export const Input = memo(InputComp)
+export default formControlled(Input)
