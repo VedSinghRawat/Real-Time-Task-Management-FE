@@ -1,18 +1,24 @@
 import ROUTES from '../../../routes'
 import Button from '../../UI/Button'
 import Input from '../../UI/Form/Input/Input'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useMemo } from 'react'
-import { useForm } from 'react-hook-form'
-import { LoginRequest } from '../../../services/auth.service'
 import { loginSchema } from '../../../validators/auth/login.validator'
 import NavLink from '../../UI/NavLink'
+import UserSelectors from '../../../state/selector/user.selector'
+import { Store, useAppStore } from '../../../state/store'
+import useForm from '../../../Hooks/useForm'
+
+const selectors = (state: Store) => ({
+  loading: UserSelectors.base.loading(state),
+  login: UserSelectors.base.login(state),
+})
 
 const LoginForm = () => {
-  const { handleSubmit, control } = useForm<LoginRequest>({
-    resolver: zodResolver(loginSchema),
+  const { loading, login } = useAppStore(selectors)
+
+  const { control, submitHandler } = useForm(loginSchema, login, {
+    email: '',
+    password: '',
   })
-  const onSubmit = useMemo(() => handleSubmit((val) => console.log(val)), [handleSubmit])
 
   return (
     <>
@@ -21,7 +27,7 @@ const LoginForm = () => {
         Not Registered With Us. Click <NavLink to={ROUTES.register}>Here</NavLink> to register with us.
       </p>
 
-      <form onSubmit={onSubmit} className={`flex flex-col gap-3 mt-8 text-sm sm:text-lg lg:text-xl`}>
+      <form onSubmit={submitHandler} className={`flex flex-col gap-3 mt-8 text-sm sm:text-lg lg:text-xl`}>
         <Input control={control} name="email" placeholder="Your Registered Email">
           Email
         </Input>
@@ -30,7 +36,7 @@ const LoginForm = () => {
           Password
         </Input>
 
-        <Button className={`px-8 mx-auto mt-8 w-fit`} type="submit">
+        <Button className={`px-8 mx-auto mt-8 w-fit`} type="submit" isLoading={loading}>
           Submit
         </Button>
       </form>

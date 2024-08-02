@@ -54,36 +54,34 @@ const TimeInput: FC<TimeInputProps> = ({ className = '', containerClasses = '', 
 
   return (
     <div className={`${containerClasses} flex`}>
-      {inputsData.map(({ ref, value, disable, label, className, setter }, i) => {
-        return (
-          <span className={`relative`} key={label}>
-            <Input
-              disabled={disable}
-              placeholder="00"
-              value={value}
-              onChange={(e) => {
-                const val = e.currentTarget.value
+      {inputsData.map(({ ref, value, disable, label, className, setter }, i) => (
+        <span className={`relative`} key={label}>
+          <Input
+            disabled={disable}
+            placeholder="00"
+            value={value}
+            onChange={(e) => {
+              const val = e.currentTarget.value
 
-                if (val.length <= 2) !isNaN(+val) && setter(val)
+              if (val.length <= 2) !isNaN(+val) && setter(val)
 
-                if (val.length >= 2) {
-                  const nextInput = inputsData[i - 1]?.ref.current
+              if (val.length >= 2) {
+                const nextInput = inputsData[i - 1]?.ref.current
 
-                  if (nextInput) {
-                    nextInput.disabled = false
-                    nextInput.focus()
-                  }
+                if (nextInput) {
+                  nextInput.disabled = false
+                  nextInput.focus()
                 }
-              }}
-              setRef={ref}
-              className={`text-right !outline-none !border-0 ${className}`}
-              {...rest}
-            />
+              }
+            }}
+            innerRef={ref}
+            className={`text-right !outline-none !border-0 ${className}`}
+            {...rest}
+          />
 
-            <span className={`right-0.5 top-1/2 -translate-y-1/2 absolute text-opacity-70`}>{label}</span>
-          </span>
-        )
-      })}
+          <span className={`right-0.5 top-1/2 -translate-y-1/2 absolute text-opacity-70`}>{label}</span>
+        </span>
+      ))}
     </div>
   )
 }

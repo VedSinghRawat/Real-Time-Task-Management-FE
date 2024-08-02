@@ -4,6 +4,7 @@ import { createJSONStorage, devtools, persist, StateStorage } from 'zustand/midd
 import { immer } from 'zustand/middleware/immer'
 import { UserSlice, createUserSlice } from './slices/user.slice'
 import { TaskSlice, createTaskSlice } from './slices/task.slice'
+import { merge } from 'lodash'
 
 const storage: StateStorage = {
   getItem: async (name: string): Promise<string | null> => {
@@ -52,13 +53,14 @@ export const useAppStore = create<Store>()(
       onRehydrateStorage: () => (state) => {
         state && state.setHasHydrated(true)
       },
+      merge: (persistedState, currentState) => {
+        return merge(persistedState, currentState)
+      },
       storage: createJSONStorage(() => storage, {
         reviver: (_key, value) => {
           // check if value is a Date ISO string
-          if (typeof value === 'string' && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/.test(value)) {
-            return new Date(value)
-          }
-          return value
+          if (!(typeof value === 'string' && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/.test(value))) return value
+          return new Date(value)
         },
       }),
     }

@@ -1,28 +1,28 @@
-import { FC, memo, useMemo } from 'react'
-import { useForm } from 'react-hook-form'
-import { RegisterRequest } from '../../../services/auth.service'
-import { zodResolver } from '@hookform/resolvers/zod'
+import { FC, memo } from 'react'
 import Input from '../../UI/Form/Input/Input'
 import Button from '../../UI/Button'
 import ROUTES from '../../../routes'
 import NavLink from '../../UI/NavLink'
+import useForm from '../../../Hooks/useForm'
 import { signupSchema } from '../../../validators/auth/signup.validator'
+import { Store, useAppStore } from '../../../state/store'
+import UserSelectors from '../../../state/selector/user.selector'
 
 interface RegisterProps {}
 
+const selectors = (state: Store) => ({
+  loading: UserSelectors.base.loading(state),
+  signup: UserSelectors.base.signup(state),
+})
+
 const Register: FC<RegisterProps> = () => {
-  const { handleSubmit, control } = useForm<RegisterRequest>({
-    resolver: zodResolver(signupSchema),
-    shouldFocusError: true,
-    mode: 'onTouched',
+  const { loading, signup } = useAppStore(selectors)
+
+  const { control, submitHandler } = useForm(signupSchema, signup, {
+    username: '',
+    email: '',
+    password: '',
   })
-  const onSubmit = useMemo(
-    () =>
-      handleSubmit((vals) => {
-        console.log(vals)
-      }),
-    [handleSubmit]
-  )
 
   return (
     <>
@@ -31,7 +31,7 @@ const Register: FC<RegisterProps> = () => {
         Already have an account. Click <NavLink to={ROUTES.login}>Here</NavLink> to login.
       </p>
 
-      <form onSubmit={onSubmit} className={`flex flex-col gap-1 mt-8 text-sm sm:text-lg lg:text-xl`}>
+      <form onSubmit={submitHandler} className={`flex flex-col gap-1 mt-8 text-sm sm:text-lg lg:text-xl`}>
         <Input control={control} name="username" type="text" placeholder="Your Username">
           Username
         </Input>
@@ -44,7 +44,7 @@ const Register: FC<RegisterProps> = () => {
           Password
         </Input>
 
-        <Button className={`px-8 mx-auto mt-8 w-fit`} type="submit" isLoading={true}>
+        <Button className={`px-8 mx-auto mt-8 w-fit`} type="submit" isLoading={loading}>
           Submit
         </Button>
       </form>

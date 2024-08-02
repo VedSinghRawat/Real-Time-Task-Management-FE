@@ -17,7 +17,7 @@ type Actions = {
 
 export type UserSlice = Keys & Actions
 
-export const userStateInit: { [key in keyof Keys | keyof Actions]: null } = {
+export const userStateInit: { [key in keyof UserSlice]: null } = {
   map: null,
   meId: null,
   loading: null,

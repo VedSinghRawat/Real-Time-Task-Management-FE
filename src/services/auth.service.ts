@@ -10,7 +10,7 @@ export type RegisterRequest = {
 export type LoginRequest = Omit<RegisterRequest, 'username'>
 
 export type AuthResponse = {
-  access_token: string
+  auth_token: string
   user: User
 }
 
@@ -19,5 +19,5 @@ export default class AuthService {
 
   static signup = (data: RegisterRequest) => apiService.methods.POST<AuthResponse>({ urlSuffix: '/signup', data })
 
-  static fetchMe = () => apiService.methods.GET<{ user: User }>({ urlSuffix: '/me' })
+  static fetchMe = () => apiService.methods.GET<Omit<AuthResponse, 'access_token'>>({ urlSuffix: '/me' })
 }
