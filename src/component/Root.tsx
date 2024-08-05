@@ -9,18 +9,18 @@ interface RootProps {}
 
 const selectors = (state: Store) => ({
   fetchMe: UserSelectors.base.fetchMe(state),
+  meId: UserSelectors.base.meId(state),
   loading: loadingSelector(state),
-  hasHydrated: state.hasHydrated,
 })
 
 const Root: FC<RootProps> = () => {
-  const { fetchMe, loading, hasHydrated } = useAppStore(selectors)
+  const { fetchMe, loading, meId } = useAppStore(selectors)
 
   useEffect(() => {
-    fetchMe && void fetchMe()
-  }, [fetchMe])
+    meId === undefined && void fetchMe()
+  }, [fetchMe, meId])
 
-  if (loading || !hasHydrated)
+  if (loading)
     return (
       <div className="flex items-center justify-center h-screen bg-black">
         <Loading />

@@ -10,4 +10,8 @@ export default class Routes {
   public static get register() {
     return `${this.auth}/register` as const
   }
+
+  public static get home() {
+    return '/app' as const
+  }
 }

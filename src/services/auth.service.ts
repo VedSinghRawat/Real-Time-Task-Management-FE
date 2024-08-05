@@ -10,7 +10,7 @@ export type RegisterRequest = {
 export type LoginRequest = Omit<RegisterRequest, 'username'>
 
 export type AuthResponse = {
-  auth_token: string
+  access_token: string
   user: User
 }
 

@@ -9,12 +9,14 @@ export const taskSliceSelector = createSelector(rootStateSelector, (state) => st
 
 export const loadingSelector = createSelector(rootStateSelector, (state) => state.pageLoading)
 
+export const hasHydratedSelector = createSelector(rootStateSelector, (state) => state.hasHydrated)
+
 export function createSliceSelectors<
   E extends EntitySliceMap,
   EN extends keyof EntitySliceMap,
   ES extends E[EN],
   K extends Exclude<keyof ES, symbol>,
-  KM extends { [key in K]: null },
+  KM extends { [key in K]: undefined },
 >(_entityName: EN, keyMap: KM, baseSelector: (s: E) => ES) {
   const keys = Object.keys(keyMap) as K[]
 

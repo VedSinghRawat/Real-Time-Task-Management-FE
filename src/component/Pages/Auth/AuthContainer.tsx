@@ -1,9 +1,22 @@
 import { FC, memo } from 'react'
-import { Outlet } from 'react-router-dom'
+import { Navigate, Outlet } from 'react-router-dom'
+import { Store, useAppStore } from '../../../state/store'
+import Routes from '../../../routes'
+import UserSelectors from '../../../state/selector/user.selector'
 
 interface AuthContainerProps {}
 
+const selectors = (state: Store) => ({
+  meId: UserSelectors.base.meId(state),
+})
+
 const AuthContainer: FC<AuthContainerProps> = () => {
+  const { meId } = useAppStore(selectors)
+
+  if (meId !== null) {
+    return <Navigate to={Routes.home} />
+  }
+
   return (
     <div className={`flex flex-col items-center justify-center min-h-screen px-8 py-10 sm:px-24 pattern-bg`}>
       <div

@@ -15,10 +15,7 @@ function useForm<T extends FieldValues>(
     defaultValues,
   })
 
-  const submitHandler = useMemo(() => {
-    console.log({ onSubmit })
-    return handleSubmit(onSubmit)
-  }, [handleSubmit, onSubmit])
+  const submitHandler = useMemo(() => handleSubmit(onSubmit), [handleSubmit, onSubmit])
 
   return { ...rest, submitHandler }
 }

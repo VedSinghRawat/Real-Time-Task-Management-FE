@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosRequestHeaders } from 'axios'
+import LocalStorageService from './localStorage.service'
 
 const API_METHODS = ['GET', 'POST', 'DELETE', 'PATCH', 'PUT'] as const
 type APIMethods = (typeof API_METHODS)[number]
@@ -22,7 +23,7 @@ export default class APIService {
         baseURL: this.API_BASE_URL + data.urlSuffix,
         headers: {
           ...data.headers,
-          Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
+          Authorization: `Bearer ${LocalStorageService.get('access_token') || ''}`,
         },
       })
       return response.data

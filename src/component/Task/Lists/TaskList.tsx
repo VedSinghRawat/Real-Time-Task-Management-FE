@@ -32,6 +32,9 @@ const Base = ({ className = '', children, ...rest }: TaskListProps) => {
 const MemoedBase = memo(Base) as unknown as NamedExoticComponent<TaskListProps> & SubComps
 
 MemoedBase.Heading = ({ children }: { children: string }) => {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  useContext(TaskListContext)
+
   return <h2 className={`text-secondary-normal text-2xl sm:text-4xl`}>{children}</h2>
 }
 
