@@ -20,7 +20,6 @@ const Root: FC<RootProps> = () => {
     meId === undefined && void fetchMe()
   }, [fetchMe, meId])
 
-  console.log('root')
   if (loading)
     return (
       <div className="flex items-center justify-center h-screen bg-black">
@@ -29,7 +28,7 @@ const Root: FC<RootProps> = () => {
     )
 
   return (
-    <div className={`min-w-full min-h-screen bg-black `}>
+    <div className={`min-w-full min-h-screen bg-black text-primary-12`}>
       <Outlet />
     </div>
   )

@@ -52,13 +52,12 @@ export const createUserSlice: StateSlice<UserSlice> = (set) => {
         }),
       onSuccess: authSuccess,
       onError: () => {
-        safeNav(ROUTES.login)
-      },
-      onFinal: () => {
         set((state) => {
           state.pageLoading = false
           state.user.loading = false
+          state.user.meId = null
         })
+        safeNav(ROUTES.login)
       },
     }),
 

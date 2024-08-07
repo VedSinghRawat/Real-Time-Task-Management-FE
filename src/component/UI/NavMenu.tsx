@@ -4,7 +4,6 @@ import { GiHamburgerMenu } from 'react-icons/gi'
 import { useNavigate } from 'react-router'
 import DatePickerPopup from './Popups/DatePickerPopup'
 import NavLink from './NavLink'
-import { Link } from 'react-router-dom'
 
 interface NavMenuProps {}
 
@@ -34,14 +33,15 @@ const NavMenu: FC<NavMenuProps> = () => {
             <div className={`m-auto w-0 h-0 border-x-[0.8rem] border-x-transparent border-b-[1rem] absolute -top-4 border-primary-medium`}></div>
 
             <ul className="flex flex-col gap-1">
-              <Link to={'/dashboard'}>
-                <NavLink>Dashboard</NavLink>
-              </Link>
+              <NavLink to={'/dashboard'}>Dashboard</NavLink>
 
-              <Link to={'/'}>
-                <NavLink className={`w-full`}>Today</NavLink>
-              </Link>
-              <NavLink onClick={() => setIsDatePickerOpen(true)}>History</NavLink>
+              <NavLink to={'/'} className={`w-full`}>
+                Today
+              </NavLink>
+
+              <button className="underline text-primary-11 " onClick={() => setIsDatePickerOpen(true)}>
+                History
+              </button>
             </ul>
           </Popover.Panel>
         </Transition>

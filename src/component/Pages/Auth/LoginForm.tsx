@@ -22,7 +22,7 @@ const LoginForm = () => {
 
   return (
     <>
-      <h1 className={`text-2xl text-center text-primary-12 sm:text-4xl lg:text-5xl`}>Login</h1>
+      <h1 className={`text-2xl text-center sm:text-4xl lg:text-5xl`}>Login</h1>
       <p className={`mt-3 text-xs sm:text-base lg:text-lg`}>
         Not Registered With Us. Click <NavLink to={ROUTES.register}>Here</NavLink> to register with us.
       </p>

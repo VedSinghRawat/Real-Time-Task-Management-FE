@@ -1,14 +1,14 @@
 import { FC } from 'react'
 import { Outlet } from 'react-router-dom'
-import NavMenu from './component/UI/NavMenu'
 
 const App: FC = () => {
-  console.log('app')
   return (
     <>
-      <NavMenu />
+      {/* <NavMenu /> */}
 
-      <Outlet />
+      <div className="px-12 py-8 ">
+        <Outlet />
+      </div>
     </>
   )
 }
