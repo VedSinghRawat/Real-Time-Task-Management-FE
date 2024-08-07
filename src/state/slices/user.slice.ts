@@ -2,6 +2,7 @@ import { User } from '../../entities/user.entity'
 import ROUTES from '../../routes'
 import AuthService from '../../services/auth.service'
 import LocalStorageService from '../../services/localStorage.service'
+import { safeNav } from '../../utils'
 import { ApiAction, StateSlice, actionCreatorGenerator } from '../store'
 
 type Keys = {
@@ -34,7 +35,7 @@ export const createUserSlice: StateSlice<UserSlice> = (set) => {
       state.user.meId = data.user.id
     })
     if (data.access_token) LocalStorageService.set('access_token', data.access_token)
-    window.history.pushState({}, '', ROUTES.home)
+    safeNav(ROUTES.home)
   }
 
   const actionGenerator = actionCreatorGenerator('user', set)
@@ -51,7 +52,7 @@ export const createUserSlice: StateSlice<UserSlice> = (set) => {
         }),
       onSuccess: authSuccess,
       onError: () => {
-        if (!window.location.pathname.includes('auth')) window.history.pushState({}, '', ROUTES.home)
+        safeNav(ROUTES.login)
       },
       onFinal: () => {
         set((state) => {

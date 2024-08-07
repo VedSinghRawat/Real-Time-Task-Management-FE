@@ -53,3 +53,7 @@ export function getRandomInt(min: number, max: number) {
 export function sleep(dur?: number) {
   return new Promise((res) => setTimeout(() => res('done'), dur || 1000))
 }
+
+export function safeNav(path: string) {
+  if (!window.location.pathname.includes(path)) window.location.href = path
+}
