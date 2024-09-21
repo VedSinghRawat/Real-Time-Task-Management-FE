@@ -3,7 +3,7 @@ import { Heading, SubHeading } from '../../component/UI/Headings'
 
 const Project: FC = () => {
   return (
-    <div className="container px-4 py-8 mx-auto">
+    <div className="container mx-auto">
       <Heading>Projects</Heading>
 
       <SubHeading>Projects You Own</SubHeading>

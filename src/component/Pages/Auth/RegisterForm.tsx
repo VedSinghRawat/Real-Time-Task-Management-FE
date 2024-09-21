@@ -6,13 +6,13 @@ import NavLink from '../../UI/NavLink'
 import useForm from '../../../Hooks/useForm'
 import { signupSchema } from '../../../validators/auth/signup.validator'
 import { Store, useAppStore } from '../../../state/store'
-import UserSelectors from '../../../state/selector/user.selector'
+import userSelectors from '../../../state/selector/user.selector'
 
 interface RegisterProps {}
 
 const selectors = (state: Store) => ({
-  loading: UserSelectors.base.loading(state),
-  signup: UserSelectors.base.signup(state),
+  loading: userSelectors.base.loading(state),
+  signup: userSelectors.base.signup(state),
 })
 
 const Register: FC<RegisterProps> = () => {

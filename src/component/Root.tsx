@@ -1,15 +1,15 @@
 import { FC, memo, useEffect } from 'react'
 import { Outlet } from 'react-router'
 import { Store, useAppStore } from '../state/store'
-import UserSelectors from '../state/selector/user.selector'
+import userSelectors from '../state/selector/user.selector'
 import { loadingSelector } from '../state/selector'
 import { Loading } from './UI/Loading'
 
 interface RootProps {}
 
 const selectors = (state: Store) => ({
-  fetchMe: UserSelectors.base.fetchMe(state),
-  meId: UserSelectors.base.meId(state),
+  fetchMe: userSelectors.base.fetchMe(state),
+  meId: userSelectors.base.meId(state),
   loading: loadingSelector(state),
 })
 

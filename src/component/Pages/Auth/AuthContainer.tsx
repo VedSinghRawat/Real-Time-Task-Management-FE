@@ -2,12 +2,12 @@ import { FC, memo } from 'react'
 import { Navigate, Outlet } from 'react-router-dom'
 import { Store, useAppStore } from '../../../state/store'
 import Routes from '../../../routes'
-import UserSelectors from '../../../state/selector/user.selector'
+import userSelectors from '../../../state/selector/user.selector'
 
 interface AuthContainerProps {}
 
 const selectors = (state: Store) => ({
-  meId: UserSelectors.base.meId(state),
+  meId: userSelectors.base.meId(state),
 })
 
 const AuthContainer: FC<AuthContainerProps> = () => {

@@ -3,13 +3,13 @@ import Button from '../../UI/Button'
 import Input from '../../UI/Form/Input/Input'
 import { loginSchema } from '../../../validators/auth/login.validator'
 import NavLink from '../../UI/NavLink'
-import UserSelectors from '../../../state/selector/user.selector'
+import userSelectors from '../../../state/selector/user.selector'
 import { Store, useAppStore } from '../../../state/store'
 import useForm from '../../../Hooks/useForm'
 
 const selectors = (state: Store) => ({
-  loading: UserSelectors.base.loading(state),
-  login: UserSelectors.base.login(state),
+  loading: userSelectors.base.loading(state),
+  login: userSelectors.base.login(state),
 })
 
 const LoginForm = () => {
