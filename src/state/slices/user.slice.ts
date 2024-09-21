@@ -33,6 +33,7 @@ export const createUserSlice: StateSlice<UserSlice> = (set) => {
   function authSuccess<T extends { user: User; access_token?: string }>(data: T) {
     set((state) => {
       state.user.meId = data.user.id
+      state.pageLoading = false
     })
     if (data.access_token) LocalStorageService.set('access_token', data.access_token)
     safeNav(ROUTES.home)
