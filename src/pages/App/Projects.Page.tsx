@@ -1,15 +1,19 @@
 import { FC, memo } from 'react'
+import { Heading, SubHeading } from '../../component/UI/Headings'
 
 const Project: FC = () => {
   return (
-    <div className="">
-      <h1>Projects</h1>
+    <div className="container px-4 py-8 mx-auto">
+      <Heading>Projects</Heading>
 
-      <h2>Projects You Own</h2>
+      <SubHeading>Projects You Own</SubHeading>
+      {/* Add content for owned projects */}
 
-      <h2>Project You Are Leading</h2>
+      <SubHeading>Projects You Are Leading</SubHeading>
+      {/* Add content for led projects */}
 
-      <h2>Projects You Work In</h2>
+      <SubHeading>Projects You Work In</SubHeading>
+      {/* Add content for projects you work in */}
     </div>
   )
 }

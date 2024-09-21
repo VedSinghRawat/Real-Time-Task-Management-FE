@@ -6,7 +6,7 @@ const App: FC = () => {
     <>
       {/* <NavMenu /> */}
 
-      <div className="px-12 py-8 ">
+      <div className="px-12 py-8">
         <Outlet />
       </div>
     </>
