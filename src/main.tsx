@@ -10,7 +10,7 @@ import TestPage from './pages/Test.Page.tsx'
 import RegisterPage from './component/Pages/Auth/RegisterForm.tsx'
 import AuthContainer from './component/Pages/Auth/AuthContainer.tsx'
 import LoginForm from './component/Pages/Auth/LoginForm.tsx'
-import ProjectsPage from './pages/App/Projects.Page.tsx'
+import ProjectsPage from './pages/App/Home.Page.tsx'
 
 const router = createBrowserRouter([
   {

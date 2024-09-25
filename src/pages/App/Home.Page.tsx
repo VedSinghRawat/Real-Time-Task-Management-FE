@@ -6,10 +6,10 @@ const Project: FC = () => {
     <div className="container mx-auto">
       <Heading>Projects</Heading>
 
-      <SubHeading>Projects You Own</SubHeading>
+      <SubHeading>Your Projects</SubHeading>
       {/* Add content for owned projects */}
 
-      <SubHeading>Projects You Are Leading</SubHeading>
+      <SubHeading>Projects You Lead</SubHeading>
       {/* Add content for led projects */}
 
       <SubHeading>Projects You Work In</SubHeading>
