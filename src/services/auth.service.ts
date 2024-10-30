@@ -1,13 +1,8 @@
 import { User } from '../entities/user.entity'
+import { SignupDTO } from '../validators/auth/signup.validator'
 import apiService from './api.service'
 
-export type RegisterRequest = {
-  username: string
-  email: string
-  password: string
-}
-
-export type LoginRequest = Omit<RegisterRequest, 'username'>
+export type LoginDTO = Omit<SignupDTO, 'username'>
 
 export type AuthResponse = {
   access_token: string
@@ -15,9 +10,9 @@ export type AuthResponse = {
 }
 
 export default class AuthService {
-  static login = (data: LoginRequest) => apiService.methods.POST<AuthResponse>({ urlSuffix: '/login', data })
+  static login = (data: LoginDTO) => apiService.methods.POST<AuthResponse>({ urlSuffix: '/login', data })
 
-  static signup = (data: RegisterRequest) => apiService.methods.POST<AuthResponse>({ urlSuffix: '/signup', data })
+  static signup = (data: SignupDTO) => apiService.methods.POST<AuthResponse>({ urlSuffix: '/signup', data })
 
   static fetchMe = () => apiService.methods.GET<Omit<AuthResponse, 'access_token'>>({ urlSuffix: '/me' })
 }

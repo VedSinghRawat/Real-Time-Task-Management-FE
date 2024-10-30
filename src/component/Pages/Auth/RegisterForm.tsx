@@ -27,7 +27,8 @@ const Register: FC<RegisterProps> = () => {
   return (
     <>
       <h1 className={`text-2xl text-center sm:text-4xl lg:text-5xl`}>Register</h1>
-      <p className={`sm:mt-4 mt-2 text-xs sm:text-base lg:text-lg`}>
+
+      <p className={`mt-2 text-xs sm:mt-4 sm:text-base lg:text-lg`}>
         Already have an account. Click <NavLink to={ROUTES.login}>Here</NavLink> to login.
       </p>
 
