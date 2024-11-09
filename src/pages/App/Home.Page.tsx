@@ -1,24 +1,11 @@
-import { FC, memo, useEffect } from 'react'
+import { FC, memo } from 'react'
 import { Heading, SubHeading } from '../../component/UI/Headings'
-import { Store } from '../../state/store'
-import { useAppStore } from '../../state/store'
-import ProjectSelectors from '../../state/selector/project.selector'
+import useHomePage from '../../hooks/useHomePage'
 
-const selectors = (state: Store) => ({
-  list: ProjectSelectors.list(state),
-  listMine: ProjectSelectors.base.listMine(state),
-})
+const Home: FC = () => {
+  const { projectsByRole } = useHomePage()
 
-const Project: FC = () => {
-  const { list, listMine } = useAppStore(selectors)
-
-  useEffect(() => {
-    void listMine()
-  }, [listMine])
-
-  const myProjects = []
-  const ledProjects = []
-  const joinedProjects = []
+  console.log(projectsByRole)
 
   return (
     <div className="container mx-auto">
@@ -35,5 +22,4 @@ const Project: FC = () => {
     </div>
   )
 }
-
-export default memo(Project)
+export default memo(Home)

@@ -6,6 +6,7 @@ import { UserSlice, createUserSlice } from './slices/user.slice'
 import { TaskSlice, createTaskSlice } from './slices/task.slice'
 import { merge } from 'lodash'
 import { createProjectSlice, ProjectSlice } from './slices/project.slice'
+import { createProjectUserSlice, ProjectUserSlice } from './slices/projectUser.slice'
 
 const storage: StateStorage = {
   getItem: async (name: string): Promise<string | null> => {
@@ -29,6 +30,7 @@ export type EntitySliceMap = {
   user: UserSlice
   task: TaskSlice
   project: ProjectSlice
+  projectUser: ProjectUserSlice
 }
 
 export type Store = EntitySliceMap & ExtraState
@@ -49,8 +51,10 @@ export const useAppStore = create<Store>()(
         user: createUserSlice(set, get, store),
         task: createTaskSlice(set, get, store),
         project: createProjectSlice(set, get, store),
+        projectUser: createProjectUserSlice(set, get, store),
       }))
     ),
+
     {
       name: 'todo-state-zustand',
       onRehydrateStorage: () => (state) => {

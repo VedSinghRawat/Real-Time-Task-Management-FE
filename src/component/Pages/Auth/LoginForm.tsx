@@ -5,7 +5,7 @@ import { loginSchema } from '../../../validators/auth/login.validator'
 import NavLink from '../../UI/NavLink'
 import userSelectors from '../../../state/selector/user.selector'
 import { Store, useAppStore } from '../../../state/store'
-import useForm from '../../../Hooks/useForm'
+import useForm from '../../../hooks/useForm'
 
 const selectors = (state: Store) => ({
   loading: userSelectors.base.loading(state),

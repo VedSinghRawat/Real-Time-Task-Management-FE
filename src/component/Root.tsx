@@ -20,7 +20,6 @@ const Root: FC<RootProps> = () => {
     meId === undefined && void fetchMe()
   }, [fetchMe, meId])
 
-  console.log({ loading })
   if (loading)
     return (
       <div className="flex justify-center items-center h-screen bg-black">

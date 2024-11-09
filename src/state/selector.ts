@@ -13,6 +13,8 @@ export const hasHydratedSelector = createSelector(rootStateSelector, (state) => 
 
 export const projectSliceSelector = createSelector(rootStateSelector, (state) => state.project)
 
+export const projectUserSliceSelector = createSelector(rootStateSelector, (state) => state.projectUser)
+
 export function createSliceSelectors<
   E extends EntitySliceMap,
   EN extends keyof EntitySliceMap,
