@@ -1,9 +1,4 @@
-export type Entity<T extends 'id' | 'uuid' = 'id'> = {
+export type Entity = {
+  id: number
   createdAt: Date
-} & (T extends 'id'
-  ? {
-      id: number
-    }
-  : {
-      uuid: string
-    })
+}

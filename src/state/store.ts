@@ -5,6 +5,7 @@ import { immer } from 'zustand/middleware/immer'
 import { UserSlice, createUserSlice } from './slices/user.slice'
 import { TaskSlice, createTaskSlice } from './slices/task.slice'
 import { merge } from 'lodash'
+import { createProjectSlice, ProjectSlice } from './slices/project.slice'
 
 const storage: StateStorage = {
   getItem: async (name: string): Promise<string | null> => {
@@ -27,6 +28,7 @@ type ExtraState = {
 export type EntitySliceMap = {
   user: UserSlice
   task: TaskSlice
+  project: ProjectSlice
 }
 
 export type Store = EntitySliceMap & ExtraState
@@ -46,6 +48,7 @@ export const useAppStore = create<Store>()(
 
         user: createUserSlice(set, get, store),
         task: createTaskSlice(set, get, store),
+        project: createProjectSlice(set, get, store),
       }))
     ),
     {
@@ -73,7 +76,7 @@ export type ApiAction<T extends (...args: any[]) => any> = (...args: Parameters<
 export function actionCreatorGenerator<KT extends keyof EntitySliceMap>(name: KT, set: Parameters<StateSlice<EntitySliceMap[KT]>>[0]) {
   return <P extends unknown[], T extends EntitySliceMap[KT]['map'][string], RT extends { [key in KT]: T } | { [key in KT]: T[] }>(
       api: (...args: P) => Promise<RT>,
-      opts: { beforeReq?: () => void; onSuccess?: (data: RT) => void; onError?: (error: unknown) => void; onFinal?: () => void } | undefined
+      opts?: { beforeReq?: () => void; onSuccess?: (data: RT) => void; onError?: (error: unknown) => void; onFinal?: () => void }
     ) =>
     async (...args: P) => {
       set((state) => {

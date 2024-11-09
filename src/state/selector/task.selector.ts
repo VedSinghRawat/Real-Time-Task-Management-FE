@@ -5,18 +5,19 @@ import { TODAY } from '../../constants'
 import { createSliceSelectors, taskSliceSelector } from '../selector'
 import { TaskSlice } from '../slices/task.slice'
 
-const taskStateInit: TaskSlice = {
-  map: {},
-  idsToConfirm: [],
+const taskStateInit: { [key in keyof TaskSlice]: undefined } = {
+  map: undefined,
+  loading: undefined,
+  idsToConfirm: undefined,
 
-  add: () => undefined,
-  addToConfirm: () => undefined,
-  changeTimer: () => undefined,
-  clearConfirm: () => undefined,
-  delete: () => undefined,
-  move: () => undefined,
-  removeFromConfirm: () => undefined,
-  update: () => undefined,
+  add: undefined,
+  addToConfirm: undefined,
+  changeTimer: undefined,
+  clearConfirm: undefined,
+  delete: undefined,
+  move: undefined,
+  removeFromConfirm: undefined,
+  update: undefined,
 }
 
 export default class TaskSelectors {

@@ -11,6 +11,8 @@ export const loadingSelector = createSelector(rootStateSelector, (state) => stat
 
 export const hasHydratedSelector = createSelector(rootStateSelector, (state) => state.hasHydrated)
 
+export const projectSliceSelector = createSelector(rootStateSelector, (state) => state.project)
+
 export function createSliceSelectors<
   E extends EntitySliceMap,
   EN extends keyof EntitySliceMap,

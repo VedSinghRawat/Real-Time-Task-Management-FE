@@ -20,15 +20,6 @@ type Actions = {
 
 export type UserSlice = Keys & Actions
 
-export const userStateInit: { [key in keyof UserSlice]: undefined } = {
-  map: undefined,
-  meId: undefined,
-  loading: undefined,
-  fetchMe: undefined,
-  login: undefined,
-  signup: undefined,
-}
-
 export const createUserSlice: StateSlice<UserSlice> = (set) => {
   function authSuccess<T extends { user: User; access_token?: string }>(data: T) {
     set((state) => {
