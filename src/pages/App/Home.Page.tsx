@@ -1,25 +1,36 @@
 import { FC, memo } from 'react'
 import { Heading, SubHeading } from '../../component/UI/Headings'
 import useHomePage from '../../hooks/useHomePage'
+import ProjectCardList from '../../component/Pages/Home/ProjectCardList'
 
 const Home: FC = () => {
   const { projectsByRole } = useHomePage()
 
-  console.log(projectsByRole)
-
   return (
-    <div className="container mx-auto">
+    <div className="container px-4 py-8 mx-auto">
       <Heading>Projects</Heading>
 
-      <SubHeading>Your Projects</SubHeading>
-      {/* Add content for owned projects */}
+      <div className="space-y-8">
+        <section>
+          <SubHeading>Your Projects</SubHeading>
 
-      <SubHeading>Projects You Lead</SubHeading>
-      {/* Add content for led projects */}
+          <ProjectCardList projects={projectsByRole.owner} emptyMessage="You don't own any projects yet" />
+        </section>
 
-      <SubHeading>Projects You Work In</SubHeading>
-      {/* Add content for projects you work in */}
+        <section>
+          <SubHeading>Projects You Lead</SubHeading>
+
+          <ProjectCardList projects={projectsByRole.team_leader} emptyMessage="You're not leading any projects" />
+        </section>
+
+        <section>
+          <SubHeading>Projects You Work In</SubHeading>
+
+          <ProjectCardList projects={projectsByRole.member} emptyMessage="You're not a member of any projects" />
+        </section>
+      </div>
     </div>
   )
 }
+
 export default memo(Home)
