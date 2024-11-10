@@ -31,7 +31,7 @@
     background-color: #1f1f1f;
   }
   ::-webkit-scrollbar-track {
-    background-color: transparent;
+    background-color: #b6b6b6;
   }
 
   .react-datepicker__header {

@@ -7,10 +7,8 @@ interface ProjectCardListProps {
   emptyMessage?: string
 }
 
-const ProjectCardList: FC<ProjectCardListProps> = ({ projects, emptyMessage = 'No projects available' }) => {
-  if (projects.length === 0) {
-    return <p className="mx-4 italic text-gray-500 md:mx-6 lg:mx-8">{emptyMessage}</p>
-  }
+const ProjectCardList: FC<ProjectCardListProps> = ({ projects, emptyMessage }) => {
+  if (projects.length === 0) return <p className="mx-4 italic text-gray-500 md:mx-6 lg:mx-8">{emptyMessage || 'No projects available'}</p>
 
   return (
     <ul className="grid grid-cols-1 gap-2 p-0 mx-4 list-none md:gap-4 lg:gap-6 md:mx-6 lg:mx-8 md:grid-cols-2 lg:grid-cols-3">
