@@ -45,7 +45,7 @@ const Register: FC<RegisterProps> = () => {
           Password
         </Input>
 
-        <Button className={`px-8 mx-auto mt-8 w-fit`} type="submit" isLoading={loading}>
+        <Button className={`px-8 mx-auto mt-7 w-fit`} type="submit" isLoading={loading}>
           Submit
         </Button>
       </form>

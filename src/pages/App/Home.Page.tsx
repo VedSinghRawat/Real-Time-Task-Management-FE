@@ -3,6 +3,7 @@ import { Heading, SubHeading } from '../../component/UI/Headings'
 import useHomePage from '../../hooks/useHomePage'
 import ProjectCardList from '../../component/Pages/Home/ProjectCardList'
 import Divider from '../../component/UI/Divider'
+import Button from '../../component/UI/Button'
 
 const Home: FC = () => {
   const { projectsByRole } = useHomePage()
@@ -16,6 +17,10 @@ const Home: FC = () => {
           <SubHeading>Your Projects</SubHeading>
 
           <ProjectCardList projects={projectsByRole.owner} emptyMessage="You don't own any projects yet" />
+
+          <Button className="mx-auto mt-4 text-lg md:text-xl" variant="transparent">
+            Create Project +
+          </Button>
         </section>
 
         <Divider className="-mx-4" />

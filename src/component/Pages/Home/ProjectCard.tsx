@@ -2,6 +2,7 @@ import { FC, useState, useRef, useEffect } from 'react'
 import { Project } from '../../../entities/project.entity'
 import { Link } from 'react-router-dom'
 import Button from '../../UI/Button'
+import { getRandomInt } from '../../../utils'
 
 interface ProjectCardProps {
   project: Project
@@ -17,12 +18,16 @@ const ProjectCard: FC<ProjectCardProps> = ({ project }) => {
       if (contentRef.current.innerText.length < 100) return
 
       const scrollHeight = contentRef.current.scrollHeight
-      setContentHeight(isExpanded ? scrollHeight : scrollHeight * 0.5)
+      setContentHeight(isExpanded ? scrollHeight : scrollHeight * 0.3)
     }
   }, [isExpanded])
 
+  const randomImage = `/assets/img/default-proj-backgorund-${getRandomInt(1, 6)}.jpg`
+
   return (
     <div className="p-4 mb-4 rounded-lg border shadow-md transition-shadow select-none sm:p-6 bg-primary-3 hover:bg-primary-4 hover:shadow-lg text-secondary-11 border-secondary-7 hover:border-secondary-8 hover:text-secondary-12">
+      <img src={randomImage} alt="project_image" className="object-cover mb-3 rounded-lg aspect-video" />
+
       <h3 className="mb-2 text-base font-semibold sm:text-lg lg:text-xl">{project.title}</h3>
 
       <div className="relative mb-4">

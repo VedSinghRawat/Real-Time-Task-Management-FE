@@ -7,18 +7,22 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   Icon?: IconType
   iconClasses?: string
   isLoading?: boolean
+  variant?: 'transparent'
 }
 
-const Button: FC<ButtonProps> = ({ className = '', iconClasses = '', Icon, children, isLoading, ...rest }) => {
+const Button: FC<ButtonProps> = ({ className = '', iconClasses = '', Icon, children, isLoading, variant, ...rest }) => {
   return (
     <button
       className={cn(
-        'font-medium text-primary-3 bg-secondary-9 border border-secondary-7 py-0.5 px-2.5 rounded flex items-center gap-x-3 relative',
-        className
+        'font-medium text-sm md:text-base text-primary-3 bg-secondary-9 border border-secondary-7 py-0.5 px-2.5 rounded flex items-center gap-x-3 relative',
+        className,
+        {
+          'bg-opacity-30 backdrop-blur-sm text-secondary-11 bg-primary-5': variant === 'transparent',
+        }
       )}
       {...rest}
     >
-      <span className={cn('', { 'opacity-0': isLoading }, className)}>
+      <span className={cn({ 'opacity-0': isLoading })}>
         {children} {Icon && <Icon className={iconClasses} />}
       </span>
 
