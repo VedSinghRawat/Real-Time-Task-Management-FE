@@ -3,6 +3,8 @@ import { Navigate, Outlet } from 'react-router-dom'
 import { Store, useAppStore } from '../../../state/store'
 import Routes from '../../../routes'
 import userSelectors from '../../../state/selector/user.selector'
+import { transparentClasses } from '../../../utils'
+import { cn } from '../../../utils/tailwind'
 
 interface AuthContainerProps {}
 
@@ -12,17 +14,18 @@ const selectors = (state: Store) => ({
 
 const AuthContainer: FC<AuthContainerProps> = () => {
   const { meId } = useAppStore(selectors)
-
-  console.log({ meId })
-
   if (meId) return <Navigate to={Routes.home} />
 
   return (
-    <div className={`flex flex-col items-center justify-center min-h-screen px-8 py-10 sm:px-24 pattern-bg`}>
+    <div className={`flex flex-col justify-center items-center px-8 py-10 min-h-screen sm:px-24 pattern-bg`}>
       <div
-        className={`w-full max-w-md px-8 py-5 border border-primary-4 bg-primary-2 bg-opacity-30 backdrop-blur-sm sm:px-12 sm:py-9 rounded-xl sm:max-w-xl`}
+        className={cn(
+          `px-8 py-5 w-full max-w-md rounded-xl sm:px-12 sm:py-9 sm:max-w-xl`,
+          transparentClasses,
+          'border bg-primary-2 border-primary-4'
+        )}
       >
-        <img src="/assets/img/logo.png" alt="logo" className={`w-3/4 mx-auto mb-5 sm:mb-8`} />
+        <img src="/assets/img/logo.png" alt="logo" className={`mx-auto mb-5 w-3/4 sm:mb-8`} />
 
         <Outlet />
       </div>

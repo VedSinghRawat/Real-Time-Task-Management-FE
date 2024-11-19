@@ -1,22 +1,28 @@
 import { FC, InputHTMLAttributes, RefObject, memo } from 'react'
 import formControlled from '../../../../HOC/formControlled'
+import { cn } from '../../../../utils/tailwind'
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   innerRef?: RefObject<HTMLInputElement>
   children?: string
+  containerClassName?: string
 }
 
-const InputComp: FC<InputProps> = ({ className = '', children, innerRef, ...rest }) => {
+const InputComp: FC<InputProps> = ({ className = '', children, innerRef, containerClassName, ...rest }) => {
   return (
-    <>
-      {children ? <label htmlFor={rest.name}>{children}</label> : <></>}
+    <div className={cn('', containerClassName)}>
+      {children && <label htmlFor={rest.name}>{children}</label>}
 
       <input
         ref={innerRef}
-        className={`font-medium placeholder-secondary-12 placeholder-opacity-55 outline-[3px] p-1 px-2 outline-secondary-7 bg-secondary-3 bg-opacity-60 backdrop-blur-sm rounded-sm mt-1 block w-full ${className}`}
+        id={rest.name}
+        className={cn(
+          `block p-1 px-2 mt-1.5 w-full font-medium bg-opacity-60 rounded-sm border backdrop-blur-sm outline-none focus:border-secondary-8 border-secondary-7 placeholder-secondary-11 text-secondary-12 placeholder-opacity-55 bg-secondary-3 `,
+          className
+        )}
         {...rest}
       />
-    </>
+    </div>
   )
 }
 

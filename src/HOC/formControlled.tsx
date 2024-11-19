@@ -1,8 +1,13 @@
-import { FC } from 'react'
-import { InputProps } from '../component/UI/Form/Input/Input'
+import { FC, RefObject } from 'react'
 import { FieldValues, UseControllerProps, useController } from 'react-hook-form'
 
-function formControlled<P extends InputProps>(Comp: FC<P>) {
+function formControlled<
+  E,
+  P extends {
+    innerRef?: RefObject<E>
+    className?: string
+  },
+>(Comp: FC<P>) {
   function FormControlled<T extends FieldValues>({ innerRef, ...props }: UseControllerProps<T> & { control: UseControllerProps<T>['control'] } & P) {
     const { field, fieldState } = useController(props)
     return (

@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig, AxiosRequestHeaders } from 'axios'
+import axios, { AxiosRequestConfig } from 'axios'
 import LocalStorageService from './localStorage.service'
 
 const API_METHODS = ['GET', 'POST', 'DELETE', 'PATCH', 'PUT'] as const
@@ -8,7 +8,7 @@ type RequestParams<T> = {
   urlSuffix: string
   method: APIMethods
   config?: AxiosRequestConfig<T>
-  headers?: AxiosRequestHeaders
+  headers?: AxiosRequestConfig['headers']
   data?: unknown
 }
 

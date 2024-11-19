@@ -1,5 +1,4 @@
 import { z } from 'zod'
-import { createValidator } from '../base.validator'
 import { signupSchema } from './signup.validator'
 
 export const loginSchema = signupSchema.pick({ email: true, password: true })

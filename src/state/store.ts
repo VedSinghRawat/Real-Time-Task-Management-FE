@@ -7,6 +7,7 @@ import { TaskSlice, createTaskSlice } from './slices/task.slice'
 import { merge } from 'lodash'
 import { createProjectSlice, ProjectSlice } from './slices/project.slice'
 import { createProjectUserSlice, ProjectUserSlice } from './slices/projectUser.slice'
+import { KeysMatching } from '../utilType'
 
 const storage: StateStorage = {
   getItem: async (name: string): Promise<string | null> => {
@@ -78,13 +79,22 @@ export const useAppStore = create<Store>()(
 export type ApiAction<T extends (...args: any[]) => any> = (...args: Parameters<T>) => Promise<void>
 
 export function actionCreatorGenerator<KT extends keyof EntitySliceMap>(name: KT, set: Parameters<StateSlice<EntitySliceMap[KT]>>[0]) {
-  return <P extends unknown[], T extends EntitySliceMap[KT]['map'][string], RT extends { [key in KT]: T } | { [key in KT]: T[] }>(
+  return <P extends unknown[], T extends EntitySliceMap[typeof name]['map'][string], RT extends { [key in typeof name]: T } | { [key in KT]: T[] }>(
       api: (...args: P) => Promise<RT>,
-      opts?: { beforeReq?: () => void; onSuccess?: (data: RT) => void; onError?: (error: unknown) => void; onFinal?: () => void }
+      opts?: {
+        beforeReq?: () => void
+        onSuccess?: (data: RT) => void
+        onError?: (error: unknown) => void
+        onFinal?: () => void
+        loadingKey?: KeysMatching<EntitySliceMap[KT], boolean>
+      }
     ) =>
     async (...args: P) => {
+      const loadingKey = opts?.loadingKey || 'loading'
+
       set((state) => {
-        state[name].loading = true
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        state[name][loadingKey] = true as any
       })
 
       try {
@@ -110,7 +120,8 @@ export function actionCreatorGenerator<KT extends keyof EntitySliceMap>(name: KT
       }
 
       set((state) => {
-        state[name].loading = false
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        state[name][loadingKey] = false as any
       })
 
       opts?.onFinal?.()

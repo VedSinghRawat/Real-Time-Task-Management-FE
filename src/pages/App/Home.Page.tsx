@@ -1,9 +1,27 @@
-import { FC, memo } from 'react'
+import { FC, memo, useState } from 'react'
 import { Heading, SubHeading } from '../../component/UI/Headings'
 import useHomePage from '../../hooks/useHomePage'
 import ProjectCardList from '../../component/Pages/Home/ProjectCardList'
 import Divider from '../../component/UI/Divider'
 import Button from '../../component/UI/Button'
+import CreateProjectForm from '../../component/CreateProjectForm'
+
+const CreateProjectButton: FC = () => {
+  const [formOpen, setFormOpen] = useState(false)
+
+  if (formOpen)
+    return (
+      <div className="mx-4">
+        <CreateProjectForm onClose={() => setFormOpen(false)} />
+      </div>
+    )
+
+  return (
+    <Button className="mx-auto text-lg md:text-xl" variant="transparent" onClick={() => setFormOpen(true)}>
+      Create Project +
+    </Button>
+  )
+}
 
 const Home: FC = () => {
   const { projectsByRole } = useHomePage()
@@ -18,9 +36,9 @@ const Home: FC = () => {
 
           <ProjectCardList projects={projectsByRole.owner} emptyMessage="You don't own any projects yet" />
 
-          <Button className="mx-auto mt-4 text-lg md:text-xl" variant="transparent">
-            Create Project +
-          </Button>
+          <div className="mt-4">
+            <CreateProjectButton />
+          </div>
         </section>
 
         <Divider className="-mx-4" />
