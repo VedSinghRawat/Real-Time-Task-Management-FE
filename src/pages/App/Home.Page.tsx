@@ -1,30 +1,13 @@
-import { FC, memo, useState } from 'react'
+import { FC, memo } from 'react'
 import { Heading, SubHeading } from '../../component/UI/Headings'
 import useHomePage from '../../hooks/useHomePage'
 import ProjectCardList from '../../component/Pages/Home/ProjectCardList'
 import Divider from '../../component/UI/Divider'
 import Button from '../../component/UI/Button'
-import CreateProjectForm from '../../component/CreateProjectForm'
-
-const CreateProjectButton: FC = () => {
-  const [formOpen, setFormOpen] = useState(false)
-
-  if (formOpen)
-    return (
-      <div className="mx-4">
-        <CreateProjectForm onClose={() => setFormOpen(false)} />
-      </div>
-    )
-
-  return (
-    <Button className="mx-auto text-lg md:text-xl" variant="transparent" onClick={() => setFormOpen(true)}>
-      Create Project +
-    </Button>
-  )
-}
+import ProjectForm from '../../component/ProjectForm'
 
 const Home: FC = () => {
-  const { projectsByRole } = useHomePage()
+  const { projectsByRole, setFormOpen, formOpen } = useHomePage()
 
   return (
     <div className="container px-4 py-8 mx-auto lg:px-8 lg:py-10">
@@ -34,10 +17,18 @@ const Home: FC = () => {
         <section>
           <SubHeading>Your Projects</SubHeading>
 
-          <ProjectCardList projects={projectsByRole.owner} emptyMessage="You don't own any projects yet" />
+          <ProjectCardList projects={projectsByRole.owner} emptyMessage="You don't own any projects yet" showActions />
 
           <div className="mt-4">
-            <CreateProjectButton />
+            {formOpen ? (
+              <div className="mx-4">
+                <ProjectForm onClose={() => setFormOpen(false)} />
+              </div>
+            ) : (
+              <Button className="mx-auto text-lg md:text-xl" variant="transparent" onClick={() => setFormOpen(true)}>
+                Create Project +
+              </Button>
+            )}
           </div>
         </section>
 

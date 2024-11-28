@@ -5,4 +5,5 @@ export interface Project extends Entity {
   description: string
   public: boolean
   ownerId: number
+  image: string
 }

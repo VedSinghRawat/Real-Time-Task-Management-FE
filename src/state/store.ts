@@ -4,10 +4,10 @@ import { createJSONStorage, devtools, persist, StateStorage } from 'zustand/midd
 import { immer } from 'zustand/middleware/immer'
 import { UserSlice, createUserSlice } from './slices/user.slice'
 import { TaskSlice, createTaskSlice } from './slices/task.slice'
-import { merge } from 'lodash'
 import { createProjectSlice, ProjectSlice } from './slices/project.slice'
 import { createProjectUserSlice, ProjectUserSlice } from './slices/projectUser.slice'
 import { KeysMatching } from '../utilType'
+import { merge } from 'lodash'
 
 const storage: StateStorage = {
   getItem: async (name: string): Promise<string | null> => {
@@ -22,9 +22,7 @@ const storage: StateStorage = {
 }
 
 type ExtraState = {
-  hasHydrated: boolean
   pageLoading: boolean
-  setHasHydrated: (isHyd: boolean) => void
 }
 
 export type EntitySliceMap = {
@@ -42,12 +40,7 @@ export const useAppStore = create<Store>()(
   persist(
     immer(
       devtools((set, get, store) => ({
-        hasHydrated: false,
         pageLoading: false,
-
-        setHasHydrated: (isHyd) => {
-          set({ hasHydrated: isHyd })
-        },
 
         user: createUserSlice(set, get, store),
         task: createTaskSlice(set, get, store),
@@ -58,12 +51,7 @@ export const useAppStore = create<Store>()(
 
     {
       name: 'todo-state-zustand',
-      onRehydrateStorage: () => (state) => {
-        state && state.setHasHydrated(true)
-      },
-      merge: (persistedState, currentState) => {
-        return merge(persistedState, currentState)
-      },
+      merge: (persistedState, currentState) => merge({}, currentState, persistedState),
       storage: createJSONStorage(() => storage, {
         reviver: (_key, value) => {
           // check if value is a Date ISO string
@@ -79,7 +67,11 @@ export const useAppStore = create<Store>()(
 export type ApiAction<T extends (...args: any[]) => any> = (...args: Parameters<T>) => Promise<void>
 
 export function actionCreatorGenerator<KT extends keyof EntitySliceMap>(name: KT, set: Parameters<StateSlice<EntitySliceMap[KT]>>[0]) {
-  return <P extends unknown[], T extends EntitySliceMap[typeof name]['map'][string], RT extends { [key in typeof name]: T } | { [key in KT]: T[] }>(
+  return <
+      P extends unknown[],
+      T extends EntitySliceMap[typeof name]['map'][string],
+      RT extends { [key in typeof name]: T } | { [key in KT]: T[] } | null,
+    >(
       api: (...args: P) => Promise<RT>,
       opts?: {
         beforeReq?: () => void
@@ -101,17 +93,18 @@ export function actionCreatorGenerator<KT extends keyof EntitySliceMap>(name: KT
         opts?.beforeReq?.()
 
         const data = await api(...args)
-
-        set((state) => {
-          const ent = data[name]
-          if (Array.isArray(ent)) {
-            for (const item of ent as T[]) {
-              state[name].map[item.id] = item
+        if (data) {
+          set((state) => {
+            const ent = data[name]
+            if (Array.isArray(ent)) {
+              for (const item of ent as T[]) {
+                state[name].map[item.id] = item
+              }
+            } else {
+              state[name].map[ent.id] = ent
             }
-          } else {
-            state[name].map[ent.id] = ent
-          }
-        })
+          })
+        }
 
         opts?.onSuccess?.(data)
       } catch (error) {

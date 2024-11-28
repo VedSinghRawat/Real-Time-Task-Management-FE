@@ -1,10 +1,11 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Project } from '../entities/project.entity'
 import { Role } from '../entities/projectUser.entity'
 import ProjectUserSelectors from '../state/selector/proejctUser.selector'
 import ProjectSelectors from '../state/selector/project.selector'
 import UserSelectors from '../state/selector/user.selector'
 import { Store, useAppStore } from '../state/store'
+import { useShallow } from 'zustand/shallow'
 
 const selectors = (state: Store) => ({
   list: ProjectSelectors.list(state),
@@ -14,7 +15,8 @@ const selectors = (state: Store) => ({
 })
 
 const useHomePage = () => {
-  const { list, listMine, getRole, meId } = useAppStore(selectors)
+  const [formOpen, setFormOpen] = useState(false)
+  const { list, listMine, getRole, meId } = useAppStore(useShallow(selectors))
 
   useEffect(() => {
     void listMine()
@@ -37,7 +39,7 @@ const useHomePage = () => {
     return result
   }, [list, getRole, meId])
 
-  return { projectsByRole }
+  return { projectsByRole, setFormOpen, formOpen }
 }
 
 export default useHomePage

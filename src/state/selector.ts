@@ -9,8 +9,6 @@ export const taskSliceSelector = createSelector(rootStateSelector, (state) => st
 
 export const loadingSelector = createSelector(rootStateSelector, (state) => state.pageLoading)
 
-export const hasHydratedSelector = createSelector(rootStateSelector, (state) => state.hasHydrated)
-
 export const projectSliceSelector = createSelector(rootStateSelector, (state) => state.project)
 
 export const projectUserSliceSelector = createSelector(rootStateSelector, (state) => state.projectUser)

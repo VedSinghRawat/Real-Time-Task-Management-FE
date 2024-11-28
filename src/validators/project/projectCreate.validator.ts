@@ -6,3 +6,6 @@ export const projectCreateSchema = z.object({
   public: z.boolean().optional(),
 })
 export type ProjectCreateDTO = z.infer<typeof projectCreateSchema>
+
+export const projectUpdateSchema = projectCreateSchema.partial()
+export type ProjectUpdateDTO = z.infer<typeof projectUpdateSchema>

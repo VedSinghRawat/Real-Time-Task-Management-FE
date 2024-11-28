@@ -2,7 +2,6 @@ import { ButtonHTMLAttributes, FC, memo } from 'react'
 import { IconType } from 'react-icons'
 import { FaSpinner } from 'react-icons/fa'
 import { cn } from '../../utils/tailwind'
-import { transparentClasses } from '../../utils'
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   Icon?: IconType
@@ -18,7 +17,7 @@ const Button: FC<ButtonProps> = ({ className = '', iconClasses = '', Icon, child
         'font-medium text-sm md:text-base text-primary-3 bg-secondary-9 border border-secondary-7 py-0.5 px-2.5 rounded flex items-center gap-x-3 relative',
         className,
         {
-          [`text-secondary-11 ${transparentClasses}`]: variant === 'transparent',
+          [`text-secondary-11 bg-opacity-30 backdrop-blur-md bg-primary-3 border-primary-7`]: variant === 'transparent',
         }
       )}
       {...rest}

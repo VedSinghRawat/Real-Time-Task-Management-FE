@@ -57,5 +57,3 @@ export function sleep(dur?: number) {
 export function safeNav(path: string) {
   if (!window.location.pathname.includes(path)) window.location.href = path
 }
-
-export const transparentClasses = 'bg-opacity-30 backdrop-blur-sm bg-primary-5 border border-primary-7'

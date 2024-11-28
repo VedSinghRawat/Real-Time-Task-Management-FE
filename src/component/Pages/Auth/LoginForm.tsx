@@ -6,6 +6,7 @@ import NavLink from '../../UI/NavLink'
 import userSelectors from '../../../state/selector/user.selector'
 import { Store, useAppStore } from '../../../state/store'
 import useForm from '../../../hooks/useForm'
+import { useShallow } from 'zustand/shallow'
 
 const selectors = (state: Store) => ({
   loading: userSelectors.base.loading(state),
@@ -13,7 +14,7 @@ const selectors = (state: Store) => ({
 })
 
 const LoginForm = () => {
-  const { loading, login } = useAppStore(selectors)
+  const { loading, login } = useAppStore(useShallow(selectors))
 
   const { control, submitHandler } = useForm(loginSchema, login, {
     email: '',

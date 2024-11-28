@@ -4,6 +4,7 @@ import { Store, useAppStore } from '../state/store'
 import userSelectors from '../state/selector/user.selector'
 import { loadingSelector } from '../state/selector'
 import { Loading } from './UI/Loading'
+import { useShallow } from 'zustand/shallow'
 
 interface RootProps {}
 
@@ -14,7 +15,7 @@ const selectors = (state: Store) => ({
 })
 
 const Root: FC<RootProps> = () => {
-  const { fetchMe, loading, meId } = useAppStore(selectors)
+  const { fetchMe, loading, meId } = useAppStore(useShallow(selectors))
 
   useEffect(() => {
     meId === undefined && void fetchMe()
