@@ -51,7 +51,11 @@ export const useAppStore = create<Store>()(
 
     {
       name: 'todo-state-zustand',
-      merge: (persistedState, currentState) => merge({}, currentState, persistedState),
+      merge: (persistedState, currentState) => {
+        const state = merge({}, currentState, persistedState)
+        state.user.meId = undefined
+        return state
+      },
       storage: createJSONStorage(() => storage, {
         reviver: (_key, value) => {
           // check if value is a Date ISO string
@@ -94,6 +98,7 @@ export function actionCreatorGenerator<KT extends keyof EntitySliceMap>(name: KT
         opts?.beforeReq?.()
 
         data = await api(...args)
+        console.log('API res', data)
         if (data) {
           set((state) => {
             const ent = data![name]

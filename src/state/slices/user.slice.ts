@@ -19,12 +19,14 @@ type Actions = {
 export type UserSlice = Keys & Actions
 
 export const createUserSlice: StateSlice<UserSlice> = (set) => {
-  function authSuccess<T extends { user: User; access_token?: string }>(data: T) {
+  function authSuccess<T extends { user: User; access_token?: string; refresh_token?: string }>(data: T) {
     set((state) => {
       state.user.meId = data.user.id
       state.pageLoading = false
     })
+
     if (data.access_token) LocalStorageService.set('access_token', data.access_token)
+    if (data.refresh_token) LocalStorageService.set('refresh_token', data.refresh_token)
   }
 
   const actionGenerator = actionCreatorGenerator('user', set)

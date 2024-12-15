@@ -1,5 +1,6 @@
 type LocalStorageMap = {
   access_token: string
+  refresh_token: string
 }
 
 export default class LocalStorageService {
