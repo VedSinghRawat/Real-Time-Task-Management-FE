@@ -64,7 +64,7 @@ export const useAppStore = create<Store>()(
 )
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type ApiAction<T extends (...args: any[]) => any> = (...args: Parameters<T>) => Promise<void>
+export type ApiAction<T extends (...args: any[]) => any> = (...args: Parameters<T>) => Promise<Awaited<ReturnType<T>> | undefined>
 
 export function actionCreatorGenerator<KT extends keyof EntitySliceMap>(name: KT, set: Parameters<StateSlice<EntitySliceMap[KT]>>[0]) {
   return <
@@ -89,13 +89,14 @@ export function actionCreatorGenerator<KT extends keyof EntitySliceMap>(name: KT
         state[name][loadingKey] = true as any
       })
 
+      let data: RT | undefined
       try {
         opts?.beforeReq?.()
 
-        const data = await api(...args)
+        data = await api(...args)
         if (data) {
           set((state) => {
-            const ent = data[name]
+            const ent = data![name]
             if (Array.isArray(ent)) {
               for (const item of ent as T[]) {
                 state[name].map[item.id] = item
@@ -118,5 +119,6 @@ export function actionCreatorGenerator<KT extends keyof EntitySliceMap>(name: KT
       })
 
       opts?.onFinal?.()
+      return data
     }
 }

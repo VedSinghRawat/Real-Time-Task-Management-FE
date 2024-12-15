@@ -1,7 +1,3 @@
-import { Entity } from './base.entity'
+import { Database } from '../database.types'
 
-export interface User extends Entity {
-  username: string
-  email: string
-  password: string
-}
+export type User = Database['public']['Tables']['users']['Row']

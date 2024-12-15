@@ -1,10 +1,11 @@
 import { FC, memo, useEffect } from 'react'
-import { Outlet } from 'react-router'
+import { Outlet, useNavigate } from 'react-router'
 import { Store, useAppStore } from '../state/store'
 import userSelectors from '../state/selector/user.selector'
 import { loadingSelector } from '../state/selector'
 import { Loading } from './UI/Loading'
 import { useShallow } from 'zustand/shallow'
+import Routes from '../routes'
 
 interface RootProps {}
 
@@ -17,16 +18,20 @@ const selectors = (state: Store) => ({
 const Root: FC<RootProps> = () => {
   const { fetchMe, loading, meId } = useAppStore(useShallow(selectors))
 
-  useEffect(() => {
-    meId === undefined && void fetchMe()
-  }, [fetchMe, meId])
+  const navigator = useNavigate()
 
-  if (loading)
+  useEffect(() => {
+    if (meId === undefined) void fetchMe()
+    else if (meId === null) navigator(Routes.login)
+  }, [fetchMe, meId, navigator])
+
+  if (loading || meId === undefined) {
     return (
       <div className="flex justify-center items-center h-screen bg-black">
         <Loading />
       </div>
     )
+  }
 
   return (
     <div className={`min-w-full min-h-screen bg-black text-primary-12`}>

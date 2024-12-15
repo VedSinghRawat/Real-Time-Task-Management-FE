@@ -7,6 +7,7 @@ import useForm from '../../../hooks/useForm'
 import { signupSchema } from '../../../validators/auth/signup.validator'
 import { Store, useAppStore } from '../../../state/store'
 import userSelectors from '../../../state/selector/user.selector'
+import { useShallow } from 'zustand/shallow'
 
 interface RegisterProps {}
 
@@ -16,7 +17,7 @@ const selectors = (state: Store) => ({
 })
 
 const Register: FC<RegisterProps> = () => {
-  const { loading, signup } = useAppStore(selectors)
+  const { loading, signup } = useAppStore(useShallow(selectors))
 
   const { control, submitHandler } = useForm(signupSchema, signup, {
     username: '',
