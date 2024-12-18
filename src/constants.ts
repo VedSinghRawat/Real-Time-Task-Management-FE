@@ -11,3 +11,5 @@ export const LOCAL_STORAGE_LEFTOVER_DATE = 'leftover_date'
 export const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'] as const
 
 export const TODAY = new Date()
+
+export const STORAGE_BUCKET = 'taskanager'

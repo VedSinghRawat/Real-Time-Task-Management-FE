@@ -1,9 +1,3 @@
-import { Entity } from './base.entity'
+import { Database } from '../database.types'
 
-export interface Project extends Entity {
-  title: string
-  description: string
-  public: boolean
-  ownerId: number
-  image: string
-}
+export type Project = Database['public']['Tables']['projects']['Row']

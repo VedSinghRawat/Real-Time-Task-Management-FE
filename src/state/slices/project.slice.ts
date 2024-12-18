@@ -14,7 +14,7 @@ type Keys = {
 }
 
 type Actions = {
-  listMine: ApiAction<typeof ProjectService.listMine>
+  list: ApiAction<typeof ProjectService.list>
   create: ApiAction<typeof ProjectService.create>
   update: ApiAction<typeof ProjectService.update>
   delete: ApiAction<typeof ProjectService.delete>
@@ -32,9 +32,9 @@ export const createProjectSlice: StateSlice<ProjectSlice> = (set) => {
       const roleByUserIdByProjectId: { [projId: string]: { [userId: string]: Role } } = state.projectUser.roleByUserIdByProjectId
 
       for (const pu of projectUser) {
-        if (!roleByUserIdByProjectId[pu.projectId]) roleByUserIdByProjectId[pu.projectId] = {}
+        if (!roleByUserIdByProjectId[pu.project_id]) roleByUserIdByProjectId[pu.project_id] = {}
 
-        roleByUserIdByProjectId[pu.projectId]![pu.userId] = pu.role
+        roleByUserIdByProjectId[pu.project_id]![pu.user_id] = pu.role
       }
 
       state.projectUser.roleByUserIdByProjectId = roleByUserIdByProjectId
@@ -49,7 +49,7 @@ export const createProjectSlice: StateSlice<ProjectSlice> = (set) => {
     deleting: false,
     editId: undefined,
 
-    listMine: actionGenerator(ProjectService.listMine, { onSuccess: ({ projectUser }) => setProjectUsers(projectUser) }),
+    list: actionGenerator(ProjectService.list, { onSuccess: ({ projectUser }) => setProjectUsers(projectUser) }),
     create: actionGenerator(ProjectService.create, { loadingKey: 'creating', onSuccess: ({ projectUser }) => setProjectUsers([projectUser]) }),
     update: actionGenerator(ProjectService.update, { loadingKey: 'updating' }),
     delete: actionGenerator(ProjectService.delete, {

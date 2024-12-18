@@ -1,10 +1,4 @@
-import { Entity } from './base.entity'
+import { Database } from '../database.types'
 
-const ROLE = ['team_leader', 'member', 'owner'] as const
-export type Role = (typeof ROLE)[number]
-
-export interface ProjectUser extends Omit<Entity, 'createdAt'> {
-  projectId: number
-  userId: number
-  role: Role
-}
+export type ProjectUser = Database['public']['Tables']['project_users']['Row']
+export type Role = ProjectUser['role']

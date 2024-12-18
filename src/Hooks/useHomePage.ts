@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Project } from '../entities/project.entity'
 import { Role } from '../entities/projectUser.entity'
 import ProjectUserSelectors from '../state/selector/proejctUser.selector'
@@ -8,19 +8,17 @@ import { Store, useAppStore } from '../state/store'
 import { useShallow } from 'zustand/shallow'
 
 const selectors = (state: Store) => ({
-  list: ProjectSelectors.list(state),
-  listMine: ProjectSelectors.base.listMine(state),
+  projects: ProjectSelectors.projects(state),
+  list: ProjectSelectors.base.list(state),
   getRole: ProjectUserSelectors.getRole(state),
   meId: UserSelectors.base.meId(state)!,
 })
 
 const useHomePage = () => {
   const [formOpen, setFormOpen] = useState(false)
-  const { list, listMine, getRole, meId } = useAppStore(useShallow(selectors))
+  const { projects, list, getRole, meId } = useAppStore(useShallow(selectors))
 
-  useEffect(() => {
-    void listMine()
-  }, [listMine])
+  void list(meId)
 
   const projectsByRole = useMemo(() => {
     const result: { [key in Role]: Project[] } = {
@@ -29,7 +27,7 @@ const useHomePage = () => {
       member: [],
     }
 
-    for (const project of list) {
+    for (const project of projects) {
       const role = getRole(project.id, meId)
       if (!role) continue
 
@@ -37,7 +35,7 @@ const useHomePage = () => {
     }
 
     return result
-  }, [list, getRole, meId])
+  }, [getRole, meId, projects])
 
   return { projectsByRole, setFormOpen, formOpen }
 }

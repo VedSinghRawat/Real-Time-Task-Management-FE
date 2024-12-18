@@ -17,6 +17,7 @@
     "axios": "^1.6.7",
     "clsx": "^2.1.1",
     "date-fns": "^2.30.0",
+    "drizzle-orm": "^0.38.2",
     "formik": "^2.4.5",
     "idb-keyval": "^6.2.1",
     "immer": "^10.0.2",

@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS "projects" (
 	"id" bigserial PRIMARY KEY NOT NULL,
 	"title" varchar(50) NOT NULL,
 	"description" text NOT NULL,
-	"image" varchar(255),
+	"image" text,
 	"public" boolean DEFAULT false NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL
 );

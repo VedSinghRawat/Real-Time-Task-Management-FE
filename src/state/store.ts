@@ -71,11 +71,7 @@ export const useAppStore = create<Store>()(
 export type ApiAction<T extends (...args: any[]) => any> = (...args: Parameters<T>) => Promise<Awaited<ReturnType<T>> | undefined>
 
 export function actionCreatorGenerator<KT extends keyof EntitySliceMap>(name: KT, set: Parameters<StateSlice<EntitySliceMap[KT]>>[0]) {
-  return <
-      P extends unknown[],
-      T extends EntitySliceMap[typeof name]['map'][string],
-      RT extends { [key in typeof name]: T } | { [key in KT]: T[] } | null,
-    >(
+  return <P extends unknown[], T extends EntitySliceMap[typeof name]['map'][string], RT extends { [key in typeof name]: T } | { [key in KT]: T[] }>(
       api: (...args: P) => Promise<RT>,
       opts?: {
         beforeReq?: () => void
@@ -93,26 +89,24 @@ export function actionCreatorGenerator<KT extends keyof EntitySliceMap>(name: KT
         state[name][loadingKey] = true as any
       })
 
-      let data: RT | undefined
       try {
         opts?.beforeReq?.()
 
-        data = await api(...args)
-        console.log('API res', data)
-        if (data) {
-          set((state) => {
-            const ent = data![name]
-            if (Array.isArray(ent)) {
-              for (const item of ent as T[]) {
-                state[name].map[item.id] = item
-              }
-            } else {
-              state[name].map[ent.id] = ent
+        const data = await api(...args)
+
+        set((state) => {
+          const ent = data[name]
+          if (Array.isArray(ent)) {
+            for (const item of ent as T[]) {
+              state[name].map[item.id] = item
             }
-          })
-        }
+          } else {
+            state[name].map[ent.id] = ent
+          }
+        })
 
         opts?.onSuccess?.(data)
+        return data
       } catch (error) {
         console.error(error)
         opts?.onError?.(error)
@@ -124,6 +118,5 @@ export function actionCreatorGenerator<KT extends keyof EntitySliceMap>(name: KT
       })
 
       opts?.onFinal?.()
-      return data
     }
 }

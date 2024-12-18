@@ -12,6 +12,6 @@ export default class ProjectUserSelectors {
   static base = createSliceSelectors('projectUser', projectUserStateInit, projectUserSliceSelector)
 
   static getRole = createSelector(this.base.roleByUserIdByProjectId, (roleByUserIdByProjectId) => {
-    return (projectId: number, userId: number) => roleByUserIdByProjectId[projectId]?.[userId]
+    return (projectId: number, userId: string) => roleByUserIdByProjectId[projectId]?.[userId]
   })
 }
