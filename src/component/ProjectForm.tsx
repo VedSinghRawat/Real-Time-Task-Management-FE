@@ -16,22 +16,23 @@ type ProjectFormProps<T extends boolean> = {
 } & (T extends true ? { project: Project } : unknown)
 
 const selectors = (state: Store) => ({
-  updating: state.project.updating,
+  loading: state.project.loading,
   create: state.project.create,
   update: state.project.update,
+  meId: state.user.meId,
 })
 
 function ProjectForm<T extends boolean>({ onClose, edit, ...rest }: ProjectFormProps<T>) {
   const [file, setFile] = useState<File | undefined>(undefined)
 
-  const { updating, create, update } = useAppStore(useShallow(selectors))
+  const { loading, create, update, meId } = useAppStore(useShallow(selectors))
 
   const handleSubmit = async (data: ProjectCreateDTO | ProjectUpdateDTO) => {
     if (edit) {
       const proj = (rest as ProjectFormProps<true>).project
       await update(proj.id, data as ProjectUpdateDTO, file)
     } else {
-      await create(data as ProjectCreateDTO, file)
+      await create(data as ProjectCreateDTO, meId!, file)
     }
 
     onClose()
@@ -95,7 +96,7 @@ function ProjectForm<T extends boolean>({ onClose, edit, ...rest }: ProjectFormP
             Public (defaults to false)
           </Input>
 
-          <Button type="submit" isLoading={updating} className="mx-auto mt-8">
+          <Button type="submit" isLoading={loading} className="mx-auto mt-8">
             Submit
           </Button>
         </div>

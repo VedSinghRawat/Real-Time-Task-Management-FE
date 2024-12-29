@@ -89,13 +89,14 @@ export function actionCreatorGenerator<KT extends keyof EntitySliceMap>(name: KT
         state[name][loadingKey] = true as any
       })
 
+      let data: RT | undefined
       try {
         opts?.beforeReq?.()
 
-        const data = await api(...args)
+        data = await api(...args)
 
         set((state) => {
-          const ent = data[name]
+          const ent = data![name]
           if (Array.isArray(ent)) {
             for (const item of ent as T[]) {
               state[name].map[item.id] = item
@@ -104,9 +105,7 @@ export function actionCreatorGenerator<KT extends keyof EntitySliceMap>(name: KT
             state[name].map[ent.id] = ent
           }
         })
-
         opts?.onSuccess?.(data)
-        return data
       } catch (error) {
         console.error(error)
         opts?.onError?.(error)
@@ -118,5 +117,6 @@ export function actionCreatorGenerator<KT extends keyof EntitySliceMap>(name: KT
       })
 
       opts?.onFinal?.()
+      return data
     }
 }

@@ -1,4 +1,4 @@
-import { FC, useState, useRef, useEffect } from 'react'
+import { FC } from 'react'
 import { Project } from '../../../entities/project.entity'
 import { Link } from 'react-router-dom'
 import Button from '../../UI/Button'
@@ -10,34 +10,17 @@ import ProjectForm from '../../ProjectForm'
 import { Store, useAppStore } from '../../../state/store'
 import { useShallow } from 'zustand/shallow'
 import { FaSpinner } from 'react-icons/fa'
+import useProjectCard from '../../../hooks/useProjectCard'
 
 interface ProjectCardProps {
   project: Project
   showActions?: boolean
 }
 
-const selectors = (state: Store) => ({
-  editId: state.project.editId,
-  setEditId: state.project.setEditId,
-})
-
 const ProjectCard: FC<ProjectCardProps> = ({ project, showActions }) => {
-  const { editId, setEditId } = useAppStore(useShallow(selectors))
-
-  const [isExpanded, setIsExpanded] = useState(project.description.length < 100)
-  const [contentHeight, setContentHeight] = useState<number | undefined>()
-  const contentRef = useRef<HTMLParagraphElement>(null)
-
-  useEffect(() => {
-    if (!(contentRef.current && contentRef.current.innerText.length > 100)) return
-
-    const scrollHeight = contentRef.current.scrollHeight
-    setContentHeight(isExpanded ? scrollHeight : scrollHeight * 0.3)
-  }, [isExpanded])
+  const { editId, defaultImage, contentHeight, contentRef, setIsExpanded, isExpanded, setEditId } = useProjectCard(project)
 
   if (editId === project.id) return <ProjectForm onClose={() => setEditId(undefined)} edit project={project} />
-
-  const defaultImage = `/assets/img/default-proj-backgorund-${(project.id % 6) + 1}.jpg`
 
   return (
     <div className="relative p-4 rounded-lg border shadow-md transition-shadow select-none sm:p-6 bg-primary-3 hover:bg-primary-4 hover:shadow-lg text-secondary-11 border-secondary-7 hover:border-secondary-8 hover:text-secondary-12">
@@ -84,11 +67,11 @@ const ProjectCard: FC<ProjectCardProps> = ({ project, showActions }) => {
 const menuSelectors = (state: Store) => ({
   setEditId: state.project.setEditId,
   deleteAction: state.project.delete,
-  deleting: state.project.deleting,
+  loading: state.project.loading,
 })
 
 const ActionMenu = ({ project }: { project: Project }) => {
-  const { setEditId, deleteAction, deleting } = useAppStore(useShallow(menuSelectors))
+  const { setEditId, deleteAction, loading } = useAppStore(useShallow(menuSelectors))
 
   return (
     <Menu>
@@ -119,12 +102,12 @@ const ActionMenu = ({ project }: { project: Project }) => {
           }}
           className={({ focus }) =>
             cn(`flex gap-2 justify-between items-center w-full text-red/70 px-2 py-1 rounded-md relative`, {
-              'bg-red/90 text-secondary-12': focus || deleting,
-              'justify-center': deleting,
+              'bg-red/90 text-secondary-12': focus || loading,
+              'justify-center': loading,
             })
           }
         >
-          {deleting ? (
+          {loading ? (
             <FaSpinner className="animate-spin" />
           ) : (
             <>

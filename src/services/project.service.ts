@@ -33,11 +33,6 @@ class ProjectService implements IProjectService {
     let newProject = data!
 
     try {
-      if (image) {
-        const res = await this.update(newProject.id, { title: undefined }, image)
-        newProject = res.project
-      }
-
       const { data: projectUser } = await supabaseService
         .from('project_users')
         .insert({
@@ -48,6 +43,11 @@ class ProjectService implements IProjectService {
         .select('*')
         .single()
         .throwOnError()
+
+      if (image) {
+        const res = await this.update(newProject.id, { title: undefined }, image)
+        newProject = res.project
+      }
 
       return { project: newProject, projectUser: projectUser! }
     } catch (error) {
@@ -61,7 +61,7 @@ class ProjectService implements IProjectService {
   update = async (id: number, data: ProjectUpdateDTO, imageFile?: File) => {
     let image: string | undefined
     if (imageFile) {
-      const filePath = `images/project/${id}`
+      const filePath = `images/project/${id}` + imageFile.type.replace('image/', '.')
 
       image = await supabaseService.upload(filePath, imageFile)
     }
@@ -78,8 +78,8 @@ class ProjectService implements IProjectService {
   }
 
   delete = async (id: number) => {
-    await supabaseService.from('projects').delete().eq('id', id).throwOnError()
     const { data: project } = await supabaseService.from('projects').select('*').eq('id', id).single().throwOnError()
+    await supabaseService.from('projects').delete().eq('id', id).throwOnError()
 
     return { project: project! }
   }

@@ -1,6 +1,5 @@
 import { User } from '../../entities/user.entity'
 import AuthService from '../../services/auth.service'
-import LocalStorageService from '../../services/localStorage.service'
 import { ApiAction, StateSlice, actionCreatorGenerator } from '../store'
 
 type Keys = {
@@ -19,14 +18,11 @@ type Actions = {
 export type UserSlice = Keys & Actions
 
 export const createUserSlice: StateSlice<UserSlice> = (set) => {
-  function authSuccess<T extends { user: User; access_token?: string; refresh_token?: string }>(data: T) {
+  function authSuccess<T extends { user: User }>(data: T) {
     set((state) => {
       state.user.meId = data.user.id
       state.pageLoading = false
     })
-
-    if (data.access_token) LocalStorageService.set('access_token', data.access_token)
-    if (data.refresh_token) LocalStorageService.set('refresh_token', data.refresh_token)
   }
 
   const actionGenerator = actionCreatorGenerator('user', set)

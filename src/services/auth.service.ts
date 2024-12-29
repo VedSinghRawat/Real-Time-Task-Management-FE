@@ -1,6 +1,5 @@
 import { User } from '../entities/user.entity'
 import { SignupDTO } from '../validators/auth/signup.validator'
-import LocalStorageService from './localStorage.service'
 import SupabaseService from './supabase.service'
 
 export type LoginDTO = Omit<SignupDTO, 'username'>
@@ -63,34 +62,10 @@ class AuthService implements IAuthService {
   }
 
   fetchMe = async () => {
-    const token = LocalStorageService.get('access_token')
-    if (!token) throw 'No token found'
+    const res = await SupabaseService.client.auth.getSession()
+    if (!res.data.session?.user) throw new Error('No user found')
 
-    const res = await SupabaseService.client.auth.getUser(token)
-    if (res.error) {
-      const refresh_token = LocalStorageService.get('refresh_token')
-      if (!refresh_token) throw res.error
-
-      const { data, error } = await SupabaseService.client.auth.refreshSession({
-        refresh_token,
-      })
-
-      if (error) throw error
-      if (!data.session) throw new Error('No session found')
-      if (!data.user) throw new Error('No user found')
-
-      const user = await SupabaseService.client.from('users').select('*').eq('id', data.user.id).single()
-      if (!user.data) throw new Error('No user found')
-
-      const session = data.session
-      return {
-        access_token: session.access_token,
-        user: user.data,
-      }
-    }
-    if (!res.data.user) throw new Error('No user found')
-
-    const user = await SupabaseService.client.from('users').select('*').eq('id', res.data.user.id).single()
+    const user = await SupabaseService.client.from('users').select('*').eq('id', res.data.session.user.id).single()
     if (!user.data) throw new Error('No user found')
 
     return { user: user.data }

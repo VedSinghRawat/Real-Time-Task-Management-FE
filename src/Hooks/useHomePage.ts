@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Project } from '../entities/project.entity'
 import { Role } from '../entities/projectUser.entity'
 import ProjectUserSelectors from '../state/selector/proejctUser.selector'
@@ -18,7 +18,9 @@ const useHomePage = () => {
   const [formOpen, setFormOpen] = useState(false)
   const { projects, list, getRole, meId } = useAppStore(useShallow(selectors))
 
-  void list(meId)
+  useEffect(() => {
+    meId && void list(meId)
+  }, [list, meId])
 
   const projectsByRole = useMemo(() => {
     const result: { [key in Role]: Project[] } = {

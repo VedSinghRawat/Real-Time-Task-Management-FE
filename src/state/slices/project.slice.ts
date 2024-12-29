@@ -6,9 +6,6 @@ import { ApiAction, actionCreatorGenerator, StateSlice } from '../store'
 type Keys = {
   map: { [id: string]: Project }
   loading: boolean
-  creating: boolean
-  updating: boolean
-  deleting: boolean
 
   editId?: number
 }
@@ -44,16 +41,12 @@ export const createProjectSlice: StateSlice<ProjectSlice> = (set) => {
   return {
     map: {},
     loading: false,
-    creating: false,
-    updating: false,
-    deleting: false,
     editId: undefined,
 
     list: actionGenerator(ProjectService.list, { onSuccess: ({ projectUser }) => setProjectUsers(projectUser) }),
-    create: actionGenerator(ProjectService.create, { loadingKey: 'creating', onSuccess: ({ projectUser }) => setProjectUsers([projectUser]) }),
-    update: actionGenerator(ProjectService.update, { loadingKey: 'updating' }),
+    create: actionGenerator(ProjectService.create, { onSuccess: ({ projectUser }) => setProjectUsers([projectUser]) }),
+    update: actionGenerator(ProjectService.update),
     delete: actionGenerator(ProjectService.delete, {
-      loadingKey: 'deleting',
       onSuccess: ({ project }) =>
         set((state) => {
           delete state.project.map[project.id]
