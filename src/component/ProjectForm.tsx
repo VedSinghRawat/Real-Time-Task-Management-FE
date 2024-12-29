@@ -1,4 +1,4 @@
-import { memo, useState } from 'react'
+import { FC, memo, useState } from 'react'
 import { GoXCircle } from 'react-icons/go'
 import Dropzone from 'react-dropzone'
 import Input from './UI/Form/Input/Input'
@@ -10,10 +10,9 @@ import { Store, useAppStore } from '../state/store'
 import { useShallow } from 'zustand/shallow'
 import { Project } from '../entities/project.entity'
 
-type ProjectFormProps<T extends boolean> = {
+type ProjectFormProps = {
   onClose: () => void
-  edit?: T
-} & (T extends true ? { project: Project } : unknown)
+} & ({ edit: true; project: Project } | { edit?: false; project?: never })
 
 const selectors = (state: Store) => ({
   loading: state.project.loading,
@@ -22,17 +21,16 @@ const selectors = (state: Store) => ({
   meId: state.user.meId,
 })
 
-function ProjectForm<T extends boolean>({ onClose, edit, ...rest }: ProjectFormProps<T>) {
-  const [file, setFile] = useState<File | undefined>(undefined)
+const ProjectForm: FC<ProjectFormProps> = ({ onClose, edit, project }) => {
+  const [file, setFile] = useState<File | undefined | null>(undefined)
 
   const { loading, create, update, meId } = useAppStore(useShallow(selectors))
 
   const handleSubmit = async (data: ProjectCreateDTO | ProjectUpdateDTO) => {
     if (edit) {
-      const proj = (rest as ProjectFormProps<true>).project
-      await update(proj.id, data as ProjectUpdateDTO, file)
+      await update(project.id, data as ProjectUpdateDTO, file)
     } else {
-      await create(data as ProjectCreateDTO, meId!, file)
+      await create(data as ProjectCreateDTO, meId!, file || undefined)
     }
 
     onClose()
@@ -41,7 +39,7 @@ function ProjectForm<T extends boolean>({ onClose, edit, ...rest }: ProjectFormP
   const { control, submitHandler } = useForm(
     edit ? projectUpdateSchema : projectCreateSchema,
     handleSubmit,
-    edit ? (rest as ProjectFormProps<true>).project : { title: '', description: '' }
+    edit ? project : { title: '', description: '' }
   )
 
   return (
@@ -49,12 +47,16 @@ function ProjectForm<T extends boolean>({ onClose, edit, ...rest }: ProjectFormP
       <h3 className="text-center">Create New Project</h3>
 
       <form onSubmit={submitHandler} className="flex flex-col gap-1 mt-4 text-sm">
-        {file ? (
+        {(file || project?.image) && file !== null ? (
           <div className="relative">
-            <img src={URL.createObjectURL(file)} alt={file.name} className="object-cover mb-3 rounded-lg aspect-video" />
-
+            {/*  eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain */}
+            <img src={file ? URL.createObjectURL(file) : project?.image!} className="object-cover mb-3 rounded-lg aspect-video" />
             <button
-              onClick={() => setFile(undefined)}
+              onClick={(e) => {
+                e.preventDefault()
+                console.log('hello world')
+                setFile(project?.image ? null : undefined)
+              }}
               className={`absolute -top-3 -right-3 bg-opacity-30 rounded-full backdrop-blur-sm text-secondary-12`}
             >
               <GoXCircle className="w-5 h-5" />
@@ -109,4 +111,4 @@ function ProjectForm<T extends boolean>({ onClose, edit, ...rest }: ProjectFormP
   )
 }
 
-export default memo(ProjectForm) as typeof ProjectForm
+export default memo(ProjectForm)

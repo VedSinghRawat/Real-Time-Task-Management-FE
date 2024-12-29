@@ -22,7 +22,7 @@ class SupabaseService {
   storage = this.client.storage
   from = this.client.from.bind(this.client)
 
-  async upload(filePath: string, file: File) {
+  async uploadFile(filePath: string, file: File) {
     const { data: uploadData, error: uploadError } = await this.storage.from(STORAGE_BUCKET).upload(filePath, file, {
       upsert: true,
       cacheControl: '3600',
@@ -35,6 +35,18 @@ class SupabaseService {
     }
 
     return uploadData.path
+  }
+
+  async getStorageFilePublicUrl(filePath: string) {
+    const { data } = await this.storage.from(STORAGE_BUCKET).createSignedUrl(filePath, 60 * 60 * 24 * 1)
+    if (!data) throw new Error('Failed to get signed URL')
+
+    return data.signedUrl
+  }
+
+  async deleteFile(filePath: string) {
+    const { error } = await this.storage.from(STORAGE_BUCKET).remove([filePath])
+    if (error) throw error
   }
 }
 

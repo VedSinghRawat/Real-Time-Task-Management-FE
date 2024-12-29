@@ -15,8 +15,6 @@ export default function useProjectCard(project: Project) {
   const [contentHeight, setContentHeight] = useState<number | undefined>()
   const contentRef = useRef<HTMLParagraphElement>(null)
 
-  const defaultImage = `/assets/img/default-proj-backgorund-${(project.id % 6) + 1}.jpg`
-
   useEffect(() => {
     if (!(contentRef.current && contentRef.current.innerText.length > 100)) return
 
@@ -24,5 +22,7 @@ export default function useProjectCard(project: Project) {
     setContentHeight(isExpanded ? scrollHeight : scrollHeight * 0.3)
   }, [isExpanded])
 
-  return { editId, defaultImage, contentHeight, contentRef, setIsExpanded, isExpanded, setEditId }
+  const image = project.image || `/assets/img/default-proj-backgorund-${(project.id % 6) + 1}.jpg`
+
+  return { editId, image, contentHeight, contentRef, setIsExpanded, isExpanded, setEditId }
 }

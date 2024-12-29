@@ -18,18 +18,13 @@ interface ProjectCardProps {
 }
 
 const ProjectCard: FC<ProjectCardProps> = ({ project, showActions }) => {
-  const { editId, defaultImage, contentHeight, contentRef, setIsExpanded, isExpanded, setEditId } = useProjectCard(project)
+  const { editId, image, contentHeight, contentRef, setIsExpanded, isExpanded, setEditId } = useProjectCard(project)
 
   if (editId === project.id) return <ProjectForm onClose={() => setEditId(undefined)} edit project={project} />
 
   return (
     <div className="relative p-4 rounded-lg border shadow-md transition-shadow select-none sm:p-6 bg-primary-3 hover:bg-primary-4 hover:shadow-lg text-secondary-11 border-secondary-7 hover:border-secondary-8 hover:text-secondary-12">
-      <img
-        src={project.image ? `${import.meta.env.VITE_S3_BASE_URL}/${project.image}` : defaultImage}
-        alt="project_image"
-        className="object-cover mb-3 rounded-lg aspect-video"
-        onError={(e) => (e.currentTarget.src = defaultImage)}
-      />
+      <img src={image} alt="project_image" className="object-cover mb-3 rounded-lg aspect-video" />
 
       <h3 className="mb-2 text-base font-semibold sm:text-lg lg:text-xl">{project.title}</h3>
 

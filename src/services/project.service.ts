@@ -19,11 +19,23 @@ class ProjectService implements IProjectService {
     return ProjectService.instance
   }
 
+  private static async updateProjectImg(project: Project) {
+    project.image = project.image ? await supabaseService.getStorageFilePublicUrl(project.image) : null
+    return project
+  }
+
   list = async (userId: string) => {
     const result = await supabaseService.from('project_users').select('*, projects (*)').eq('user_id', userId).throwOnError()
     const data = result.data!
 
-    const project = data.map((r) => r.projects!).filter(Boolean)
+    const project = (
+      await Promise.all(
+        data.map(async (r) => {
+          if (!r.projects) return
+          return ProjectService.updateProjectImg(r.projects)
+        })
+      )
+    ).filter(Boolean) as Project[]
     const projectUser = data.map(({ projects: _, ...rest }) => rest)
     return { project, projectUser }
   }
@@ -46,7 +58,7 @@ class ProjectService implements IProjectService {
 
       if (image) {
         const res = await this.update(newProject.id, { title: undefined }, image)
-        newProject = res.project
+        newProject = await ProjectService.updateProjectImg(res.project)
       }
 
       return { project: newProject, projectUser: projectUser! }
@@ -58,12 +70,17 @@ class ProjectService implements IProjectService {
     }
   }
 
-  update = async (id: number, data: ProjectUpdateDTO, imageFile?: File) => {
-    let image: string | undefined
+  update = async (id: number, data: ProjectUpdateDTO, imageFile?: File | null) => {
+    const { data: projectData } = await supabaseService.from('projects').select('*').eq('id', id).single().throwOnError()
+
+    let image: string | null | undefined
     if (imageFile) {
       const filePath = `images/project/${id}` + imageFile.type.replace('image/', '.')
 
-      image = await supabaseService.upload(filePath, imageFile)
+      image = await supabaseService.uploadFile(filePath, imageFile)
+    } else if (imageFile === null && projectData?.image) {
+      await supabaseService.deleteFile(projectData.image)
+      image = null
     }
 
     const { data: project } = await supabaseService
@@ -74,7 +91,7 @@ class ProjectService implements IProjectService {
       .single()
       .throwOnError()
 
-    return { project: project! }
+    return { project: await ProjectService.updateProjectImg(project!) }
   }
 
   delete = async (id: number) => {
