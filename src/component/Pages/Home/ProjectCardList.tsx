@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { Project } from '../../../entities/project.entity'
+import { Project } from '../../../entities'
 import ProjectCard from './ProjectCard'
 
 interface ProjectCardListProps {

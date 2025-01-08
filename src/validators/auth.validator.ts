@@ -14,5 +14,7 @@ export const signupSchema = z
       .regex(/..*[!#$%&*+-./<=>?@^_|~].*/, 'Password should contain atleast one special character (!,#,$,%,&,*,+,-,<,=,>,?,@,^,_,|,~)'),
   })
   .required()
-
 export type SignupDTO = z.infer<typeof signupSchema>
+
+export const loginSchema = signupSchema.pick({ email: true, password: true })
+export type LoginDTO = z.infer<typeof loginSchema>

@@ -1,23 +1,19 @@
 import { createSelector } from 'reselect'
-import { isAfter, isSameDay, isToday, startOfDay, subDays, subMonths } from 'date-fns'
-import { TaskType, Task } from '../../model/Task'
-import { TODAY } from '../../constants'
-import { createSliceSelectors, taskSliceSelector } from '../selector'
+import { isToday } from 'date-fns'
+import { createSliceSelectors, SliceSelectorInitMap, taskSliceSelector } from '../selector'
 import { TaskSlice } from '../slices/task.slice'
 
-const taskStateInit: { [key in keyof TaskSlice]: undefined } = {
+const taskStateInit: SliceSelectorInitMap<TaskSlice> = {
   map: undefined,
   loading: undefined,
   idsToConfirm: undefined,
-
-  add: undefined,
   addToConfirm: undefined,
-  changeTimer: undefined,
   clearConfirm: undefined,
   delete: undefined,
-  move: undefined,
   removeFromConfirm: undefined,
   update: undefined,
+  create: undefined,
+  subscribe: undefined,
 }
 
 export default class TaskSelectors {
@@ -36,7 +32,7 @@ export default class TaskSelectors {
       [(id: Task['id'], by: number) => state.changeTimer(id, by, 'inc'), (id: Task['id'], by: number) => state.changeTimer(id, by, 'dec')] as const
   )
 
-  static form = createSelector(taskSliceSelector, (state) => [state.add, state.update] as const)
+  static form = createSelector(taskSliceSelector, (state) => [state.create, state.update] as const)
 
   static totalRemainingTime = createSelector(this.todayList, (taskList) =>
     taskList.reduce((totalTime, task) => {
@@ -47,15 +43,4 @@ export default class TaskSelectors {
   )
 
   static toConfirmList = createSelector([this.base.idsToConfirm, this.base.map], (ids, map) => ids.map((id) => map[id]).filter((t) => !!t) as Task[])
-
-  static dateFilteredList = (filterDate?: Date) =>
-    createSelector(this.list, (list) => (filterDate ? list.filter((task) => isSameDay(task.created_at, filterDate)) : []))
-
-  static lastWeekList = createSelector(this.list, (list) => list.filter((t) => isAfter(t.created_at, startOfDay(subDays(TODAY, 7)))))
-
-  static lastMonthList = createSelector(this.list, (list) => list.filter((t) => isAfter(t.created_at, startOfDay(subMonths(TODAY, 1)))))
-
-  static lastSixMonthsList = createSelector(this.list, (list) => list.filter((t) => isAfter(t.created_at, startOfDay(subMonths(TODAY, 6)))))
-
-  static yesterdayLeftList = createSelector(this.list, (list) => list.filter((t) => t.type !== 'done' && isSameDay(t.created_at, subDays(TODAY, 1))))
 }

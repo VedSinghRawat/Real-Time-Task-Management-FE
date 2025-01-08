@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { useShallow } from 'zustand/shallow'
 import { Store, useAppStore } from '../state/store'
-import { Project } from '../entities/project.entity'
+import { Project } from '../entities'
 
 const selectors = (state: Store) => ({
   editId: state.project.editId,

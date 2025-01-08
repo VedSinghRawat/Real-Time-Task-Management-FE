@@ -1,4 +1,4 @@
-import { ProjectUser, Role } from '../../entities/projectUser.entity'
+import { ProjectUser, Role } from '../../entities'
 import { StateSlice } from '../store'
 
 type Keys = {

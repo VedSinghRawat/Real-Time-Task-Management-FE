@@ -11,6 +11,7 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "project_users" (
+	"id" bigserial PRIMARY KEY NOT NULL,
 	"project_id" bigint NOT NULL,
 	"user_id" uuid NOT NULL,
 	"role" "role" NOT NULL,

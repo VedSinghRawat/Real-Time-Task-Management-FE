@@ -7,12 +7,9 @@ const projectStateInit: SliceSelectorInitMap<ProjectSlice> = {
   loading: undefined,
   list: undefined,
   create: undefined,
-  creating: undefined,
   delete: undefined,
-  deleting: undefined,
   setEditId: undefined,
   update: undefined,
-  updating: undefined,
   editId: undefined,
 }
 

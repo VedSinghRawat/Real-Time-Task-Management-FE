@@ -1,7 +1,6 @@
 import { STORAGE_BUCKET } from '../constants'
-import { Project } from '../entities/project.entity'
-import { ProjectUser } from '../entities/projectUser.entity'
-import { ProjectCreateDTO, ProjectUpdateDTO } from '../validators/project/projectCreate.validator'
+import { Project, ProjectUser } from '../entities'
+import { ProjectCreateDTO, ProjectUpdateDTO } from '../validators/project.validator'
 import supabaseService from './supabase.service'
 
 interface IProjectService {

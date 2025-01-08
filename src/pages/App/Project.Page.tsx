@@ -6,16 +6,16 @@ import TaskDonePopup from '../../component/UI/Popups/TaskDonePopup'
 import TaskSelectors from '../../state/selector/task.selector'
 import { useAppStore } from '../../state/store'
 
-interface TodayProps {}
+interface ProjectProps {}
 
-const Today: FC<TodayProps> = () => {
-  const tasksToConfirm = useAppStore(TaskSelectors.todayList)
+const Project: FC<ProjectProps> = () => {
+  const tasksToConfirm = useAppStore(TaskSelectors.ProjectList)
 
   return (
-    <section className={`mt-4 flex flex-col grow`}>
+    <section className={`flex flex-col mt-4 grow`}>
       <Info />
 
-      <TaskMultiList className={`gap-x-8 px-8 md:gap-x-16 mx-auto mt-8 md:mt-16 grow overflow-x-auto w-full max-w-5xl`} />
+      <TaskMultiList className={`overflow-x-auto gap-x-8 px-8 mx-auto mt-8 w-full max-w-5xl md:gap-x-16 md:mt-16 grow`} />
 
       <LeftoverTasksPopup />
 
@@ -26,4 +26,4 @@ const Today: FC<TodayProps> = () => {
   )
 }
 
-export default memo(Today)
+export default memo(Project)

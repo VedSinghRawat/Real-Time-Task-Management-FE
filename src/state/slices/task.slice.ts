@@ -1,7 +1,6 @@
-import { v4 as uuid } from 'uuid'
-import { Task, TaskType } from '../../model/Task'
-import { TODAY } from '../../constants'
-import { StateSlice } from '../store'
+import { ApiAction, createActionGenerator, StateSlice } from '../store'
+import { Task } from '../../entities'
+import tasksService from '../../services/tasks.service'
 import TaskSelectors from '../selector/task.selector'
 
 export type Keys = {
@@ -11,11 +10,10 @@ export type Keys = {
 }
 
 export type Actions = {
-  add: (newTask: Pick<Task, 'estimatedTime' | 'description'>) => void
-  update: (id: Task['id'], updatePayload: Partial<Omit<Task, 'id'>>) => void
-  delete: (id: Task['id']) => void
-  changeTimer: (id: Task['id'], by: number, type: 'inc' | 'dec') => void
-  move: (data: { fromListType: TaskType; toOrder: number; toListType?: TaskType; task: Task }) => void
+  create: ApiAction<typeof tasksService.create>
+  update: ApiAction<typeof tasksService.update>
+  delete: ApiAction<typeof tasksService.delete>
+  subscribe: typeof tasksService.subscribe
   removeFromConfirm: (id: Task['id']) => void
   addToConfirm: (id: Task['id']) => void
   clearConfirm: () => void
@@ -23,100 +21,60 @@ export type Actions = {
 
 export type TaskSlice = Keys & Actions
 
-export const createTaskSlice: StateSlice<TaskSlice> = (set) => ({
-  map: {},
-  idsToConfirm: [],
-  loading: false,
+export const createTaskSlice: StateSlice<TaskSlice> = (set) => {
+  const actionGenerator = createActionGenerator('task', set)
 
-  add: (newTask) =>
-    set((state) => {
-      const newId = uuid()
-      const todoTasks = TaskSelectors.listByType('todo')(state)
+  return {
+    map: {},
+    idsToConfirm: [],
+    loading: false,
 
-      todoTasks.forEach((task) => (task.order += 1))
-      state.task.map[newId] = {
-        ...newTask,
-        id: newId,
-        type: 'todo',
-        order: 1,
-        overTime: 0,
-        timeLeft: newTask.estimatedTime,
-        created_at: TODAY,
-      }
-    }),
-
-  update: (id, updatePayload) =>
-    set((state) => {
-      const old = state.task.map[id]
-
-      for (const key in updatePayload) {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        old[key] = updatePayload[key]
-      }
-    }),
-
-  delete: (id) =>
-    set((state) => {
-      const taskToDelete = state.task.map[id]
-
-      if (taskToDelete) {
-        const deletedFromList = TaskSelectors.listByType(taskToDelete.type)(state)
-
-        deletedFromList.forEach((t) => {
-          if (t.order > taskToDelete.order) t.order -= 1
+    create: actionGenerator(tasksService.create, {
+      onSuccess: ({ task }) => {
+        set((state) => {
+          const tasks = TaskSelectors.listByType('todo')(state)
+          tasks.forEach((task) => (task.order += 1))
+          state.task.map[task.id] = task
         })
-
-        delete state.task.map[id]
-      }
+      },
     }),
 
-  changeTimer: (id, by, type) =>
-    set((state) => {
-      const task = state.task.map[id]
+    update: actionGenerator(tasksService.update),
 
-      if (task) {
-        task.estimatedTime += by * (type === 'dec' ? -1 : 1)
-        task.timeLeft += by * (type === 'dec' ? -1 : 1)
-      }
-    }),
-
-  move: (data) =>
-    set((state) => {
-      const stateTask = state.task.map[data.task.id]
-
-      if (stateTask) {
-        const { fromListType, toOrder, toListType } = data
-
-        const fromList = TaskSelectors.listByType(fromListType)(state)
-        const toList = TaskSelectors.listByType(toListType || fromListType)(state)
-
-        fromList.forEach((task) => {
-          if (task.order > stateTask.order && task.id !== stateTask.id) task.order -= 1
+    delete: actionGenerator(tasksService.delete, {
+      onSuccess: ({ task }) => {
+        set((state) => {
+          delete state.task.map[task.id]
         })
+      },
+    }),
 
-        toList.forEach((task) => {
-          if (task.order >= toOrder && task.id !== stateTask.id) task.order += 1
+    subscribe: (projectId) => {
+      tasksService.subscribe(projectId, (change) => {
+        set((state) => {
+          const { eventType, new: newTask, old: oldTask } = change
+          if (eventType === 'INSERT' || eventType === 'UPDATE') {
+            state.task.map[newTask.id] = newTask
+          } else if (eventType === 'DELETE' && oldTask.id) {
+            delete state.task.map[oldTask.id]
+          }
         })
+      })
+    },
 
-        stateTask.order = toOrder
-        stateTask.type = toListType ? toListType : stateTask.type
-      }
-    }),
+    removeFromConfirm: (id) =>
+      set((state) => {
+        state.task.idsToConfirm = state.task.idsToConfirm.filter((tId) => tId !== id)
+      }),
 
-  removeFromConfirm: (id) =>
-    set((state) => {
-      state.task.idsToConfirm = state.task.idsToConfirm.filter((tId) => tId !== id)
-    }),
+    addToConfirm: (id) =>
+      set((state) => {
+        state.task.idsToConfirm.push(id)
+      }),
 
-  addToConfirm: (id) =>
-    set((state) => {
-      state.task.idsToConfirm.push(id)
-    }),
-
-  clearConfirm: () =>
-    set((state) => {
-      state.task.idsToConfirm = []
-    }),
-})
+    clearConfirm: () =>
+      set((state) => {
+        state.task.idsToConfirm = []
+      }),
+  }
+}

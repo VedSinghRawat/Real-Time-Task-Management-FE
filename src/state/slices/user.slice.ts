@@ -1,6 +1,6 @@
-import { User } from '../../entities/user.entity'
+import { User } from '../../entities'
 import AuthService from '../../services/auth.service'
-import { ApiAction, StateSlice, actionCreatorGenerator } from '../store'
+import { ApiAction, StateSlice, createActionGenerator } from '../store'
 
 type Keys = {
   map: { [id: string]: User }
@@ -25,7 +25,7 @@ export const createUserSlice: StateSlice<UserSlice> = (set) => {
     })
   }
 
-  const actionGenerator = actionCreatorGenerator('user', set)
+  const actionGenerator = createActionGenerator('user', set)
 
   return {
     map: {},

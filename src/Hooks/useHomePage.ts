@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Project } from '../entities/project.entity'
-import { Role } from '../entities/projectUser.entity'
+import { Project, Role } from '../entities'
 import ProjectUserSelectors from '../state/selector/proejctUser.selector'
 import ProjectSelectors from '../state/selector/project.selector'
 import UserSelectors from '../state/selector/user.selector'

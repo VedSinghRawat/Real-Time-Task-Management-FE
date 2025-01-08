@@ -21,6 +21,7 @@ class SupabaseService {
   auth = this.client.auth
   storage = this.client.storage
   from = this.client.from.bind(this.client)
+  channel = this.client.channel.bind(this.client)
 
   async uploadFile(filePath: string, file: File) {
     const { data: uploadData, error: uploadError } = await this.storage.from(STORAGE_BUCKET).upload(filePath, file, {

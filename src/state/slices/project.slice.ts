@@ -1,7 +1,6 @@
-import { Project } from '../../entities/project.entity'
-import { ProjectUser, Role } from '../../entities/projectUser.entity'
+import { Project, ProjectUser, Role } from '../../entities'
 import ProjectService from '../../services/project.service'
-import { ApiAction, actionCreatorGenerator, StateSlice } from '../store'
+import { ApiAction, createActionGenerator, StateSlice } from '../store'
 
 type Keys = {
   map: { [id: string]: Project }
@@ -22,7 +21,7 @@ type Actions = {
 export type ProjectSlice = Keys & Actions
 
 export const createProjectSlice: StateSlice<ProjectSlice> = (set) => {
-  const actionGenerator = actionCreatorGenerator('project', set)
+  const actionGenerator = createActionGenerator('project', set)
 
   const setProjectUsers = (projectUser: ProjectUser[]) => {
     set((state) => {
