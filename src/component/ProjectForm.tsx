@@ -4,11 +4,11 @@ import Dropzone from 'react-dropzone'
 import Input from './UI/Form/Input/Input'
 import TextArea from './UI/Form/TextArea'
 import useForm from '../hooks/useForm'
-import { ProjectCreateDTO, projectCreateSchema, ProjectUpdateDTO, projectUpdateSchema } from '../validators/project/projectCreate.validator'
 import Button from './UI/Button'
 import { Store, useAppStore } from '../state/store'
 import { useShallow } from 'zustand/shallow'
-import { Project } from '../entities/project.entity'
+import { Project } from '../entities'
+import { ProjectCreateDTO, ProjectUpdateDTO, projectUpdateSchema, projectCreateSchema } from '../validators/project.validator'
 
 type ProjectFormProps = {
   onClose: () => void

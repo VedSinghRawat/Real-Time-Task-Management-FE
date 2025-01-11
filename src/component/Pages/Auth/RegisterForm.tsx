@@ -4,10 +4,10 @@ import Button from '../../UI/Button'
 import ROUTES from '../../../routes'
 import NavLink from '../../UI/NavLink'
 import useForm from '../../../hooks/useForm'
-import { signupSchema } from '../../../validators/auth/signup.validator'
 import { Store, useAppStore } from '../../../state/store'
 import userSelectors from '../../../state/selector/user.selector'
 import { useShallow } from 'zustand/shallow'
+import { signupSchema } from '../../../validators/auth.validator'
 
 interface RegisterProps {}
 
