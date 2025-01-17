@@ -27,7 +27,7 @@ const Timer: FC<TimerProps> = ({ timeInSeconds, active, dir, onTimeChange, class
           const newTime = curr + (dir === 'dec' ? -1 : 1)
 
           setCurrTime(newTime)
-          onTimeChange && onTimeChange(newTime)
+          // onTimeChange && onTimeChange(newTime)
 
           return newTime
         })
@@ -41,7 +41,7 @@ const Timer: FC<TimerProps> = ({ timeInSeconds, active, dir, onTimeChange, class
       <p>{secondsToHHMMSS(currTime)}</p>
 
       {rest.showControls && (
-        <div className={`flex flex-col ml-2 gap-y-1 `}>
+        <div className={`flex flex-col gap-y-1 ml-2`}>
           <button onClick={() => rest.onIncreaseControlClick(setCurrTime)}>
             <AiFillPlusCircle className={`bg-secondary-dark text-tertiary-light rounded-full h-3.5 w-3.5 `} />
           </button>

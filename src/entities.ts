@@ -2,6 +2,7 @@ import { Database } from './database.types'
 
 export type User = Database['public']['Tables']['users']['Row']
 export type Task = Database['public']['Tables']['tasks']['Row']
+export type TaskType = Database['public']['Tables']['tasks']['Row']['type']
 export type TaskUser = Database['public']['Tables']['task_users']['Row']
 
 export type ProjectUser = Database['public']['Tables']['project_users']['Row']

@@ -1,5 +1,5 @@
 import { ReactElement, memo } from 'react'
-import { DragDropContext } from 'react-beautiful-dnd'
+import { DragDropContext } from '@hello-pangea/dnd'
 
 interface MultiDraggableListWithContextProps<T extends { id: number | string }, L extends { items: T[]; id: number | string }> {
   lists: L[]

@@ -1,22 +1,21 @@
 import { FC, memo, useCallback, useState } from 'react'
-import TaskSelectors from '../../../state/selector/task.selector'
-import { useAppStore } from '../../../state/store'
 import Button from '../../UI/Button'
 import TaskList from './TaskList'
 import TaskFormCard from '../TaskFormCard'
 import { AiFillPlusCircle } from 'react-icons/ai'
+import { Task } from '../../../entities'
 
 interface TaskTodoListProps {
   className?: string
+  tasks: Task[]
 }
 
-const TaskTodoList: FC<TaskTodoListProps> = ({ className }) => {
+const TaskTodoList: FC<TaskTodoListProps> = ({ className, tasks }) => {
   const [isFormOpen, setIsFormOpen] = useState(false)
-  const todoTasks = useAppStore(TaskSelectors.listByType('todo'))
   const toggleTaskForm = useCallback(() => setIsFormOpen((curr) => !curr), [setIsFormOpen])
 
   return (
-    <TaskList tasks={todoTasks} droppableId={'todo'} className={className}>
+    <TaskList tasks={tasks} droppableId={'todo'} className={className}>
       <TaskList.Heading>Todo</TaskList.Heading>
 
       <TaskList.DragList />

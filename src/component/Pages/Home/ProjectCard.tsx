@@ -1,5 +1,4 @@
 import { FC } from 'react'
-import { Project } from '../../../entities/project.entity'
 import { Link } from 'react-router-dom'
 import Button from '../../UI/Button'
 import { cn } from '../../../utils/tailwind'
@@ -11,6 +10,8 @@ import { Store, useAppStore } from '../../../state/store'
 import { useShallow } from 'zustand/shallow'
 import { FaSpinner } from 'react-icons/fa'
 import useProjectCard from '../../../hooks/useProjectCard'
+import { Project } from '../../../entities'
+import Routes from '../../../routes'
 
 interface ProjectCardProps {
   project: Project
@@ -51,7 +52,7 @@ const ProjectCard: FC<ProjectCardProps> = ({ project, showActions }) => {
       <div className={cn(`flex justify-end items-center`, { 'justify-between': showActions })}>
         {showActions && <ActionMenu project={project} />}
 
-        <Link to={`/project/${project.id}`}>
+        <Link to={Routes.project(project.id)}>
           <Button>View Project →</Button>
         </Link>
       </div>

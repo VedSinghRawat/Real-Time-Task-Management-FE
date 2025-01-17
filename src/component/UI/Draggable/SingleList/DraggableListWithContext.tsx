@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { DragDropContext, DropResult, ResponderProvided } from 'react-beautiful-dnd'
+import { DragDropContext, DropResult, ResponderProvided } from '@hello-pangea/dnd'
 import DraggableList, { DraggableListProps } from './DraggableList'
 
 interface DraggableListWithContextProps<T extends { id: number }> extends DraggableListProps<T> {

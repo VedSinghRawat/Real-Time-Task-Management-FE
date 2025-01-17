@@ -23,7 +23,7 @@ const Root: FC<RootProps> = () => {
   useEffect(() => {
     if (meId === undefined) void fetchMe()
     else if (meId === null) navigator(Routes.login)
-    else navigator(Routes.home)
+    else if (window.location.pathname === '/') navigator(Routes.home)
   }, [fetchMe, meId, navigator])
 
   if (loading || meId === undefined) {

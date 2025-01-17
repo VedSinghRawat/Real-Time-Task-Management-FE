@@ -14,4 +14,8 @@ export default class Routes {
   public static get home() {
     return '/app' as const
   }
+
+  public static project(projectId?: number) {
+    return `${this.home}/project/${projectId || ':projectId'}` as const
+  }
 }

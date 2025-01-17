@@ -1,5 +1,5 @@
 import { ReactElement, memo } from 'react'
-import { Draggable, Droppable, DroppableProps } from 'react-beautiful-dnd'
+import { Draggable, Droppable, DroppableProps } from '@hello-pangea/dnd'
 
 export interface DraggableListProps<T extends { id: number | string }> extends Omit<DroppableProps, 'children'> {
   items: T[]

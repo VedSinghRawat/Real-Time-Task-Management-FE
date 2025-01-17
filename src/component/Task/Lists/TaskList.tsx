@@ -1,7 +1,7 @@
 import { FC, NamedExoticComponent, ReactNode, createContext, memo, useContext } from 'react'
 import DraggableList from '../../UI/Draggable/SingleList/DraggableList'
 import TaskCard from '../TaskCard'
-import { Task } from '../../../model/Task'
+import { Task } from '../../../entities'
 
 interface TaskListProps {
   tasks: Task[]
@@ -35,7 +35,7 @@ MemoedBase.Heading = ({ children }: { children: string }) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   useContext(TaskListContext)
 
-  return <h2 className={`text-secondary-normal text-2xl sm:text-4xl`}>{children}</h2>
+  return <h2 className={`text-2xl text-secondary-normal sm:text-4xl`}>{children}</h2>
 }
 
 MemoedBase.DragList = () => {

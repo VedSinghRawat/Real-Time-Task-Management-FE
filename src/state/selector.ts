@@ -13,8 +13,6 @@ export const projectSliceSelector = createSelector(rootStateSelector, (state) =>
 
 export const projectUserSliceSelector = createSelector(rootStateSelector, (state) => state.projectUser)
 
-export type SliceSelectorInitMap<T> = { [key in Exclude<keyof T, symbol>]: undefined }
-
 export function createSliceSelectors<
   E extends EntitySliceMap,
   EN extends keyof EntitySliceMap,
