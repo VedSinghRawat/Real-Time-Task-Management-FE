@@ -5,13 +5,13 @@ import { cn } from '../../../utils/tailwind'
 import { BsPencilSquare, BsThreeDotsVertical, BsTrash } from 'react-icons/bs'
 import { Menu } from '@headlessui/react'
 import { MenuButton, MenuItems, MenuItem } from '@headlessui/react'
-import ProjectForm from '../../ProjectForm'
 import { Store, useAppStore } from '../../../state/store'
 import { useShallow } from 'zustand/shallow'
 import { FaSpinner } from 'react-icons/fa'
 import useProjectCard from '../../../hooks/useProjectCard'
 import { Project } from '../../../entities'
 import Routes from '../../../routes'
+import ProjectForm from '../../Project/ProjectForm'
 
 interface ProjectCardProps {
   project: Project

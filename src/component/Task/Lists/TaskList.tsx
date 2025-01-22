@@ -21,7 +21,7 @@ const Base = ({ className = '', children, ...rest }: TaskListProps) => {
   return (
     <TaskListContext.Provider value={rest}>
       <div
-        className={`bg-primary-normal flex flex-col justify-between p-3.5 sm:p-6 rounded-2xl gap-y-3.5 md:min-w-[16rem] min-w-[12.5rem] sm:gap-y-6 ${className}`}
+        className={`bg-secondary-2 border-2 border-secondary-6 flex flex-col justify-between p-3.5 sm:p-6 rounded-2xl gap-y-3.5 md:min-w-[16rem] min-w-[15rem] sm:gap-y-6 ${className}`}
       >
         {children}
       </div>
@@ -44,7 +44,7 @@ MemoedBase.DragList = () => {
 
   return (
     <DraggableList
-      className={`grow mx-auto w-full overflow-auto p-2.5 pt-3`}
+      className={`overflow-auto px-3 pt-5 mx-auto w-full grow`}
       droppableId={context!.droppableId}
       items={context!.tasks}
       itemContianerClasses="mb-5"

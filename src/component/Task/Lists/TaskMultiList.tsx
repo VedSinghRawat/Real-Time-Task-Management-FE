@@ -21,7 +21,7 @@ const TaskMultiList: FC<TaskMultiListProps> = ({ className = '', tasks }) => {
   const { lists } = useTaskMultiList(tasks)
 
   return (
-    <div className={`flex justify-between ${className}`}>
+    <div className={`flex justify-between items-start ${className}`}>
       <MultiDraggableListWithContext
         handleItemMove={() => {
           console.log('hello')

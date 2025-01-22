@@ -1,7 +1,7 @@
 import { FC, memo, useEffect, useRef } from 'react'
 import { AiFillDelete } from 'react-icons/ai'
 import TaskTimer from './TaskTimer'
-import { Task } from '../../model/Task'
+import { Task } from '../../entities'
 import TaskSelectors from '../../state/selector/task.selector'
 import { useAppStore } from '../../state/store'
 
@@ -29,16 +29,13 @@ const TaskCard: FC<TaskCardProps> = ({ task, className = '' }) => {
 
   return (
     <div
-      className={`${className} relative rounded-xl bg-primary-medium group p-2.5 transition-all duration-100 ease-in-out text-secondary-medium outline outline-2 outline-tertiary-normal`}
+      className={`${className} relative rounded-xl bg-primary-4 group p-2.5 transition-all duration-100 ease-in-out text-secondary-medium outline outline-2 outline-tertiary-normal`}
     >
-      <div className={`absolute -top-3 -right-2 flex gap-x-2 z-10`}>
-        <AiFillDelete
-          className={`bg-secondary-dark text-tertiary-light p-[0.15rem] rounded-full h-5 w-5 cursor-pointer`}
-          onClick={() => taskRemove(task.id)}
-        />
+      <div className={`flex absolute -right-3 -top-4 z-10 gap-x-2`}>
+        <AiFillDelete className={`p-1 w-7 h-7 rounded-full cursor-pointer bg-red text-secondary-12`} onClick={() => taskRemove(task.id)} />
       </div>
 
-      <p className={`bg-transparent group-focus-within:outline-primary-dark text-sm sm:text-base max-h-28 overflow-auto`}>{formattedDescription}</p>
+      <p className={`overflow-auto max-h-28 text-sm bg-transparent group-focus-within:outline-primary-dark sm:text-base`}>{formattedDescription}</p>
 
       <TaskTimer task={task} />
     </div>

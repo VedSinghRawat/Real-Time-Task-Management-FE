@@ -1,18 +1,18 @@
 import { FC, memo } from 'react'
 import TaskMultiList from '../../component/Task/Lists/TaskMultiList'
 import useProjectPage from '../../hooks/useProjectPage'
+import ProjectInfo from '../../component/Project/ProjectInfo'
 
 interface ProjectPageProps {}
 
 const ProjectPage: FC<ProjectPageProps> = () => {
   const { tasks } = useProjectPage()
-  console.log({ tasks })
 
   return (
     <section className={`flex flex-col mt-4 grow`}>
-      {/* <Info /> */}
+      <ProjectInfo tasks={tasks} />
 
-      <TaskMultiList tasks={tasks} className={`overflow-x-auto gap-x-8 px-8 mx-auto mt-8 w-full max-w-5xl md:gap-x-16 md:mt-16 grow`} />
+      <TaskMultiList tasks={tasks} className={`overflow-x-auto gap-x-8 px-8 py-12 mx-auto w-full max-w-5xl md:gap-x-16 md:py-16 grow`} />
 
       {/* <LeftoverTasksPopup /> */}
 

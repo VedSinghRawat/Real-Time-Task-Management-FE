@@ -4,7 +4,7 @@ import useHomePage from '../../hooks/useHomePage'
 import ProjectCardList from '../../component/Pages/Home/ProjectCardList'
 import Divider from '../../component/UI/Divider'
 import Button from '../../component/UI/Button'
-import ProjectForm from '../../component/ProjectForm'
+import ProjectForm from '../../component/Project/ProjectForm'
 
 const Home: FC = () => {
   const { projectsByRole, setFormOpen, formOpen } = useHomePage()

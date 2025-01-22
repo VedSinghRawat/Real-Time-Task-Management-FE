@@ -1,14 +1,14 @@
 import { FC, memo, useState } from 'react'
 import { GoXCircle } from 'react-icons/go'
 import Dropzone from 'react-dropzone'
-import Input from './UI/Form/Input/Input'
-import TextArea from './UI/Form/TextArea'
-import useForm from '../hooks/useForm'
-import Button from './UI/Button'
-import { Store, useAppStore } from '../state/store'
 import { useShallow } from 'zustand/shallow'
-import { Project } from '../entities'
-import { ProjectCreateDTO, ProjectUpdateDTO, projectUpdateSchema, projectCreateSchema } from '../validators/project.validator'
+import { Project } from '../../entities'
+import { Store, useAppStore } from '../../state/store'
+import { ProjectCreateDTO, ProjectUpdateDTO, projectUpdateSchema, projectCreateSchema } from '../../validators/project.validator'
+import TextArea from '../UI/Form/TextArea'
+import useForm from '../../hooks/useForm'
+import Input from '../UI/Form/Input/Input'
+import Button from '../UI/Button'
 
 type ProjectFormProps = {
   onClose: () => void
