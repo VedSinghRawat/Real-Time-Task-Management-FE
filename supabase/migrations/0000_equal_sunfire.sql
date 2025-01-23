@@ -39,9 +39,9 @@ CREATE TABLE IF NOT EXISTS "tasks" (
     "time_left" integer NOT NULL,
     "over_time" integer DEFAULT 0 NOT NULL,
     "type" "task_type" DEFAULT 'todo' NOT NULL,
-    "order" integer NOT NULL,
+    "position" integer NOT NULL,
     "created_at" timestamp with time zone DEFAULT now() NOT NULL,
-    CONSTRAINT "tasks_order_type_project_id_unique" UNIQUE ("order", "type", "project_id")
+    CONSTRAINT "tasks_position_type_project_id_unique" UNIQUE ("position", "type", "project_id")
 );
 
 -- Create table project_users

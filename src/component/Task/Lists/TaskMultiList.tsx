@@ -18,16 +18,11 @@ const listByType = {
 }
 
 const TaskMultiList: FC<TaskMultiListProps> = ({ className = '', tasks }) => {
-  const { lists } = useTaskMultiList(tasks)
+  const { lists, handleTaskMove } = useTaskMultiList(tasks)
 
   return (
     <div className={`flex justify-between items-start ${className}`}>
-      <MultiDraggableListWithContext
-        handleItemMove={() => {
-          console.log('hello')
-        }}
-        lists={lists}
-      >
+      <MultiDraggableListWithContext handleItemMove={handleTaskMove} lists={lists}>
         {(list) => {
           const List = listByType[list.id]
           return <List key={list.id} tasks={list.items} />

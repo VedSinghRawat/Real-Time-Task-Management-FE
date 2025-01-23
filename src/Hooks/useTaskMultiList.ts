@@ -1,32 +1,33 @@
-// const selectors = (state: Store) => ({
-//   addToConfirm: TaskSelectors.base.addToConfirm(state),
-// })
-
-import { Task } from '../entities'
+import { useCallback } from 'react'
+import { useShallow } from 'zustand/shallow'
+import { Task, TaskType } from '../entities'
+import TaskSelectors from '../state/selector/task.selector'
+import { Store, useAppStore } from '../state/store'
 
 const indexToType = {
   todo: 0,
   doing: 1,
   done: 2,
 }
-const useTaskMultiList = (tasks: Task[]) => {
-  // const { addToConfirm } = useAppStore(useShallow(selectors))
+const selectors = (state: Store) => ({
+  addToConfirm: TaskSelectors.base.addToConfirm(state),
+  taskMove: TaskSelectors.base.move(state),
+})
 
-  // const handleTaskMove = useCallback(
-  //   (data: { fromIndex: number; fromListId: TaskType; item: Task; toIndex: number; toListId?: TaskType }) => {
-  //     if (data.toListId === 'done') {
-  //       addToConfirm(data.item.id)
-  //     } else {
-  //       taskMove({
-  //         fromListType: data.fromListId,
-  //         task: data.item,
-  //         toOrder: data.toIndex + 1,
-  //         toListType: data.toListId,
-  //       })
-  //     }
-  //   },
-  //   [taskAddtoToConfirmDone, taskMove]
-  // )
+const useTaskMultiList = (tasks: Task[]) => {
+  const { addToConfirm, taskMove } = useAppStore(useShallow(selectors))
+
+  const handleTaskMove = useCallback(
+    async (data: { fromIndex: number; fromListId: TaskType; item: Task; toIndex: number; toListId?: TaskType }) => {
+      if (data.toListId === 'done') {
+        addToConfirm(data.item.id)
+      } else {
+        console.log('taskMove', data)
+        await taskMove(data.item.id, data.toListId || data.fromListId, data.toIndex + 1)
+      }
+    },
+    [addToConfirm, taskMove]
+  )
 
   const lists: { items: Task[]; id: Task['type'] }[] = [
     { items: [], id: 'todo' },
@@ -34,10 +35,12 @@ const useTaskMultiList = (tasks: Task[]) => {
     { items: [], id: 'done' },
   ]
   tasks.forEach((task) => {
-    lists[indexToType[task.type]]!.items.push(task)
+    lists[indexToType[task.type]]!.items[task.position - 1] = task
   })
 
-  return { lists }
+  console.log({ lists })
+
+  return { lists, handleTaskMove }
 }
 
 export default useTaskMultiList

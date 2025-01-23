@@ -71,35 +71,57 @@ class TaskService implements ITaskService {
   move = async (taskId: number, toType: TaskType, newOrder: number) => {
     const { data } = await supabaseService.from('tasks').select('*').eq('id', taskId).single().throwOnError()
     const currentTask = data!
+    console.log({ currentTask, toType, newOrder })
 
-    const { data: toTasks } = await supabaseService
+    let fromTasksQuery = supabaseService
       .from('tasks')
       .select('*')
-      .gte('order', newOrder)
-      .eq('type', toType)
+      .eq('type', currentTask.type)
       .eq('project_id', currentTask.project_id)
+      .gt('position', currentTask.position)
       .throwOnError()
-    const updatedToTasks = toTasks!.map((task) => ({ ...task, order: task.order + 1 }))
-    await supabaseService.from('tasks').upsert(updatedToTasks).throwOnError()
 
+    if (currentTask.type === toType) {
+      fromTasksQuery = fromTasksQuery.lte('position', newOrder)
+      await supabaseService.from('tasks').update({ position: -1, type: toType }).eq('id', taskId).select('*').single().throwOnError()
+    }
+
+    const { data: fromTasks } = await fromTasksQuery
+
+    console.log({ fromTasks })
+
+    const updatedFromTasks = fromTasks!.map((task) => ({ ...task, position: task.position - 1 }))
+    const { data: updatedFromTasksData } = await supabaseService.from('tasks').upsert(updatedFromTasks).throwOnError()
+    console.log({ updatedFromTasksData })
+
+    console.log({ currentTask })
     const { data: updatedTask } = await supabaseService
       .from('tasks')
-      .update({ order: newOrder, type: toType })
+      .update({ position: newOrder, type: toType })
       .eq('id', taskId)
       .select('*')
       .single()
       .throwOnError()
+    console.log({ updatedTask })
 
-    const { data: fromTasks } = await supabaseService
-      .from('tasks')
-      .select('*')
-      .lt('order', currentTask.order)
-      .eq('type', currentTask.type)
-      .eq('project_id', currentTask.project_id)
-      .throwOnError()
-    const updatedFromTasks = fromTasks!.map((task) => ({ ...task, order: task.order - 1 }))
-    await supabaseService.from('tasks').upsert(updatedFromTasks).throwOnError()
+    let updatedToTasks: Task[] = []
+    if (currentTask.type !== toType) {
+      const { data: toTasks } = await supabaseService
+        .from('tasks')
+        .select('*')
+        .eq('type', toType)
+        .eq('project_id', currentTask.project_id)
+        .gte('position', newOrder)
+        .throwOnError()
 
+      console.log(toTasks)
+
+      updatedToTasks = toTasks!.map((task) => ({ ...task, position: task.position + 1 }))
+      const { data: updatedToTasksData } = await supabaseService.from('tasks').upsert(updatedToTasks).throwOnError()
+      console.log({ updatedToTasksData })
+    }
+
+    console.log({ task: [...updatedToTasks, ...updatedFromTasks, updatedTask!] })
     return { task: [...updatedToTasks, ...updatedFromTasks, updatedTask!] }
   }
 

@@ -5,7 +5,7 @@ export const taskCreateSchema = z.object({
   estimated_time: z.number().int().positive(),
   time_left: z.number().int().nonnegative(),
   type: z.enum(['todo', 'doing', 'done']).optional().default('todo'),
-  order: z.number().int().positive(),
+  position: z.number().int().positive(),
 })
 export type TaskCreateDTO = z.infer<typeof taskCreateSchema>
 
