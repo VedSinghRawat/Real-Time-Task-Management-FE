@@ -12,7 +12,7 @@ const ProjectPage: FC<ProjectPageProps> = () => {
     <section className={`flex flex-col mt-4 grow`}>
       <ProjectInfo tasks={tasks} />
 
-      <TaskMultiList tasks={tasks} className={`overflow-x-auto gap-x-8 px-8 py-12 mx-auto w-full max-w-5xl md:gap-x-16 md:py-16 grow`} />
+      <TaskMultiList tasks={tasks} className={`gap-x-8 px-8 py-12 mx-auto w-full max-w-5xl md:gap-x-16 md:py-16 grow`} />
 
       {/* <LeftoverTasksPopup /> */}
 

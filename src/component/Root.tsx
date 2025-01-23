@@ -35,7 +35,7 @@ const Root: FC<RootProps> = () => {
   }
 
   return (
-    <div className={`min-w-full min-h-screen bg-black text-primary-12`}>
+    <div className={`min-h-screen bg-black min-w-fit text-primary-12`}>
       <Outlet />
     </div>
   )

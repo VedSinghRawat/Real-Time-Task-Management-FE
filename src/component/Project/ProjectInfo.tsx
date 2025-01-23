@@ -11,7 +11,7 @@ const ProjectInfo: FC<ProjectInfoProps> = ({ tasks }) => {
   const { remainingTime, done } = useProjectInfo(tasks)
 
   return (
-    <div className={`text-center sticky inset-x-0 max-w-[100vw] -mx-6 md:-mx-[4.5rem]`}>
+    <div className={`sticky w-[calc(100vw-0.5rem)] inset-x-0 -mx-8 text-center`}>
       <h1 className={`text-2xl md:text-4xl`}>Total Estimated Time:</h1>
 
       <p className={`text-3xl md:text-5xl`}>{secondsToHHMMSS(remainingTime)}</p>
