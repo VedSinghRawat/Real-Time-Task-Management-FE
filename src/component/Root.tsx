@@ -6,6 +6,8 @@ import { loadingSelector } from '../state/selector'
 import { Loading } from './UI/Loading'
 import { useShallow } from 'zustand/shallow'
 import Routes from '../routes'
+import { cn } from '../utils/tailwind'
+import { isMobile } from 'react-device-detect'
 
 interface RootProps {}
 
@@ -35,7 +37,11 @@ const Root: FC<RootProps> = () => {
   }
 
   return (
-    <div className={`min-h-screen bg-black min-w-fit text-primary-12`}>
+    <div
+      className={cn(`min-h-screen bg-black text-primary-12`, {
+        'min-w-fit': !isMobile,
+      })}
+    >
       <Outlet />
     </div>
   )

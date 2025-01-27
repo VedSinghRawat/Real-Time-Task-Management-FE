@@ -25,7 +25,7 @@ const TaskMultiList: FC<TaskMultiListProps> = ({ className = '', tasks }) => {
       <MultiDraggableListWithContext handleItemMove={handleTaskMove} lists={lists}>
         {(list) => {
           const List = listByType[list.id]
-          return <List key={list.id} tasks={list.items} />
+          return <List key={list.id} tasks={list.items} className="flex-1" />
         }}
       </MultiDraggableListWithContext>
     </div>
