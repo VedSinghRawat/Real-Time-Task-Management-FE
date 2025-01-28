@@ -38,8 +38,6 @@ const useTaskMultiList = (tasks: Task[]) => {
     lists[indexToType[task.type]]!.items[task.position - 1] = task
   })
 
-  console.log({ lists })
-
   return { lists, handleTaskMove }
 }
 

@@ -52,6 +52,7 @@ export const useAppStore = create<Store>()(
     {
       name: 'todo-state-zustand',
       merge: (persistedState, currentState) => {
+        console.log({ persistedState, currentState })
         const state = merge({}, currentState, persistedState)
         state.user.meId = undefined
         return state
