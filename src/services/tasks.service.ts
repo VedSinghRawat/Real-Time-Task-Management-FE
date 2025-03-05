@@ -68,52 +68,67 @@ class TaskService implements ITaskService {
     return { task: task! }
   }
 
-  move = async (taskId: number, toType: TaskType, newOrder: number) => {
+  move = async (taskId: number, toType: TaskType, newPosition: number) => {
+    console.log({ taskId, toType, newPosition })
     const { data } = await supabaseService.from('tasks').select('*').eq('id', taskId).single().throwOnError()
-    const currentTask = data!
+    const { project_id, position: taskToUpdateCurrPos, type: fromType } = data!
 
-    let updatedToTasks: Task[] = []
-    if (currentTask.type !== toType) {
-      const { data: toTasks } = await supabaseService
-        .from('tasks')
-        .select('*')
-        .eq('type', toType)
-        .eq('project_id', currentTask.project_id)
-        .gte('position', newOrder)
-        .order('position', { ascending: false })
-        .throwOnError()
+    const { data: projectTasks } = await supabaseService.from('tasks').select('*').eq('project_id', project_id).throwOnError()
+    const taskUpdates: Task[] = []
 
-      updatedToTasks = toTasks!.map((task) => ({ ...task, position: task.position + 1 }))
-      await supabaseService.from('tasks').upsert(updatedToTasks).throwOnError()
+    const lowerBound = Math.min(newPosition, taskToUpdateCurrPos)
+    const upperBound = Math.max(newPosition, taskToUpdateCurrPos)
+    const move = newPosition > taskToUpdateCurrPos ? -1 : 1
+
+    projectTasks!.forEach(({ position, type, id, ...rest }) => {
+      if (id === taskId) return
+
+      if (toType !== fromType) {
+        const isFromMovingList = type === fromType
+        const isPositionHigherCurr = position > taskToUpdateCurrPos
+        const isToMovingList = type === toType
+        const isPositionHigherThanNew = position >= newPosition
+
+        const sign = isFromMovingList && isPositionHigherCurr ? -1 : isToMovingList && isPositionHigherThanNew ? 1 : undefined
+
+        if (sign) {
+          const move = sign * 1
+          taskUpdates.push({ ...rest, type, id, position: position + move })
+        }
+        return
+      }
+
+      if (!(position <= upperBound && position >= lowerBound && type === toType)) return
+      taskUpdates.push({ ...rest, type, id, position: position + move })
+    })
+
+    if (toType !== fromType) {
+      taskUpdates.sort((a, b) => {
+        if (a.type === fromType && b.type === fromType) {
+          return a.position - b.position
+        }
+        if (a.type === toType && b.type === toType) {
+          return b.position - a.position
+        }
+        if (a.type === fromType && b.type === toType) {
+          return -1
+        }
+        if (a.type === toType && b.type === fromType) {
+          return 1
+        }
+        return 0
+      })
+    } else {
+      taskUpdates.sort((a, b) => (move === 1 ? b.position - a.position : a.position - b.position))
     }
 
-    await supabaseService.from('tasks').update({ position: 0, type: toType }).eq('id', taskId).select('*').single().throwOnError()
+    console.log({ updates: taskUpdates })
 
-    let fromTasksQuery = supabaseService
-      .from('tasks')
-      .select('*')
-      .eq('type', currentTask.type)
-      .eq('project_id', currentTask.project_id)
-      .gt('position', currentTask.position)
-      .throwOnError()
+    await supabaseService.from('tasks').update({ position: 0 }).eq('id', taskId).throwOnError()
+    await supabaseService.from('tasks').upsert(taskUpdates).throwOnError()
+    await supabaseService.from('tasks').update({ position: newPosition, type: toType }).eq('id', taskId).throwOnError()
 
-    if (currentTask.type === toType) {
-      fromTasksQuery = fromTasksQuery.lte('position', newOrder)
-    }
-
-    const { data: fromTasks } = await fromTasksQuery
-    const updatedFromTasks = fromTasks!.map((task) => ({ ...task, position: task.position - 1 }))
-    await supabaseService.from('tasks').upsert(updatedFromTasks).throwOnError()
-
-    const { data: updatedTask } = await supabaseService
-      .from('tasks')
-      .update({ position: newOrder, type: toType })
-      .eq('id', taskId)
-      .select('*')
-      .single()
-      .throwOnError()
-
-    return { task: [...updatedToTasks, ...updatedFromTasks, updatedTask!] }
+    return { task: [...taskUpdates, { ...data!, position: newPosition, type: toType }] }
   }
 
   listByProjectId: (projectId: number) => Promise<{ task: Task[] }> = async (projectId) => {

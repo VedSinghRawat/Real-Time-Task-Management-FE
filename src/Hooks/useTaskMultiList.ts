@@ -21,10 +21,10 @@ const useTaskMultiList = (tasks: Task[]) => {
     async (data: { fromIndex: number; fromListId: TaskType; item: Task; toIndex: number; toListId?: TaskType }) => {
       if (data.toListId === 'done') {
         addToConfirm(data.item.id)
-      } else {
-        console.log('taskMove', data)
-        await taskMove(data.item.id, data.toListId || data.fromListId, data.toIndex + 1)
       }
+
+      console.log('taskMove', data)
+      await taskMove(data.item.id, data.toListId || data.fromListId, data.toIndex + 1)
     },
     [addToConfirm, taskMove]
   )

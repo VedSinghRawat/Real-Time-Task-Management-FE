@@ -77,7 +77,9 @@ export const createTaskSlice: StateSlice<TaskSlice> = (set) => {
       })
     },
 
-    move: actionGenerator(tasksService.move, { onSuccess: updateTaskIdsByProjectId }),
+    move: actionGenerator(tasksService.move, {
+      onSuccess: updateTaskIdsByProjectId,
+    }),
 
     removeFromConfirm: (id) =>
       set((state) => {

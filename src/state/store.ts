@@ -7,7 +7,7 @@ import { TaskSlice, createTaskSlice } from './slices/task.slice'
 import { createProjectSlice, ProjectSlice } from './slices/project.slice'
 import { createProjectUserSlice, ProjectUserSlice } from './slices/projectUser.slice'
 import { KeysMatching } from '../utilType'
-import { merge } from 'lodash'
+import { mergeDeepLeft } from 'ramda'
 
 const storage: StateStorage = {
   getItem: async (name: string): Promise<string | null> => {
@@ -51,12 +51,7 @@ export const useAppStore = create<Store>()(
 
     {
       name: 'todo-state-zustand',
-      merge: (persistedState, currentState) => {
-        console.log({ persistedState, currentState })
-        const state = merge({}, currentState, persistedState)
-        state.user.meId = undefined
-        return state
-      },
+      merge: (persistedState, currentState) => mergeDeepLeft(persistedState as Store, currentState),
       storage: createJSONStorage(() => storage, {
         reviver: (_key, value) => {
           // check if value is a Date ISO string
@@ -75,7 +70,7 @@ export function createActionGenerator<KT extends keyof EntitySliceMap>(name: KT,
   return <P extends unknown[], T extends EntitySliceMap[typeof name]['map'][string], RT extends { [key in typeof name]: T } | { [key in KT]: T[] }>(
       api: (...args: P) => Promise<RT>,
       opts?: {
-        beforeReq?: () => void
+        beforeReq?: (...args: P) => void
         onSuccess?: (data: RT) => void
         onError?: (error: unknown) => void
         onFinal?: () => void
@@ -92,7 +87,7 @@ export function createActionGenerator<KT extends keyof EntitySliceMap>(name: KT,
 
       let data: RT | undefined
       try {
-        opts?.beforeReq?.()
+        opts?.beforeReq?.(...args)
 
         data = await api(...args)
 
