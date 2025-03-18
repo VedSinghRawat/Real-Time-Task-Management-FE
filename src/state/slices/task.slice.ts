@@ -51,9 +51,9 @@ export const createTaskSlice: StateSlice<TaskSlice> = (set) => {
     loading: false,
     taskIdsByProjectId: {},
 
-    create: actionGenerator(tasksService.create, { onSuccess: updateTaskIdsByProjectId }),
+    create: actionGenerator(tasksService.create),
 
-    update: actionGenerator(tasksService.update, { onSuccess: updateTaskIdsByProjectId }),
+    update: actionGenerator(tasksService.update),
 
     delete: actionGenerator(tasksService.delete, {
       onSuccess: ({ task }) => {
@@ -78,7 +78,42 @@ export const createTaskSlice: StateSlice<TaskSlice> = (set) => {
     },
 
     move: actionGenerator(tasksService.move, {
-      onSuccess: updateTaskIdsByProjectId,
+      beforeReq: (taskId, toType, newPosition) => {
+        set((state) => {
+          const task = state.task.map[taskId]
+          if (!task) return
+
+          const fromType = task.type
+          const oldPosition = task.position
+
+          // Optimistically update the moved task
+          state.task.map[taskId] = { ...task, type: toType, position: newPosition }
+
+          // Update positions of other tasks
+          Object.values(state.task.map).forEach((t) => {
+            if (t.id === taskId || t.project_id !== task.project_id) return
+
+            let positionChange = 0
+            if (toType !== fromType) {
+              if (t.type === fromType && t.position > oldPosition) {
+                positionChange = -1
+              } else if (t.type === toType && t.position >= newPosition) {
+                positionChange = 1
+              }
+            } else if (t.type === toType) {
+              if (newPosition > oldPosition && t.position <= newPosition && t.position > oldPosition) {
+                positionChange = -1
+              } else if (newPosition < oldPosition && t.position >= newPosition && t.position < oldPosition) {
+                positionChange = 1
+              }
+            }
+
+            if (positionChange !== 0) {
+              state.task.map[t.id] = { ...t, position: t.position + positionChange }
+            }
+          })
+        })
+      },
     }),
 
     removeFromConfirm: (id) =>
