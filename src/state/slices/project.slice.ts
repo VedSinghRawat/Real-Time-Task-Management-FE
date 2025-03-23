@@ -5,8 +5,7 @@ import { ApiAction, createActionGenerator, StateSlice } from '../store'
 type Keys = {
   map: { [id: string]: Project }
   loading: boolean
-
-  editId?: number
+  currentId?: number
 }
 
 type Actions = {
@@ -15,7 +14,7 @@ type Actions = {
   update: ApiAction<typeof ProjectService.update>
   delete: ApiAction<typeof ProjectService.delete>
 
-  setEditId: (id?: number) => void
+  setCurrentId: (id?: number) => void
 }
 
 export type ProjectSlice = Keys & Actions
@@ -40,7 +39,7 @@ export const createProjectSlice: StateSlice<ProjectSlice> = (set) => {
   return {
     map: {},
     loading: false,
-    editId: undefined,
+    currentId: undefined,
 
     list: actionGenerator(ProjectService.list, { onSuccess: ({ projectUser }) => setProjectUsers(projectUser) }),
     create: actionGenerator(ProjectService.create, { onSuccess: ({ projectUser }) => setProjectUsers([projectUser]) }),
@@ -52,9 +51,9 @@ export const createProjectSlice: StateSlice<ProjectSlice> = (set) => {
         }),
     }),
 
-    setEditId: (id?: number) =>
+    setCurrentId: (id?: number) =>
       set((state) => {
-        state.project.editId = id
+        state.project.currentId = id
       }),
   }
 }

@@ -29,13 +29,13 @@ const TaskCard: FC<TaskCardProps> = ({ task, className = '' }) => {
 
   return (
     <div
-      className={`${className} relative rounded-xl bg-primary-4 group p-2.5 transition-all duration-100 ease-in-out text-secondary-medium outline outline-2 outline-tertiary-normal`}
+      className={`${className} relative rounded-xl bg-primary-4 group p-2.5 transition-all duration-100 ease-in-out outline outline-2 outline-secondary-8`}
     >
       <div className={`flex absolute -right-3 -top-4 z-10 gap-x-2`}>
         <AiFillDelete className={`p-1 w-7 h-7 rounded-full cursor-pointer bg-red text-secondary-12`} onClick={() => taskRemove(task.id)} />
       </div>
 
-      <p className={`overflow-auto max-h-28 text-sm bg-transparent group-focus-within:outline-primary-dark sm:text-base`}>{formattedDescription}</p>
+      <p className={`overflow-auto max-h-28 text-sm bg-transparent group-focus-within:outline-primary-2 sm:text-base`}>{formattedDescription}</p>
 
       <TaskTimer task={task} />
     </div>

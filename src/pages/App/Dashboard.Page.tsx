@@ -248,7 +248,7 @@ const Dashboard: FC<DashboardProps> = () => {
       <section className={`mt-6 -mb-6 md:mb-3`}>
         <h3 className={`text-xl `}>Totals</h3>
 
-        <div className={`text-lg text-secondary-light flex items-center max-w-lg gap-x-8`}>
+        <div className={`text-lg text-secondary-10 flex items-center max-w-lg gap-x-8`}>
           <div className={`shrink-0`}>
             {radialGraphData.map((data) => {
               return (

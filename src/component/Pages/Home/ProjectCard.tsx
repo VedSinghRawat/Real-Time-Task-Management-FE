@@ -19,9 +19,9 @@ interface ProjectCardProps {
 }
 
 const ProjectCard: FC<ProjectCardProps> = ({ project, showActions }) => {
-  const { editId, image, contentHeight, contentRef, setIsExpanded, isExpanded, setEditId } = useProjectCard(project)
+  const { currentId, image, contentHeight, contentRef, setIsExpanded, isExpanded, setCurrentId } = useProjectCard(project)
 
-  if (editId === project.id) return <ProjectForm onClose={() => setEditId(undefined)} edit project={project} />
+  if (currentId === project.id) return <ProjectForm onClose={() => setCurrentId(undefined)} edit project={project} />
 
   return (
     <div className="relative p-4 rounded-lg border shadow-md transition-shadow select-none sm:p-6 bg-primary-3 hover:bg-primary-4 hover:shadow-lg text-secondary-11 border-secondary-7 hover:border-secondary-8 hover:text-secondary-12">
@@ -53,7 +53,7 @@ const ProjectCard: FC<ProjectCardProps> = ({ project, showActions }) => {
         {showActions && <ActionMenu project={project} />}
 
         <Link to={Routes.project(project.id)}>
-          <Button>View Project →</Button>
+          <Button onClick={() => setCurrentId(project.id)}>View Project →</Button>
         </Link>
       </div>
     </div>
@@ -61,7 +61,7 @@ const ProjectCard: FC<ProjectCardProps> = ({ project, showActions }) => {
 }
 
 const menuSelectors = (state: Store) => ({
-  setEditId: state.project.setEditId,
+  setEditId: state.project.setCurrentId,
   deleteAction: state.project.delete,
   loading: state.project.loading,
 })

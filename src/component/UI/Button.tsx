@@ -22,7 +22,7 @@ const Button: FC<ButtonProps> = ({ className = '', iconClasses = '', Icon, child
       )}
       {...rest}
     >
-      <span className={cn({ 'opacity-0': isLoading })}>
+      <span className={cn('flex gap-x-3 items-center', { 'opacity-0': isLoading })}>
         {children} {Icon && <Icon className={iconClasses} />}
       </span>
 

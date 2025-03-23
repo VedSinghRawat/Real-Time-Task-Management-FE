@@ -15,3 +15,10 @@ const App: FC = () => {
 }
 
 export default App
+
+// TODO: Add a side bar/ floating thingy in the project page to show the users in the project
+// TODO: Add feature of letting users have profile picture
+// TODO: Make the tasks in doing list active only if the corresponding user is logged in
+// FIXME: Fix the add task form
+// TODO: Add the feature to update the task description
+// TODO: Add the feature to assign a task to a user

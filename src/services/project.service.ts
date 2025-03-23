@@ -56,8 +56,8 @@ class ProjectService implements IProjectService {
         .throwOnError()
 
       if (image) {
-        const res = await this.update(newProject.id, { title: undefined }, image)
-        newProject = await ProjectService.updateProjectImg(res.project)
+        const { project } = await this.update(newProject.id, { title: undefined }, image)
+        newProject = project!
       }
 
       return { project: newProject, projectUser: projectUser! }
@@ -90,7 +90,7 @@ class ProjectService implements IProjectService {
       .single()
       .throwOnError()
 
-    return { project: await ProjectService.updateProjectImg(project!) }
+    return { project: project?.image ? await ProjectService.updateProjectImg(project!) : project! }
   }
 
   delete = async (id: number) => {

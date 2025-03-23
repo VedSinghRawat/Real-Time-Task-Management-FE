@@ -4,12 +4,12 @@ import { Store, useAppStore } from '../state/store'
 import { Project } from '../entities'
 
 const selectors = (state: Store) => ({
-  editId: state.project.editId,
-  setEditId: state.project.setEditId,
+  currentId: state.project.currentId,
+  setCurrentId: state.project.setCurrentId,
 })
 
 export default function useProjectCard(project: Project) {
-  const { editId, setEditId } = useAppStore(useShallow(selectors))
+  const { currentId, setCurrentId } = useAppStore(useShallow(selectors))
 
   const [isExpanded, setIsExpanded] = useState(project.description.length < 100)
   const [contentHeight, setContentHeight] = useState<number | undefined>()
@@ -24,5 +24,5 @@ export default function useProjectCard(project: Project) {
 
   const image = project.image || `/assets/img/default-proj-backgorund-${(project.id % 6) + 1}.jpg`
 
-  return { editId, image, contentHeight, contentRef, setIsExpanded, isExpanded, setEditId }
+  return { currentId, image, contentHeight, contentRef, setIsExpanded, isExpanded, setCurrentId }
 }

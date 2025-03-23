@@ -1,5 +1,5 @@
 import { FC, memo, useEffect, useMemo, useRef, useState } from 'react'
-import Input, { InputProps } from './Input'
+import { InputProps, Input } from './Input'
 import { TimeString } from '../../../../utils'
 
 interface TimeInputProps extends InputProps {
@@ -13,9 +13,9 @@ const TimeInput: FC<TimeInputProps> = ({ className = '', containerClasses = '', 
   const minuteInputRef = useRef<HTMLInputElement>(null)
   const secondInputRef = useRef<HTMLInputElement>(null)
 
-  const [hourValue, setHourValue] = useState('')
-  const [minuteValue, setMinuteValue] = useState('')
-  const [secondValue, setSecondValue] = useState('')
+  const [hourValue, setHourValue] = useState('00')
+  const [minuteValue, setMinuteValue] = useState('00')
+  const [secondValue, setSecondValue] = useState('00')
 
   const inputVals = useMemo(() => [hourValue, minuteValue, secondValue] as const, [hourValue, minuteValue, secondValue])
 
@@ -24,26 +24,26 @@ const TimeInput: FC<TimeInputProps> = ({ className = '', containerClasses = '', 
       {
         ref: hourInputRef,
         label: 'h',
-        className: `!rounded-l-md !rounded-none pr-3 w-8 ${className}`,
         setter: setHourValue,
         value: inputVals[0],
-        disable: inputVals[1].length < 2,
+        max: 23,
+        placeholder: '00',
       },
       {
         ref: minuteInputRef,
         label: 'm',
-        className: `!rounded-none pr-4 w-9 ${className}`,
         setter: setMinuteValue,
         value: inputVals[1],
-        disable: inputVals[2].length < 2,
+        max: 59,
+        placeholder: '00',
       },
       {
         ref: secondInputRef,
         label: 's',
-        className: `!rounded-r-md !rounded-none pr-2 w-7 ${className}`,
         setter: setSecondValue,
         value: inputVals[2],
-        disable: false,
+        max: 59,
+        placeholder: '00',
       },
     ]
   }, [className, inputVals])
@@ -53,35 +53,61 @@ const TimeInput: FC<TimeInputProps> = ({ className = '', containerClasses = '', 
   }, [getValue, inputVals])
 
   return (
-    <div className={`${containerClasses} flex`}>
-      {inputsData.map(({ ref, value, disable, label, className, setter }, i) => (
-        <span className={`relative`} key={label}>
-          <Input
-            disabled={disable}
-            placeholder="00"
-            value={value}
-            onChange={(e) => {
-              const val = e.currentTarget.value
+    <div className={`inline-flex gap-2 items-center ${containerClasses}`}>
+      {inputsData.map(({ ref, value, label, setter, max, placeholder }, i) => {
+        const nextRef = inputsData[i - 1]?.ref
+        const nextSetter = inputsData[i - 1]?.setter
 
-              if (val.length <= 2) !isNaN(+val) && setter(val)
+        console.log({ nextSetter, nextRef })
 
-              if (val.length >= 2) {
-                const nextInput = inputsData[i - 1]?.ref.current
+        return (
+          <div className="flex relative items-center" key={label}>
+            <Input
+              value={value}
+              onChange={(e) => {
+                const value = e.currentTarget.value
+                console.log({ nextSetter, nextRef })
 
-                if (nextInput) {
-                  nextInput.disabled = false
-                  nextInput.focus()
+                if (value === '') {
+                  setter('')
+                  return
                 }
-              }
-            }}
-            innerRef={ref}
-            className={`text-right !outline-none !border-0 ${className}`}
-            {...rest}
-          />
 
-          <span className={`right-0.5 top-1/2 -translate-y-1/2 absolute text-opacity-70`}>{label}</span>
-        </span>
-      ))}
+                // Only allow numbers
+                if (!/^\d*$/.test(value)) return
+
+                // Get numeric value for validation
+                const numValue = parseInt(value, 10)
+
+                // Check if value is within valid range
+                if (isNaN(numValue)) return
+
+                // Update the state
+                if (numValue > max) {
+                  const left = numValue - (max + 1)
+                  setter(left.toString())
+                  nextSetter && nextSetter('1')
+                } else {
+                  setter(value)
+                }
+
+                // Auto-focus next input if we've entered 2 digits
+                if (value.length === 2 && nextRef?.current) {
+                  nextRef.current.focus()
+                  nextRef.current.select()
+                }
+              }}
+              onFocus={(e) => e.target.select()}
+              innerRef={ref}
+              placeholder={placeholder}
+              className={`rounded-md border border-secondary-7 focus:border-secondary-10`}
+              maxLength={2}
+              {...rest}
+            />
+            <span className="ml-1 text-secondary-11">{label}</span>
+          </div>
+        )
+      })}
     </div>
   )
 }

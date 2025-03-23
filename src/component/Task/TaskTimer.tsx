@@ -22,6 +22,7 @@ const TaskTimer: FC<TaskTimerProps> = ({ task }) => {
 
   const handleTimeChange: (newTime: number) => void = useCallback(
     (newTime) => {
+      console.log(newTime)
       if (newTime === 0 && !toConfirmDoneIds.includes(task.id)) {
         void alertAudio.play()
         addToToConfirm(task.id)
