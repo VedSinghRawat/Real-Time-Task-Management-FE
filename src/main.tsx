@@ -2,8 +2,6 @@ import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
-import HistoryPage from './pages/App/History.Page.tsx'
-import DashboardPage from './pages/App/Dashboard.Page.tsx'
 import Root from './component/Root.tsx'
 import TestPage from './pages/Test.Page.tsx'
 import RegisterPage from './component/Pages/Auth/RegisterForm.tsx'
@@ -29,14 +27,6 @@ const router = createBrowserRouter([
           {
             path: Routes.project(),
             element: <ProjectPage />,
-          },
-          {
-            path: 'dashboard',
-            element: <DashboardPage />,
-          },
-          {
-            path: ':history',
-            element: <HistoryPage />,
           },
         ],
       },

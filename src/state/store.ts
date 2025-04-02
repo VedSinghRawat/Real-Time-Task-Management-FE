@@ -71,7 +71,7 @@ export function createActionGenerator<KT extends keyof EntitySliceMap>(name: KT,
       api: (...args: P) => Promise<RT>,
       opts?: {
         beforeReq?: (...args: P) => void
-        onSuccess?: (data: RT) => void
+        onSuccess?: (data: RT, ...args: P) => void
         onError?: (error: unknown) => void
         onFinal?: () => void
         loadingKey?: KeysMatching<EntitySliceMap[KT], boolean>
@@ -101,7 +101,7 @@ export function createActionGenerator<KT extends keyof EntitySliceMap>(name: KT,
             state[name].map[ent.id] = ent
           }
         })
-        opts?.onSuccess?.(data)
+        opts?.onSuccess?.(data, ...args)
       } catch (error) {
         console.error(error)
         opts?.onError?.(error)

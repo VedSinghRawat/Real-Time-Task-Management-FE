@@ -1,5 +1,5 @@
-import { User } from '../entities/user.entity'
-import { SignupDTO } from '../validators/auth/signup.validator'
+import { User } from '../entities'
+import { SignupDTO } from '../validators/auth.validator'
 import SupabaseService from './supabase.service'
 
 export type LoginDTO = Omit<SignupDTO, 'username'>
