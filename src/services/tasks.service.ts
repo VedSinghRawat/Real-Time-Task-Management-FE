@@ -69,7 +69,6 @@ class TaskService implements ITaskService {
   }
 
   move = async (taskId: number, toType: TaskType, newPosition: number) => {
-    console.log({ taskId, toType, newPosition })
     const { data } = await supabaseService.from('tasks').select('*').eq('id', taskId).single().throwOnError()
     const { project_id, position: taskToUpdateCurrPos, type: fromType } = data!
 
@@ -121,8 +120,6 @@ class TaskService implements ITaskService {
     } else {
       taskUpdates.sort((a, b) => (move === 1 ? b.position - a.position : a.position - b.position))
     }
-
-    console.log({ updates: taskUpdates })
 
     await supabaseService.from('tasks').update({ position: 0 }).eq('id', taskId).throwOnError()
     await supabaseService.from('tasks').upsert(taskUpdates).throwOnError()

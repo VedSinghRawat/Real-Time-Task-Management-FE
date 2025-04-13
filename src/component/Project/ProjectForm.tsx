@@ -54,7 +54,6 @@ const ProjectForm: FC<ProjectFormProps> = ({ onClose, edit, project }) => {
             <button
               onClick={(e) => {
                 e.preventDefault()
-                console.log('hello world')
                 setFile(project?.image ? null : undefined)
               }}
               className={`absolute -top-3 -right-3 bg-opacity-30 rounded-full backdrop-blur-xs text-secondary-12`}

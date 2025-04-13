@@ -6,6 +6,7 @@ import { UserSlice, createUserSlice } from './slices/user.slice'
 import { TaskSlice, createTaskSlice } from './slices/task.slice'
 import { createProjectSlice, ProjectSlice } from './slices/project.slice'
 import { createProjectUserSlice, ProjectUserSlice } from './slices/projectUser.slice'
+import { createPresenceSlice, PresenceSlice } from './slices/presence.slice'
 import { KeysMatching } from '../utilType'
 import { mergeDeepLeft } from 'ramda'
 
@@ -32,7 +33,7 @@ export type EntitySliceMap = {
   projectUser: ProjectUserSlice
 }
 
-export type Store = EntitySliceMap & ExtraState
+export type Store = EntitySliceMap & ExtraState & { presence: PresenceSlice }
 
 export type StateSlice<T> = StateCreator<Store, [['zustand/immer', never]], [['zustand/devtools', never]], T>
 
@@ -46,6 +47,7 @@ export const useAppStore = create<Store>()(
         task: createTaskSlice(set, get, store),
         project: createProjectSlice(set, get, store),
         projectUser: createProjectUserSlice(set, get, store),
+        presence: createPresenceSlice(set, get, store),
       }))
     ),
 

@@ -130,11 +130,8 @@
     --c2: #3d8700;
 
     --g: var(--c2) -5% 5%, #0000 0 45%;
-    background:
-      linear-gradient(45deg, #0000 10%, var(--c1) 0 40%, #0000 0),
-      repeating-linear-gradient(45deg, var(--g)),
-      linear-gradient(135deg, rgba(0, 0, 0, 1), rgba(36, 126, 48, 0.075)),
-      repeating-linear-gradient(-45deg, var(--g)) var(--c1);
+    background: linear-gradient(45deg, #0000 10%, var(--c1) 0 40%, #0000 0), repeating-linear-gradient(45deg, var(--g)),
+      linear-gradient(135deg, rgba(0, 0, 0, 1), rgba(36, 126, 48, 0.075)), repeating-linear-gradient(-45deg, var(--g)) var(--c1);
     background-size: var(--s) var(--s);
   }
 }

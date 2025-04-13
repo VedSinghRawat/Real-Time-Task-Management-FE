@@ -3,7 +3,7 @@ import formControlled from '../../../../HOC/formControlled'
 import { cn } from '../../../../utils/tailwind'
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-  innerRef?: RefObject<HTMLInputElement>
+  innerRef?: RefObject<HTMLInputElement | null>
   children?: string
   containerClassName?: string
 }

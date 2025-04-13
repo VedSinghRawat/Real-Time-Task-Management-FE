@@ -58,15 +58,12 @@ const TimeInput: FC<TimeInputProps> = ({ className = '', containerClasses = '', 
         const nextRef = inputsData[i - 1]?.ref
         const nextSetter = inputsData[i - 1]?.setter
 
-        console.log({ nextSetter, nextRef })
-
         return (
           <div className="flex relative items-center" key={label}>
             <Input
               value={value}
               onChange={(e) => {
                 const value = e.currentTarget.value
-                console.log({ nextSetter, nextRef })
 
                 if (value === '') {
                   setter('')

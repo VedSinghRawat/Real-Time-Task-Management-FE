@@ -13,7 +13,7 @@ const NavBar: React.FC = () => {
       })}
     >
       <div className="container flex justify-between items-center px-4 py-2 mx-auto lg:px-0 lg:py-3">
-        <Link to="/" className="text-xl font-bold text-gray-800">
+        <Link to="/app" className="text-xl font-bold text-gray-800">
           <img src="/assets/img/logo-side.png" alt="logo" className="max-h-14 sm:max-h-16 md:max-h-20" />
         </Link>
 

@@ -8,6 +8,7 @@ import { useShallow } from 'zustand/shallow'
 import Routes from '../routes'
 import { cn } from '../utils/tailwind'
 import { isMobile } from 'react-device-detect'
+import presenceSelectors from '../state/selector/presence.selector'
 
 interface RootProps {}
 
@@ -15,10 +16,12 @@ const selectors = (state: Store) => ({
   fetchMe: userSelectors.base.fetchMe(state),
   meId: userSelectors.base.meId(state),
   loading: loadingSelector(state),
+  initializePresence: presenceSelectors.base.initializePresence(state),
+  cleanupPresence: presenceSelectors.base.cleanupPresence(state),
 })
 
 const Root: FC<RootProps> = () => {
-  const { fetchMe, loading, meId } = useAppStore(useShallow(selectors))
+  const { fetchMe, loading, meId, initializePresence, cleanupPresence } = useAppStore(useShallow(selectors))
 
   const navigator = useNavigate()
 
@@ -27,6 +30,21 @@ const Root: FC<RootProps> = () => {
     else if (meId === null) navigator(Routes.login)
     else if (window.location.pathname === '/') navigator(Routes.home)
   }, [fetchMe, meId, navigator])
+
+  useEffect(() => {
+    if (meId) {
+      console.log('Initializing presence for user:', meId)
+      initializePresence(meId)
+
+      return () => {
+        console.log('Cleaning up presence for user:', meId)
+        void cleanupPresence()
+      }
+    } else if (meId === null) {
+      console.log('Ensuring presence cleanup due to logout/no session')
+      void cleanupPresence()
+    }
+  }, [meId, initializePresence, cleanupPresence])
 
   if (loading || meId === undefined) {
     return (

@@ -8,12 +8,26 @@ import { cn } from '../../utils/tailwind'
 import { isMobile } from 'react-device-detect'
 import { HiUsers } from 'react-icons/hi'
 import { IoClose } from 'react-icons/io5'
+import { useAppStore } from '../../state/store'
+import presenceSelectors from '../../state/selector/presence.selector'
+import { useShallow } from 'zustand/shallow'
 
 interface ProjectPageProps {}
 
 const ProjectPage: FC<ProjectPageProps> = () => {
-  const { tasks, users } = useProjectPage()
+  const { tasks, users: projectUsers } = useProjectPage()
   const [isUserListOpen, setIsUserListOpen] = useState(false)
+
+  console.log('projectUsers', projectUsers)
+
+  const onlineUserIds = useAppStore(useShallow(presenceSelectors.base.onlineUsers))
+
+  const usersWithOnlineStatus = projectUsers.map((user) => ({
+    ...user,
+    isOnline: !!onlineUserIds[user.id],
+  }))
+
+  console.log('onlineUserIds', onlineUserIds)
 
   const closePanel = () => setIsUserListOpen(false)
   const openPanel = () => setIsUserListOpen(true)
@@ -79,7 +93,7 @@ const ProjectPage: FC<ProjectPageProps> = () => {
                 </div>
                 {/* User List Container */}
                 <div className="overflow-y-auto max-h-[31.25rem]">
-                  <ProjectUserList users={users} />
+                  <ProjectUserList users={usersWithOnlineStatus} />
                 </div>
               </DialogPanel>
             </TransitionChild>

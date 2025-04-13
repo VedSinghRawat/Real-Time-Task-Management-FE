@@ -13,22 +13,21 @@ export const projectSliceSelector = createSelector(rootStateSelector, (state) =>
 
 export const projectUserSliceSelector = createSelector(rootStateSelector, (state) => state.projectUser)
 
+export const presenceSliceSelector = createSelector(rootStateSelector, (state) => state.presence)
+
 export function createSliceSelectors<
   E extends EntitySliceMap,
   EN extends keyof EntitySliceMap,
   ES extends E[EN],
   K extends Exclude<keyof ES, symbol>,
-  KM extends { [key in K]: undefined },
+  KM extends { [key in K]: undefined }
 >(_entityName: EN, keyMap: KM, baseSelector: (s: E) => ES) {
   const keys = Object.keys(keyMap) as K[]
 
-  const selectorMap = keys.reduce<{ [key in K]: (s: E) => ES[key] }>(
-    (curr, k) => {
-      curr[k] = createSelector(baseSelector, (s) => s[k])
-      return curr
-    },
-    {} as { [key in K]: (s: E) => ES[key] }
-  )
+  const selectorMap = keys.reduce<{ [key in K]: (s: E) => ES[key] }>((curr, k) => {
+    curr[k] = createSelector(baseSelector, (s) => s[k])
+    return curr
+  }, {} as { [key in K]: (s: E) => ES[key] })
 
   return selectorMap
 }

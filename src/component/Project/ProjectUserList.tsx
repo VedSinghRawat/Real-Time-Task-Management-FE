@@ -3,8 +3,11 @@ import { User } from '../../entities'
 import UserAvatar from '../User/UserAvatar'
 import { cn } from '../../utils/tailwind'
 
+// Extend User type locally or define a new type
+type UserWithOnlineStatus = User & { isOnline: boolean }
+
 interface ProjectUserListProps {
-  users: User[]
+  users: UserWithOnlineStatus[] // Use the extended type
   className?: string
 }
 
@@ -28,7 +31,12 @@ const ProjectUserList: FC<ProjectUserListProps> = ({ users, className }) => {
       {users.map((user) => (
         <div key={user.id} className="flex items-center space-x-3">
           <UserAvatar user={user} size="sm" />
-          <span className="text-sm font-medium text-gray-800 dark:text-gray-200 truncate">{user.username}</span>
+          <div className="flex items-center space-x-1.5">
+            {' '}
+            {/* Wrap username and dot */}
+            <span className="text-sm font-medium text-gray-800 dark:text-gray-200 truncate">{user.username}</span>
+            {user.isOnline && <div className="w-2 h-2 bg-green-500 rounded-full" title="Online"></div>}
+          </div>
           {/* Optional: Add role or other info here */}
         </div>
       ))}

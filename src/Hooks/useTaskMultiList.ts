@@ -23,7 +23,6 @@ const useTaskMultiList = (tasks: Task[]) => {
         addToConfirm(data.item.id)
       }
 
-      console.log('taskMove', data)
       await taskMove(data.item.id, data.toListId || data.fromListId, data.toIndex + 1)
     },
     [addToConfirm, taskMove]
