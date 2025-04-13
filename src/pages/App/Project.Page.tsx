@@ -1,5 +1,5 @@
 import { FC, memo, useState, Fragment } from 'react'
-import { Dialog, DialogPanel, Transition, TransitionChild } from '@headlessui/react'
+import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from '@headlessui/react'
 import TaskMultiList from '../../component/Task/Lists/TaskMultiList'
 import useProjectPage from '../../hooks/useProjectPage'
 import ProjectInfo from '../../component/Project/ProjectInfo'
@@ -18,16 +18,12 @@ const ProjectPage: FC<ProjectPageProps> = () => {
   const { tasks, users: projectUsers } = useProjectPage()
   const [isUserListOpen, setIsUserListOpen] = useState(false)
 
-  console.log('projectUsers', projectUsers)
-
   const onlineUserIds = useAppStore(useShallow(presenceSelectors.base.onlineUsers))
 
   const usersWithOnlineStatus = projectUsers.map((user) => ({
     ...user,
-    isOnline: !!onlineUserIds[user.id],
+    isOnline: onlineUserIds.includes(user.id),
   }))
-
-  console.log('onlineUserIds', onlineUserIds)
 
   const closePanel = () => setIsUserListOpen(false)
   const openPanel = () => setIsUserListOpen(true)
@@ -82,7 +78,7 @@ const ProjectPage: FC<ProjectPageProps> = () => {
               >
                 {/* Panel Header */}
                 <div className="flex justify-between items-center p-4 border-b border-gray-200 dark:border-gray-700">
-                  <Dialog.Title className="text-lg font-semibold text-gray-800 dark:text-gray-200">Project Members</Dialog.Title>
+                  <DialogTitle className="text-lg font-semibold text-gray-800 dark:text-gray-200">Project Members</DialogTitle>
                   <button
                     onClick={closePanel}
                     className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"

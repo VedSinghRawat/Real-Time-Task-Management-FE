@@ -33,15 +33,12 @@ const Root: FC<RootProps> = () => {
 
   useEffect(() => {
     if (meId) {
-      console.log('Initializing presence for user:', meId)
       initializePresence(meId)
 
       return () => {
-        console.log('Cleaning up presence for user:', meId)
         void cleanupPresence()
       }
     } else if (meId === null) {
-      console.log('Ensuring presence cleanup due to logout/no session')
       void cleanupPresence()
     }
   }, [meId, initializePresence, cleanupPresence])
