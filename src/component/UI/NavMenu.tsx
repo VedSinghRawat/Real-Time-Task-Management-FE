@@ -16,7 +16,7 @@ const NavMenu: FC<NavMenuProps> = () => {
       <Popover className="absolute md:text-xl">
         <PopoverButton>
           <GiHamburgerMenu
-            className={`fixed top-3 left-3 md:top-6 md:left-6 h-8 w-8 md:h-11 md:w-11 z-10 text-secondary-10 border-secondary-3 border-2 p-0.5 rounded bg-secondary-5`}
+            className={`fixed top-3 left-3 md:top-6 md:left-6 h-8 w-8 md:h-11 md:w-11 z-10 text-secondary-10 border-secondary-3 border-2 p-0.5 rounded-sm bg-secondary-5`}
           />
         </PopoverButton>
 

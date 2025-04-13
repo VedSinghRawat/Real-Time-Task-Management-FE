@@ -36,7 +36,7 @@ const TextAreaComp: FC<TextAreaProps> = ({ className = '', name, onInput, childr
 
           resizeTextarea()
         }}
-        className={`overflow-hidden p-1 px-2 mt-1.5 w-full font-medium bg-opacity-60 rounded-sm border backdrop-blur-sm outline-none resize-none focus:border-secondary-10 border-secondary-7 placeholder-secondary-11 text-secondary-12 placeholder-opacity-55 bg-secondary-3 ${className}`}
+        className={`overflow-hidden p-1 px-2 mt-1.5 w-full font-medium bg-opacity-60 rounded-xs border backdrop-blur-xs outline-hidden resize-none focus:border-secondary-10 border-secondary-7 placeholder-secondary-11 text-secondary-12 placeholder-opacity-55 bg-secondary-3 ${className}`}
         {...rest}
       />
     </>

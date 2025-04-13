@@ -38,10 +38,10 @@ function Listbox<V, T extends { id: string; value: V; label: string }>({
     <HeadlessListbox as={Fragment} value={selected} onChange={handleChange}>
       <div className={`relative`}>
         <div
-          className={`overflow-hidden relative text-left rounded-lg shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm ${className}`}
+          className={`overflow-hidden relative text-left rounded-lg shadow-md cursor-default focus:outline-hidden focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm ${className}`}
         >
           <ListboxButton
-            className={`relative px-4 py-1 pr-8 w-full text-left rounded-lg shadow-md cursor-default bg-primary-9 focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 ${buttonClasses}`}
+            className={`relative px-4 py-1 pr-8 w-full text-left rounded-lg shadow-md cursor-default bg-primary-9 focus:outline-hidden focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 ${buttonClasses}`}
           >
             <span className="block truncate">{selected.label || placeholder}</span>
 
@@ -51,7 +51,7 @@ function Listbox<V, T extends { id: string; value: V; label: string }>({
           </ListboxButton>
         </div>
         <Transition as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
-          <ListboxOptions className="overflow-auto absolute z-10 py-1 mt-1 min-w-max max-h-60 text-base rounded-md ring-1 ring-black ring-opacity-5 shadow-lg bg-primary-9 focus:outline-none sm:text-sm">
+          <ListboxOptions className="overflow-auto absolute z-10 py-1 mt-1 min-w-max max-h-60 text-base rounded-md ring-1 ring-black ring-opacity-5 shadow-lg bg-primary-9 focus:outline-hidden sm:text-sm">
             {showNoneOpt ? (
               <ListboxOption
                 className={({ active }) =>

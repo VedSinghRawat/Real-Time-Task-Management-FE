@@ -13,7 +13,7 @@ const DatePickerPopup: FC<DatePickerPopupProps> = ({ onChange, className = '', .
   const { history } = useParams()
 
   return (
-    <Popup {...rest} className={`!p-0 ${className}`}>
+    <Popup {...rest} className={`p-0! ${className}`}>
       <div>
         <DatePicker
           maxDate={TODAY}

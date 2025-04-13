@@ -18,7 +18,7 @@ const AuthContainer: FC<AuthContainerProps> = () => {
   return (
     <div className={`flex flex-col justify-center items-center px-8 py-10 min-h-screen sm:px-24 pattern-bg`}>
       <div
-        className={`px-8 py-5 w-full max-w-md bg-opacity-30 rounded-xl border backdrop-blur-sm sm:px-12 sm:py-9 sm:max-w-xl bg-primary-2 border-primary-4`}
+        className={`px-8 py-5 w-full max-w-md bg-opacity-30 rounded-xl border backdrop-blur-xs sm:px-12 sm:py-9 sm:max-w-xl bg-primary-2 border-primary-4`}
       >
         <img src="/assets/img/logo.png" alt="logo" className={`mx-auto mb-5 w-3/4 sm:mb-8`} />
 

@@ -43,7 +43,7 @@ const ProjectForm: FC<ProjectFormProps> = ({ onClose, edit, project }) => {
   )
 
   return (
-    <div className={`relative p-4 w-full bg-opacity-30 rounded-lg backdrop-blur-sm text-secondary-12 bg-primary-3 border-primary-7`}>
+    <div className={`relative p-4 w-full bg-opacity-30 rounded-lg backdrop-blur-xs text-secondary-12 bg-primary-3 border-primary-7`}>
       <h3 className="text-center">Create New Project</h3>
 
       <form onSubmit={submitHandler} className="flex flex-col gap-1 mt-4 text-sm">
@@ -57,7 +57,7 @@ const ProjectForm: FC<ProjectFormProps> = ({ onClose, edit, project }) => {
                 console.log('hello world')
                 setFile(project?.image ? null : undefined)
               }}
-              className={`absolute -top-3 -right-3 bg-opacity-30 rounded-full backdrop-blur-sm text-secondary-12`}
+              className={`absolute -top-3 -right-3 bg-opacity-30 rounded-full backdrop-blur-xs text-secondary-12`}
             >
               <GoXCircle className="w-5 h-5" />
             </button>

@@ -29,7 +29,7 @@ const TaskDonePopup: FC<TaskDonePopupProps> = ({ task }) => {
       <div className={`flex justify-around mt-10`}>
         <Button
           Icon={BsFillCheckCircleFill}
-          className={`flex-row-reverse !outline-primary-2 !text-primary-6`}
+          className={`flex-row-reverse outline-primary-2! text-primary-6!`}
           onClick={() => {
             taskUpdate(task.id, { type: 'done' })
 
@@ -41,7 +41,7 @@ const TaskDonePopup: FC<TaskDonePopupProps> = ({ task }) => {
 
         <Button
           Icon={HiXCircle}
-          className={`!bg-red-500 flex-row-reverse !outline-primary-2 !text-primary-6`}
+          className={`bg-red-500! flex-row-reverse outline-primary-2! text-primary-6!`}
           iconClasses="h-5 w-5"
           onClick={() => {
             task.overTime === 0 && taskUpdate(task.id, { overTime: 1 })

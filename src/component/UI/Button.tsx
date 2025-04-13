@@ -14,7 +14,7 @@ const Button: FC<ButtonProps> = ({ className = '', iconClasses = '', Icon, child
   return (
     <button
       className={cn(
-        'font-medium text-sm md:text-base text-primary-3 bg-secondary-9 border border-secondary-7 py-0.5 px-2.5 rounded flex items-center gap-x-3 relative',
+        'font-medium text-sm md:text-base text-primary-3 bg-secondary-9 border border-secondary-7 py-0.5 px-2.5 rounded-sm flex items-center gap-x-3 relative',
         className,
         {
           [`text-secondary-11 bg-opacity-30 backdrop-blur-md bg-primary-3 border-primary-7`]: variant === 'transparent',
