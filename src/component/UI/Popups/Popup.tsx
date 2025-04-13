@@ -1,4 +1,4 @@
-import { Transition, Dialog } from '@headlessui/react'
+import { Transition, Dialog, TransitionChild } from '@headlessui/react'
 import { ButtonHTMLAttributes, FC, Fragment, memo, ReactNode, useCallback } from 'react'
 import { ImCross } from 'react-icons/im'
 
@@ -16,7 +16,7 @@ interface PopupCloseButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> 
 
 const PopupCloseButton: FC<PopupCloseButtonProps> = ({ className = '', ...rest }) => {
   return (
-    <button {...rest} className={`rounded-full bg-secondary-2 p-2 border-4 border-primary-6 text-primary-6 ${className}`}>
+    <button {...rest} className={`p-2 rounded-full border-4 bg-secondary-2 border-primary-6 text-primary-6 ${className}`}>
       <ImCross className={`h-2.5 w-2.5`} />
     </button>
   )
@@ -31,7 +31,7 @@ const Popup: FC<PopupProps> = ({ children, className = '', setIsOpen, isOpen, on
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={closePopup}>
-        <Transition.Child
+        <TransitionChild
           as={Fragment}
           enter="ease-in-out duration-300"
           enterFrom="opacity-0"
@@ -41,9 +41,9 @@ const Popup: FC<PopupProps> = ({ children, className = '', setIsOpen, isOpen, on
           leaveTo="opacity-0"
         >
           <div className="fixed inset-0 z-40 bg-black bg-opacity-70"></div>
-        </Transition.Child>
+        </TransitionChild>
 
-        <Transition.Child
+        <TransitionChild
           className={`fixed sm:inset-[15%] inset-[5%] z-50 flex items-center justify-center`}
           as="div"
           enter="duration-300 transition-size"
@@ -53,16 +53,16 @@ const Popup: FC<PopupProps> = ({ children, className = '', setIsOpen, isOpen, on
           leaveFrom={`scale-100 opacity-100`}
           leaveTo="scale-150 opacity-0"
         >
-          <div className={`relative max-w-full max-h-full flex my-auto scale `}>
+          <div className={`flex relative my-auto max-w-full max-h-full scale`}>
             <Dialog.Panel
-              className={`shadow-secondary-5 shadow-lg overflow-y-auto max-h-full mx-auto bg-secondary-5 border-4 shadow-popup border-primary-6 rounded-2xl p-6 sm:p-12 ${className} `}
+              className={`overflow-y-auto p-6 mx-auto max-h-full rounded-2xl border-4 shadow-lg shadow-secondary-5 bg-secondary-5 shadow-popup border-primary-6 sm:p-12 ${className}`}
             >
               {children}
             </Dialog.Panel>
 
             <PopupCloseButton onClick={closePopup} className={`absolute -top-3 -right-3`} />
           </div>
-        </Transition.Child>
+        </TransitionChild>
       </Dialog>
     </Transition>
   )

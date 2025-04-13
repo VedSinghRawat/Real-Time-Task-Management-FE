@@ -1,27 +1,13 @@
 import { FC, memo, useState, Fragment } from 'react'
-import { Dialog, Transition } from '@headlessui/react'
+import { Dialog, DialogPanel, Transition, TransitionChild } from '@headlessui/react'
 import TaskMultiList from '../../component/Task/Lists/TaskMultiList'
 import useProjectPage from '../../hooks/useProjectPage'
 import ProjectInfo from '../../component/Project/ProjectInfo'
 import ProjectUserList from '../../component/Project/ProjectUserList'
 import { cn } from '../../utils/tailwind'
 import { isMobile } from 'react-device-detect'
-
-// Placeholder for icons - consider using an icon library like react-icons
-const UsersIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
-    />
-  </svg>
-)
-const CloseIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-  </svg>
-)
+import { HiUsers } from 'react-icons/hi'
+import { IoClose } from 'react-icons/io5'
 
 interface ProjectPageProps {}
 
@@ -44,14 +30,14 @@ const ProjectPage: FC<ProjectPageProps> = () => {
         )}
         aria-label="Show project members"
       >
-        <UsersIcon />
+        <HiUsers className="w-6 h-6" />
       </button>
 
       {/* Headless UI Dialog for Sliding Panel */}
       <Transition appear show={isUserListOpen} as={Fragment}>
         <Dialog as="div" className="relative z-40 text-primary-12" onClose={closePanel}>
           {/* Backdrop Overlay */}
-          <Transition.Child
+          <TransitionChild
             as={Fragment}
             enter="ease-in-out duration-300"
             enterFrom="opacity-0"
@@ -61,11 +47,11 @@ const ProjectPage: FC<ProjectPageProps> = () => {
             leaveTo="opacity-0"
           >
             <div className="fixed inset-0 bg-black/30 dark:bg-black/50" aria-hidden="true" />
-          </Transition.Child>
+          </TransitionChild>
 
           {/* Sliding Panel Content */}
           <div className="flex fixed left-0 top-1/2 max-w-full -translate-y-1/2 h-fit">
-            <Transition.Child
+            <TransitionChild
               as={Fragment}
               enter="transform transition ease-in-out duration-300"
               enterFrom="-translate-x-full"
@@ -74,7 +60,7 @@ const ProjectPage: FC<ProjectPageProps> = () => {
               leaveFrom="translate-x-0"
               leaveTo="-translate-x-full"
             >
-              <Dialog.Panel
+              <DialogPanel
                 className={cn(
                   // Copied styles from previous panel div, adjust as needed
                   'relative w-64 bg-black rounded-r-lg border-r shadow-xl border-y border-secondary-7 dark:bg-gray-900'
@@ -88,15 +74,15 @@ const ProjectPage: FC<ProjectPageProps> = () => {
                     className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
                     aria-label="Close members panel"
                   >
-                    <CloseIcon />
+                    <IoClose className="w-6 h-6" />
                   </button>
                 </div>
                 {/* User List Container */}
                 <div className="overflow-y-auto max-h-[31.25rem]">
                   <ProjectUserList users={users} />
                 </div>
-              </Dialog.Panel>
-            </Transition.Child>
+              </DialogPanel>
+            </TransitionChild>
           </div>
         </Dialog>
       </Transition>

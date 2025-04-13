@@ -1,4 +1,4 @@
-import { Popover, Transition } from '@headlessui/react'
+import { Popover, PopoverButton, PopoverPanel, Transition } from '@headlessui/react'
 import { FC, Fragment, memo, useState } from 'react'
 import { GiHamburgerMenu } from 'react-icons/gi'
 import { useNavigate } from 'react-router'
@@ -14,11 +14,11 @@ const NavMenu: FC<NavMenuProps> = () => {
   return (
     <>
       <Popover className="absolute md:text-xl">
-        <Popover.Button>
+        <PopoverButton>
           <GiHamburgerMenu
             className={`fixed top-3 left-3 md:top-6 md:left-6 h-8 w-8 md:h-11 md:w-11 z-10 text-secondary-10 border-secondary-3 border-2 p-0.5 rounded bg-secondary-5`}
           />
-        </Popover.Button>
+        </PopoverButton>
 
         <Transition
           as={Fragment}
@@ -29,7 +29,7 @@ const NavMenu: FC<NavMenuProps> = () => {
           leaveFrom="opacity-100 translate-y-0"
           leaveTo="opacity-0 translate-y-1"
         >
-          <Popover.Panel className="fixed z-10 px-2 py-1 rounded-lg top-[4.3rem] md:top-[5.8rem] md:left-7 left-4 bg-primary-8">
+          <PopoverPanel className="fixed z-10 px-2 py-1 rounded-lg top-[4.3rem] md:top-[5.8rem] md:left-7 left-4 bg-primary-8">
             <div className={`m-auto w-0 h-0 border-x-[0.8rem] border-x-transparent border-b-[1rem] absolute -top-4 border-primary-6`}></div>
 
             <ul className="flex flex-col gap-1">
@@ -39,11 +39,11 @@ const NavMenu: FC<NavMenuProps> = () => {
                 Today
               </NavLink>
 
-              <button className="underline text-primary-11 " onClick={() => setIsDatePickerOpen(true)}>
+              <button className="underline text-primary-11" onClick={() => setIsDatePickerOpen(true)}>
                 History
               </button>
             </ul>
-          </Popover.Panel>
+          </PopoverPanel>
         </Transition>
       </Popover>
 

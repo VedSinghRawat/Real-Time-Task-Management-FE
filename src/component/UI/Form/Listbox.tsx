@@ -1,5 +1,5 @@
 import { Fragment, memo, useCallback, useState } from 'react'
-import { Listbox as HeadlessListbox, Transition } from '@headlessui/react'
+import { Listbox as HeadlessListbox, Transition, ListboxButton, ListboxOptions, ListboxOption } from '@headlessui/react'
 import { LuChevronsUpDown } from 'react-icons/lu'
 import { BsCheckLg } from 'react-icons/bs'
 
@@ -36,37 +36,37 @@ function Listbox<V, T extends { id: string; value: V; label: string }>({
 
   return (
     <HeadlessListbox as={Fragment} value={selected} onChange={handleChange}>
-      <div className={`relative `}>
+      <div className={`relative`}>
         <div
-          className={`relative overflow-hidden text-left rounded-lg shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm ${className}`}
+          className={`overflow-hidden relative text-left rounded-lg shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm ${className}`}
         >
-          <HeadlessListbox.Button
-            className={`relative w-full py-1 px-4 pr-8 text-left rounded-lg shadow-md cursor-default bg-primary-9 focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 ${buttonClasses}`}
+          <ListboxButton
+            className={`relative px-4 py-1 pr-8 w-full text-left rounded-lg shadow-md cursor-default bg-primary-9 focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 ${buttonClasses}`}
           >
             <span className="block truncate">{selected.label || placeholder}</span>
 
-            <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+            <span className="flex absolute inset-y-0 right-0 items-center pr-2 pointer-events-none">
               <LuChevronsUpDown className="w-5 h-5 text-gray-400" aria-hidden="true" />
             </span>
-          </HeadlessListbox.Button>
+          </ListboxButton>
         </div>
         <Transition as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
-          <HeadlessListbox.Options className="absolute z-10 py-1 mt-1 overflow-auto text-base rounded-md shadow-lg min-w-max bg-primary-9 max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+          <ListboxOptions className="overflow-auto absolute z-10 py-1 mt-1 min-w-max max-h-60 text-base rounded-md ring-1 ring-black ring-opacity-5 shadow-lg bg-primary-9 focus:outline-none sm:text-sm">
             {showNoneOpt ? (
-              <HeadlessListbox.Option
+              <ListboxOption
                 className={({ active }) =>
                   `relative cursor-default select-none z-10 py-2 pl-10 pr-4 ${active ? 'bg-primary-7 text-white' : 'text-gray-900'}`
                 }
                 value={DEFAULT_OPT}
               >
                 ---
-              </HeadlessListbox.Option>
+              </ListboxOption>
             ) : (
               <></>
             )}
 
             {options.map((opt) => (
-              <HeadlessListbox.Option
+              <ListboxOption
                 key={opt.id}
                 className={({ active }) =>
                   `relative cursor-default select-none z-10 py-2 pl-10 pr-4 ${active ? 'bg-primary-7 text-white' : 'text-gray-900'}`
@@ -83,9 +83,9 @@ function Listbox<V, T extends { id: string; value: V; label: string }>({
                     ) : null}
                   </>
                 )}
-              </HeadlessListbox.Option>
+              </ListboxOption>
             ))}
-          </HeadlessListbox.Options>
+          </ListboxOptions>
         </Transition>
       </div>
     </HeadlessListbox>
